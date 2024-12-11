@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "lib/trace_viz/version"
+lib = File.expand_path("../lib", __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require "trace_viz/version"
 
 Gem::Specification.new do |spec|
   spec.name = "trace_viz"
@@ -21,10 +23,10 @@ Gem::Specification.new do |spec|
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   gemspec = File.basename(__FILE__)
-  spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
+  spec.files = IO.popen(["git", "ls-files", "-z"], chdir: __dir__, err: IO::NULL) do |ls|
     ls.readlines("\x0", chomp: true).reject do |f|
       (f == gemspec) ||
-        f.start_with?(*%w[bin/ spec/ .git .github Gemfile])
+        f.start_with?("bin/", "spec/", ".git", ".github", "Gemfile")
     end
   end
   spec.bindir = "exe"
