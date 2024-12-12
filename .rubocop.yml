@@ -5,6 +5,7 @@ AllCops:
   TargetRubyVersion: 3.0
   Exclude:
     - '.git/**/*'
+    - 'Rakefile'
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
