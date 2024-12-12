@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe TraceViz do
+RSpec.describe(TraceViz) do
   it "has a version number" do
-    expect(TraceViz::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(false).to eq(true)
+    expect(TraceViz::VERSION).not_to(be(nil))
   end
 end

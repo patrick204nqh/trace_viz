@@ -21,7 +21,7 @@ module TraceViz
       finish: "🏁",
     }.freeze
 
-    LEVELS = [:info, :success, :error, :warn].freeze
+    LEVELS = [:info, :success, :error, :warn, :start, :finish].freeze
 
     def initialize(output: $stdout)
       @output = output
@@ -58,7 +58,15 @@ module TraceViz
 
       color = COLORS[level] || COLORS[:info]
       emoji = EMOJIS[level] || EMOJIS[:info]
-      formatted_message = "#{color}#{emoji} [#{level.to_s.upcase}]#{COLORS[:reset]} #{message}"
+
+      # Align emoji and level using fixed-width columns
+      formatted_message = format(
+        "#{color}%-3s %-8s#{COLORS[:reset]} %s",
+        emoji,
+        "[#{level.to_s.upcase}]",
+        message,
+      )
+
       @output.puts(formatted_message)
     end
   end
