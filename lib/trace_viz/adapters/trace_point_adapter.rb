@@ -15,7 +15,7 @@ module TraceViz
           trace_data = TracePoint::TraceData.new(tp)
 
           next if trace_data.internal_call?
-          next unless trace_data.within_depth_limit?
+          next if trace_data.exceeded_max_depth?
 
           TracePoint::EventHandler.new(trace_data).handle
         end.enable(&block)

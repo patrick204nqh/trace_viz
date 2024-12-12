@@ -6,7 +6,7 @@ RSpec.describe(TraceViz::Adapters::TracePointAdapter) do
 
   before do
     # Redirect stdout to capture output
-    $stdout = output
+    # $stdout = output
   end
 
   after do

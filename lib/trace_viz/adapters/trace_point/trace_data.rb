@@ -6,7 +6,7 @@ module TraceViz
   module Adapters
     module TracePoint
       class TraceData
-        attr_reader :trace_point, :timestampt, :depth
+        attr_reader :trace_point, :timestamp, :depth
 
         def initialize(trace_point)
           @trace_point = trace_point
@@ -47,8 +47,10 @@ module TraceViz
           internal_path? || internal_class?
         end
 
-        def within_depth_limit?
-          @depth <= 5
+        def exceeded_max_depth?
+          return false unless TraceViz.configuration.max_display_depth
+
+          @depth > TraceViz.configuration.max_display_depth
         end
 
         def duration

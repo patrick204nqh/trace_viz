@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require "trace_viz/version"
-require "trace_viz/core/tracer"
+require "trace_viz/configuration"
+require "trace_viz/core"
 
 module TraceViz
   class Error < StandardError; end
