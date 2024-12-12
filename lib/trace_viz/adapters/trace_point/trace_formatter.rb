@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "trace_viz/utils/colorize"
+
 module TraceViz
   module Adapters
     module TracePoint
@@ -15,10 +17,10 @@ module TraceViz
 
           [
             indent_if_enabled,
-            depth_if_enabled,
-            method_name_if_enabled,
-            source_location_if_enabled,
-            params_if_enabled,
+            colorize(depth_if_enabled, :blue),
+            colorize(method_name_if_enabled, :light_green),
+            colorize(source_location_if_enabled, :dark_gray),
+            colorize(params_if_enabled, :yellow),
           ].compact.join(" ")
         end
 
@@ -27,11 +29,11 @@ module TraceViz
 
           [
             indent_if_enabled,
-            depth_if_enabled,
-            method_name_if_enabled,
-            result_if_enabled,
-            source_location_if_enabled,
-            execution_time_if_enabled,
+            colorize(depth_if_enabled, :blue),
+            colorize(method_name_if_enabled, :light_green),
+            colorize(result_if_enabled, :cyan),
+            colorize(source_location_if_enabled, :dark_gray),
+            colorize(execution_time_if_enabled, :red),
           ].compact.join(" ")
         end
 
@@ -82,6 +84,10 @@ module TraceViz
           return unless config.show_execution_time && trace_data.duration
 
           "in #{trace_data.duration}ms"
+        end
+
+        def colorize(text, color_key)
+          TraceViz::Utils::Colorize.colorize(text, color_key)
         end
       end
     end
