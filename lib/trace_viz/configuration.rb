@@ -13,7 +13,8 @@ module TraceViz
       :show_source_location,
       :show_params,
       :show_return_value,
-      :show_execution_time
+      :show_execution_time,
+      :show_trace_events
 
     def initialize
       @logger = Logger.new
@@ -26,6 +27,7 @@ module TraceViz
       @show_params = true
       @show_return_value = true
       @show_execution_time = true
+      @show_trace_events = [:call, :return]
     end
 
     def dup

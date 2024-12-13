@@ -6,10 +6,13 @@ module TraceViz
       class TraceLogger
         def initialize(trace_data)
           @trace_data = trace_data
+          @config = @trace_data.config
           @formatter = TraceFormatter.new(@trace_data)
         end
 
         def log_trace
+          return unless should_log?
+
           case trace_data.event
           when :call
             log_call
@@ -20,7 +23,7 @@ module TraceViz
 
         private
 
-        attr_reader :trace_data, :formatter
+        attr_reader :trace_data, :config, :formatter
 
         def log_call
           formatted_call = formatter.format_call
@@ -30,6 +33,10 @@ module TraceViz
         def log_return
           formatted_return = formatter.format_return
           TraceViz.logger.finish(formatted_return)
+        end
+
+        def should_log?
+          config.show_trace_events.include?(trace_data.event)
         end
       end
     end

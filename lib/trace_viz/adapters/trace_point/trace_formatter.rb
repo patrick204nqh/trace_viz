@@ -8,7 +8,7 @@ module TraceViz
       class TraceFormatter
         def initialize(trace_data)
           @trace_data = trace_data
-          @config = trace_data.config
+          @config = @trace_data.config
           @logger = TraceViz.logger
         end
 
