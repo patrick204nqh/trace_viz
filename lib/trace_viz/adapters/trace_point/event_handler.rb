@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "trace_viz/context_manager"
-
 module TraceViz
   module Adapters
     module TracePoint

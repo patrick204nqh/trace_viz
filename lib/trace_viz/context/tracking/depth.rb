@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module TraceViz
-  class Context
-    class Tracking
+  module Context
+    module Tracking
       class Depth
         attr_reader :current
 

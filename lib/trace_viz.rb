@@ -8,8 +8,8 @@ module TraceViz
   class Error < StandardError; end
 
   class << self
-    def trace(&block)
-      Core::Tracer.new.trace(&block)
+    def trace(**options, &block)
+      Core::Tracer.new.trace(**options, &block)
     end
   end
 end

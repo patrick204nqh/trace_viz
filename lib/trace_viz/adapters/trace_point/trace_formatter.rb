@@ -8,7 +8,7 @@ module TraceViz
       class TraceFormatter
         def initialize(trace_data)
           @trace_data = trace_data
-          @config = TraceViz.configuration
+          @config = trace_data.config
           @logger = TraceViz.logger
         end
 
@@ -66,7 +66,7 @@ module TraceViz
         end
 
         def params_if_enabled
-          return unless config.show_parameters
+          return unless config.show_params
 
           param_values = trace_data.params.map do |var|
             trace_data.trace_point.binding.local_variable_get(var).inspect

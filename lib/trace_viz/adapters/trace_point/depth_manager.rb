@@ -5,11 +5,11 @@ module TraceViz
     module TracePoint
       class DepthManager
         def initialize
-          @context = ContextManager.get_context(:tracking)
+          @context = Context.for(:tracking)
         end
 
         def assign_depth(trace_data)
-          context_depth = context_tracking&.depth
+          context_depth = context&.depth
           return 0 unless context_depth
 
           case trace_data.event
@@ -27,10 +27,6 @@ module TraceViz
         private
 
         attr_reader :context
-
-        def context_tracking
-          context&.tracking
-        end
       end
     end
   end

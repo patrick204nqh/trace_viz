@@ -6,10 +6,11 @@ module TraceViz
   module Adapters
     module TracePoint
       class TraceData
-        attr_reader :trace_point, :timestamp, :depth
+        attr_reader :trace_point, :config, :timestamp, :depth
 
         def initialize(trace_point)
           @trace_point = trace_point
+          @config = Context.for(:config).configuration
           @depth_manager = DepthManager.new
 
           record_timestamp
@@ -49,9 +50,9 @@ module TraceViz
         end
 
         def exceeded_max_depth?
-          return false unless TraceViz.configuration.max_display_depth
+          return false unless config.max_display_depth
 
-          depth > TraceViz.configuration.max_display_depth
+          depth > config.max_display_depth
         end
 
         def duration
