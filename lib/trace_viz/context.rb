@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-require "singleton"
-require "trace_viz/context/depth"
+require "trace_viz/context/tracking"
 
 module TraceViz
   class Context
-    attr_reader :depth
+    attr_reader :tracking
 
     def initialize
-      @depth = Depth.new
+      @tracking = Tracking.new
     end
   end
 end

@@ -87,7 +87,7 @@ module TraceViz
         end
 
         def colorize(text, color_key)
-          TraceViz::Utils::Colorize.colorize(text, color_key)
+          Utils::Colorize.colorize(text, color_key)
         end
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/adapters/trace_point/trace_logger"
+require "trace_viz/adapters/trace_point/depth_manager"
 
 module TraceViz
   module Adapters
@@ -10,37 +10,38 @@ module TraceViz
 
         def initialize(trace_point)
           @trace_point = trace_point
+          @depth_manager = DepthManager.new
 
           record_timestamp
           assign_depth
         end
 
         def id
-          @trace_point.method_id
+          trace_point.method_id
         end
 
         def event
-          @trace_point.event
+          trace_point.event
         end
 
         def path
-          @trace_point.path
+          trace_point.path
         end
 
         def line_number
-          @trace_point.lineno
+          trace_point.lineno
         end
 
         def klass
-          @trace_point.defined_class
+          trace_point.defined_class
         end
 
         def params
-          @trace_point.binding.local_variables
+          trace_point.binding.local_variables
         end
 
         def result
-          @trace_point.return_value
+          trace_point.return_value
         end
 
         def internal_call?
@@ -50,7 +51,7 @@ module TraceViz
         def exceeded_max_depth?
           return false unless TraceViz.configuration.max_display_depth
 
-          @depth > TraceViz.configuration.max_display_depth
+          depth > TraceViz.configuration.max_display_depth
         end
 
         def duration
@@ -63,6 +64,8 @@ module TraceViz
         end
 
         private
+
+        attr_reader :depth_manager
 
         def internal_path?
           path.include?("<internal:")
@@ -77,16 +80,7 @@ module TraceViz
         end
 
         def assign_depth
-          context_depth = ContextManager.current.depth
-
-          @depth = case @trace_point.event
-          when :call
-            depth = context_depth.current
-            context_depth.increment
-            depth
-          when :return
-            context_depth.decrement
-          end
+          @depth = @depth_manager.assign_depth(self)
         end
       end
     end

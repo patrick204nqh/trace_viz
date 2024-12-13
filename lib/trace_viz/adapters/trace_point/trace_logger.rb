@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "trace_viz/adapters/trace_point/trace_formatter"
-
 module TraceViz
   module Adapters
     module TracePoint
@@ -12,7 +10,7 @@ module TraceViz
         end
 
         def log_trace
-          case @trace_data.event
+          case trace_data.event
           when :call
             log_call
           when :return
@@ -22,13 +20,15 @@ module TraceViz
 
         private
 
+        attr_reader :trace_data, :formatter
+
         def log_call
-          formatted_call = @formatter.format_call
+          formatted_call = formatter.format_call
           TraceViz.logger.start(formatted_call)
         end
 
         def log_return
-          formatted_return = @formatter.format_return
+          formatted_return = formatter.format_return
           TraceViz.logger.finish(formatted_return)
         end
       end

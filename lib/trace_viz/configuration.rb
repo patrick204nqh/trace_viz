@@ -20,7 +20,7 @@ module TraceViz
       @show_depth = true
       @max_display_depth = 3 # Recommended to keep this value between 3 and 5
       @show_method_name = true
-      @show_source_location = true
+      @show_source_location = false
       @show_parameters = true
       @show_return_value = true
       @show_execution_time = true
