@@ -2,16 +2,16 @@
 
 RSpec.describe(TraceViz::Adapters::TracePointAdapter) do
   let(:output) { StringIO.new }
-  let(:original_stdout) { $stdout }
 
   before do
     # Redirect stdout to capture output
-    $stdout = output
+    allow($stdout).to(receive(:write) { |message| output.write(message) })
   end
 
   after do
-    # Restore the original stdout
-    $stdout = original_stdout
+    # Reset the captured output
+    output.truncate(0)
+    output.rewind
   end
 
   describe "#initialize" do
@@ -26,9 +26,11 @@ RSpec.describe(TraceViz::Adapters::TracePointAdapter) do
 
   describe "#trace" do
     it "traces the block" do
+      TraceViz::Context::Manager.enter_context(:config)
       described_class.new.trace do
         puts("Hello, world!")
       end
+      TraceViz::Context::Manager.exit_context(:config)
 
       expect(output.string).to(include("Hello, world!"))
     end

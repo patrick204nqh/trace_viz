@@ -2,16 +2,16 @@
 
 RSpec.describe(TraceViz::Core::Tracer) do
   let(:output) { StringIO.new }
-  let(:original_stdout) { $stdout }
 
   before do
     # Redirect stdout to capture output
-    # $stdout = output
+    allow($stdout).to(receive(:write) { |message| output.write(message) })
   end
 
   after do
-    # Restore the original stdout
-    $stdout = original_stdout
+    # Reset the captured output
+    output.truncate(0)
+    output.rewind
   end
 
   describe "#initialize" do

@@ -8,16 +8,9 @@ module TraceViz
   module Core
     class Tracer
       def trace(**options, &block)
-        Context::Manager.enter_multiple_contexts(
-          config: options,
-          tracking: {},
-        )
-
-        begin
+        Context::Manager.with_contexts(config: options, tracking: {}) do
           adapter = Adapters::TracePointAdapter.new
           adapter.trace(&block)
-        ensure
-          Context::Manager.exit_multiple_contexts(:config, :tracking)
         end
       end
     end
