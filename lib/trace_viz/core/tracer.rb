@@ -2,6 +2,7 @@
 
 require "trace_viz/logger"
 require "trace_viz/context"
+require "trace_viz/configuration"
 require "trace_viz/adapters/trace_point_adapter"
 
 module TraceViz

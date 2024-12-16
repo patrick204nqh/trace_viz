@@ -4,11 +4,12 @@ module TraceViz
   module Adapters
     module TracePoint
       class DepthManager
-        def initialize
+        def initialize(trace_data)
+          @trace_data = trace_data
           @context = Context.for(:tracking)
         end
 
-        def assign_depth(trace_data)
+        def assign_depth
           context_depth = context&.depth
           return 0 unless context_depth
 
@@ -26,7 +27,7 @@ module TraceViz
 
         private
 
-        attr_reader :context
+        attr_reader :trace_data, :context
       end
     end
   end

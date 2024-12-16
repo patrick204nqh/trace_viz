@@ -15,7 +15,7 @@ module TraceViz
           when :return
             handle_return
           else
-            raise "Unknown event type #{trace_data.event}"
+            raise AdapterError, "Unknown event type #{trace_data.event}"
           end
         end
 

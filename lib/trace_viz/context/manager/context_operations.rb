@@ -24,7 +24,7 @@ module TraceViz
 
         def enter_multiple_contexts(contexts_with_options = {})
           unless contexts_with_options.is_a?(Hash)
-            raise ArgumentError, "Expected a Hash of contexts and options, got #{contexts_with_options.class}"
+            raise ContextError, "Expected a Hash of contexts and options, got #{contexts_with_options.class}"
           end
 
           contexts_with_options.each do |key, options|
@@ -35,7 +35,7 @@ module TraceViz
         def exit_context(key)
           validate_key!(key)
           context = @context_map.delete(key)
-          raise ArgumentError, "No context found with key '#{key}' to exit" unless context
+          raise ContextError, "No context found with key '#{key}' to exit" unless context
 
           context
         end

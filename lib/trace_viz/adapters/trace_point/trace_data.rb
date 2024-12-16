@@ -11,7 +11,8 @@ module TraceViz
         def initialize(trace_point)
           @trace_point = trace_point
           @config = Context.for(:config).configuration
-          @depth_manager = DepthManager.new
+          @logger = TraceLogger.new(self)
+          @depth_manager = DepthManager.new(self)
 
           record_timestamp
           assign_depth
@@ -60,13 +61,12 @@ module TraceViz
         end
 
         def log_trace
-          logger = TraceLogger.new(self)
           logger.log_trace
         end
 
         private
 
-        attr_reader :depth_manager
+        attr_reader :logger, :depth_manager
 
         def internal_path?
           path.include?("<internal:")
@@ -81,7 +81,7 @@ module TraceViz
         end
 
         def assign_depth
-          @depth = @depth_manager.assign_depth(self)
+          @depth = @depth_manager.assign_depth
         end
       end
     end

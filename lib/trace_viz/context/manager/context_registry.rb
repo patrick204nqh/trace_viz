@@ -9,7 +9,7 @@ module TraceViz
           validate_context_class!(context_class)
 
           if @registered_contexts.key?(key)
-            raise ArgumentError, "Context type for key '#{key}' is already registered"
+            raise ContextError, "Context type for key '#{key}' is already registered"
           end
 
           @registered_contexts[key] = context_class
