@@ -6,6 +6,7 @@ AllCops:
   Exclude:
     - '.git/**/*'
     - 'Rakefile'
+    - 'examples/**/*'
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
