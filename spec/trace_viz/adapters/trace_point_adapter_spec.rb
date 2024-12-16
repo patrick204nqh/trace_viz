@@ -15,22 +15,19 @@ RSpec.describe(TraceViz::Adapters::TracePointAdapter) do
   end
 
   describe "#initialize" do
-    it "creates a TracePointAdapter instance" do
-      expect(described_class.new).to(be_instance_of(described_class))
-    end
+    subject { described_class.new }
 
-    it "creates a TracePointAdapter instance that inherits from BaseAdapter" do
-      expect(described_class.new).to(be_kind_of(TraceViz::Adapters::BaseAdapter))
-    end
+    it { is_expected.to(be_instance_of(described_class)) }
+    it { is_expected.to(be_kind_of(TraceViz::Adapters::BaseAdapter)) }
   end
 
   describe "#trace" do
+    include_context "with TraceViz contexts", config: {}
+
+    subject { described_class.new }
+
     it "traces the block" do
-      TraceViz::Context::Manager.enter_context(:config)
-      described_class.new.trace do
-        puts("Hello, world!")
-      end
-      TraceViz::Context::Manager.exit_context(:config)
+      subject.trace { puts "Hello, world!" }
 
       expect(output.string).to(include("Hello, world!"))
     end
