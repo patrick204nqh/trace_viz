@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "trace_viz/adapters/trace_point/trace_formatter"
+
 module TraceViz
   module Adapters
     module TracePoint

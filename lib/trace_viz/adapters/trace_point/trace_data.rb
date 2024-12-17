@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "trace_viz/adapters/trace_point/depth_manager"
+require "trace_viz/adapters/trace_point/trace_logger"
 
 module TraceViz
   module Adapters

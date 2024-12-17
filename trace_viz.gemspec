@@ -11,8 +11,7 @@ Gem::Specification.new do |spec|
   spec.email = ["patrick204nqh@gmail.com"]
 
   spec.summary = "Trace method and attribute usage in Ruby classes and generate diagrams."
-  spec.description = "Trace method calls and attribute accesses within Ruby classes, " \
-    "collect execution data, and visualize the results using Mermaid diagrams."
+  spec.description = "Trace method and attribute usage in Ruby classes and generate diagrams."
   spec.homepage = "https://github.com/patrick204nqh/trace_viz"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
