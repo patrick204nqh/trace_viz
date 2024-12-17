@@ -39,6 +39,7 @@ TraceViz.trace(
   show_depth: true,
   max_display_depth: 4, # Recommended to keep this value between 3 and 5
   show_method_name: true,
+  show_source_location: false,
   show_params: true,
   show_return_value: true,
   show_execution_time: true,
@@ -81,6 +82,7 @@ TraceViz.trace(
     show_depth: true,
     max_display_depth: 3,
     show_method_name: true,
+    show_source_location: false,
     show_params: true,
     show_return_value: true,
     show_execution_time: true,
@@ -107,19 +109,20 @@ Final result: 24
 
 ### Configuration Options
 
-| Option                | Type             | Description                                                                      |
-| --------------------- | ---------------- | -------------------------------------------------------------------------------- |
-| `tab_size`            | Integer          | Defines the number of spaces used for indentation when `show_indent` is enabled. |
-| `show_indent`         | Boolean          | Whether to visually indent nested calls.                                         |
-| `show_depth`          | Boolean          | Displays the depth level of the method call.                                     |
-| `max_display_depth`   | Integer          | Limits the display to a maximum depth of calls.                                  |
-| `show_method_name`    | Boolean          | Shows the name of the method being called.                                       |
-| `show_params`         | Boolean          | Logs the parameters passed to the method.                                        |
-| `show_return_value`   | Boolean          | Logs the return value of the method.                                             |
-| `show_execution_time` | Boolean          | Logs the execution time for methods.                                             |
-| `show_trace_events`   | Array of Symbols | Specifies the events to trace. Valid values include:                             |
-|                       |                  | - `:call` - Log method calls.                                                    |
-|                       |                  | - `:return` - Log method returns.                                                |
+| Option                 | Type             | Description                                                                      |
+| ---------------------- | ---------------- | -------------------------------------------------------------------------------- |
+| `tab_size`             | Integer          | Defines the number of spaces used for indentation when `show_indent` is enabled. |
+| `show_indent`          | Boolean          | Whether to visually indent nested calls.                                         |
+| `show_depth`           | Boolean          | Displays the depth level of the method call.                                     |
+| `max_display_depth`    | Integer          | Limits the display to a maximum depth of calls.                                  |
+| `show_method_name`     | Boolean          | Shows the name of the method being called.                                       |
+| `show_source_location` | Boolean          | Logs the source file name and line number where the method is defined.           |
+| `show_params`          | Boolean          | Logs the parameters passed to the method.                                        |
+| `show_return_value`    | Boolean          | Logs the return value of the method.                                             |
+| `show_execution_time`  | Boolean          | Logs the execution time for methods.                                             |
+| `show_trace_events`    | Array of Symbols | Specifies the events to trace. Valid values include:                             |
+|                        |                  | - `:call` - Log method calls.                                                    |
+|                        |                  | - `:return` - Log method returns.                                                |
 
 ## Development
 

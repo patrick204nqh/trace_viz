@@ -34,6 +34,7 @@ TraceViz.trace(
     show_params: true,
     show_return_value: true,
     show_execution_time: true,
+    show_source_location: true,
     show_trace_events: [:call, :return]
 ) do
   example = Example.new
