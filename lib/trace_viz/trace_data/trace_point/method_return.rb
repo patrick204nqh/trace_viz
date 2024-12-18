@@ -13,7 +13,10 @@ module TraceViz
         end
 
         def log_trace
+          return unless should_log?
+
           formatted_return = Formatters::TracePoint::MethodReturnFormatter.new(self).format
+
           logger.finish(formatted_return)
         end
 

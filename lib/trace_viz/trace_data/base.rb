@@ -41,9 +41,17 @@ module TraceViz
         raise NotImplementedError
       end
 
+      def log_trace
+        raise NotImplementedError
+      end
+
       private
 
       attr_reader :logger, :tracker
+
+      def should_log?
+        config.show_trace_events.include?(event)
+      end
     end
   end
 end
