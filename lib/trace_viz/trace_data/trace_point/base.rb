@@ -1,22 +1,18 @@
 # frozen_string_literal: true
 
-require "trace_viz/adapters/trace_point/depth_manager"
-require "trace_viz/adapters/trace_point/trace_logger"
+require "trace_viz/trace_data/base"
 
 module TraceViz
-  module Adapters
+  module TraceData
     module TracePoint
-      class TraceData
-        attr_reader :trace_point, :config, :timestamp, :depth
+      class Base < TraceData::Base
+        attr_reader :trace_point, :timestamp, :depth
 
         def initialize(trace_point)
+          super()
           @trace_point = trace_point
-          @config = Context.for(:config).configuration
-          @logger = TraceLogger.new(self)
-          @depth_manager = DepthManager.new(self)
 
           record_timestamp
-          assign_depth
         end
 
         def id
@@ -61,13 +57,7 @@ module TraceViz
           # TODO: Implement duration calculation
         end
 
-        def log_trace
-          logger.log_trace
-        end
-
         private
-
-        attr_reader :logger, :depth_manager
 
         def internal_path?
           path.include?("<internal:")
@@ -79,10 +69,6 @@ module TraceViz
 
         def record_timestamp
           @timestamp = Time.now
-        end
-
-        def assign_depth
-          @depth = @depth_manager.assign_depth
         end
       end
     end
