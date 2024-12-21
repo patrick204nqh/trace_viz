@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require "trace_viz/collectors/filters/depth_filter"
+require "trace_viz/collectors/filters/allow_classes_filter"
 require "trace_viz/collectors/filters/exclude_internal_call_filter"
+require "trace_viz/collectors/filters/exclude_gems_filter"
 require "trace_viz/collectors/filters/exclude_rails_framework_filter"
-require "trace_viz/collectors/filters/allow_class_filter"
-require "trace_viz/collectors/filters/exclude_class_filter"
+require "trace_viz/collectors/filters/exclude_default_classes_filter"
+require "trace_viz/collectors/filters/exclude_classes_filter"
 
 module TraceViz
   module Collectors
@@ -12,10 +14,12 @@ module TraceViz
       class Registry
         FILTERS = {
           depth: DepthFilter,
+          allow_class: AllowClassesFilter,
           exclude_internal_call: ExcludeInternalCallFilter,
+          exclude_gems: ExcludeGemsFilter,
           exclude_rails_framework: ExcludeRailsFrameworkFilter,
-          allow_class: AllowClassFilter,
-          exclude_class: ExcludeClassFilter,
+          exclude_default_classes: ExcludeDefaultClassesFilter,
+          exclude_class: ExcludeClassesFilter,
         }.freeze
 
         class << self

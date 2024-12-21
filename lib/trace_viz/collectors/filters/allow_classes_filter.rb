@@ -5,7 +5,7 @@ require "trace_viz/collectors/filters/base_filter"
 module TraceViz
   module Collectors
     module Filters
-      class AllowClassFilter < BaseFilter
+      class AllowClassesFilter < BaseFilter
         def initialize(**options)
           super()
           @allowed_classes = options[:classes].map(&:to_s).freeze

@@ -16,6 +16,7 @@ module TraceViz
           "ActionMailer",
           "ActiveJob",
           "ActionCable",
+          "ActionDispatch",
           "ActiveStorage",
           "ActionMailbox",
           "ActionText",
