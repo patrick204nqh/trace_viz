@@ -8,14 +8,18 @@ module TraceViz
       class ExcludeRailsFrameworkFilter < BaseFilter
         RAILS_MODULES = [
           "ActiveSupport",
+          "ActiveModel",
+          "ActiveRecord",
+          "ActionPack",
           "ActionController",
           "ActionView",
-          "ActiveRecord",
+          "ActionMailer",
+          "ActiveJob",
+          "ActionCable",
+          "ActiveStorage",
+          "ActionMailbox",
+          "ActionText",
           "Rails",
-          # Additional Rails modules
-          "ActionDispatch",
-          "Zeitwerk",
-          "ViewComponent",
         ].freeze
 
         def apply?(trace_data)

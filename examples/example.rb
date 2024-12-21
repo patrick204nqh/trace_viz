@@ -35,7 +35,18 @@ TraceViz.trace(
     show_return_value: true,
     show_execution_time: true,
     show_source_location: true,
-    show_trace_events: [:call, :return]
+    show_trace_events: [:call],
+    filters: [
+      :depth,
+      :exclude_internal_call,
+      :exclude_rails_framework,
+      allow_class: {
+        classes: [Example]
+      },
+      # exclude_class: {
+      #   classes: [Example]
+      # }
+    ]
 ) do
   example = Example.new
   example.perform_task(5, 7)

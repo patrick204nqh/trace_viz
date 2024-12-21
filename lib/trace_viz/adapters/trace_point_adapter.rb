@@ -14,9 +14,13 @@ module TraceViz
 
       def trace(&block)
         ::TracePoint.new(:call, :return) do |tp|
-          @collector.collect(tp)
+          collector.collect(tp)
         end.enable(&block)
       end
+
+      private
+
+      attr_reader :collector
     end
   end
 end
