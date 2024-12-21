@@ -1,19 +1,20 @@
 # frozen_string_literal: true
 
 require "trace_viz/adapters/base_adapter"
-require "trace_viz/trace_data/trace_point_builder"
+require "trace_viz/collectors/trace_point_collector"
 
 module TraceViz
   module Adapters
     class TracePointAdapter < BaseAdapter
+      def initialize
+        super()
+
+        @collector = Collectors::TracePointCollector.new
+      end
+
       def trace(&block)
         ::TracePoint.new(:call, :return) do |tp|
-          trace_data = TraceData::TracePointBuilder.build(tp)
-
-          next if trace_data.internal_call?
-          next if trace_data.exceeded_max_depth?
-
-          trace_data.log_trace
+          @collector.collect(tp)
         end.enable(&block)
       end
     end

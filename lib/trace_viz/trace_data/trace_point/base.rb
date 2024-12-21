@@ -43,10 +43,6 @@ module TraceViz
           trace_point.return_value
         end
 
-        def internal_call?
-          internal_path? || internal_class?
-        end
-
         def exceeded_max_depth?
           return false unless config.max_display_depth
 
@@ -58,14 +54,6 @@ module TraceViz
         end
 
         private
-
-        def internal_path?
-          path.include?("<internal:")
-        end
-
-        def internal_class?
-          klass.to_s.start_with?("TracePoint")
-        end
 
         def record_timestamp
           @timestamp = Time.now

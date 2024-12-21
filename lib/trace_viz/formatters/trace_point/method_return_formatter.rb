@@ -7,8 +7,6 @@ module TraceViz
     module TracePoint
       class MethodReturnFormatter < TraceViz::Formatters::BaseFormatter
         def format
-          return "" if trace_data.exceeded_max_depth?
-
           [
             indent_if_enabled,
             colorize(depth_if_enabled, :blue),
