@@ -7,7 +7,7 @@ require "trace_viz/collectors/filters/exclude_rails_framework_filter"
 module TraceViz
   module Collectors
     module Filters
-      module Registry
+      class Registry
         class << self
           def available_filters
             {

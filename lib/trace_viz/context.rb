@@ -5,8 +5,8 @@ require "trace_viz/context/manager"
 module TraceViz
   module Context
     class << self
-      def for(type)
-        Manager.get_context(type)
+      def for(key)
+        Manager.fetch_context(key)
       end
     end
   end
