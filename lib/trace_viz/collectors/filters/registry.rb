@@ -14,12 +14,12 @@ module TraceViz
       class Registry
         FILTERS = {
           depth: DepthFilter,
-          allow_class: AllowClassesFilter,
+          allow_classes: AllowClassesFilter,
           exclude_internal_call: ExcludeInternalCallFilter,
           exclude_gems: ExcludeGemsFilter,
           exclude_rails_framework: ExcludeRailsFrameworkFilter,
           exclude_default_classes: ExcludeDefaultClassesFilter,
-          exclude_class: ExcludeClassesFilter,
+          exclude_classes: ExcludeClassesFilter,
         }.freeze
 
         class << self

@@ -10,7 +10,7 @@ module TraceViz
         @config = @trace_data.config
       end
 
-      def format
+      def format_for_log
         raise NotImplementedError
       end
 

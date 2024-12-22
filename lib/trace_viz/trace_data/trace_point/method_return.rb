@@ -15,7 +15,7 @@ module TraceViz
         def log_trace
           return unless should_log?
 
-          formatted_return = Formatters::TracePoint::MethodReturnFormatter.new(self).format
+          formatted_return = Formatters::TracePoint::MethodReturnFormatter.new(self).format_for_log
 
           logger.finish(formatted_return)
         end

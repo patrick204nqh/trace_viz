@@ -40,10 +40,10 @@ TraceViz.trace(
       :depth,
       :exclude_internal_call,
       :exclude_rails_framework,
-      allow_class: {
+      allow_classes: {
         classes: [Example]
       },
-      # exclude_class: {
+      # exclude_classes: {
       #   classes: [Example]
       # }
     ]

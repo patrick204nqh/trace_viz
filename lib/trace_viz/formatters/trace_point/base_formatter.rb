@@ -5,7 +5,7 @@ require "trace_viz/formatters/base_formatter"
 module TraceViz
   module Formatters
     module TracePoint
-      class BaseFormatter < TraceViz::Formatters::BaseFormatter
+      class BaseFormatter < Formatters::BaseFormatter
       end
     end
   end

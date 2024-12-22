@@ -5,8 +5,8 @@ require "trace_viz/formatters/trace_point/base_formatter"
 module TraceViz
   module Formatters
     module TracePoint
-      class MethodReturnFormatter < TraceViz::Formatters::BaseFormatter
-        def format
+      class MethodReturnFormatter < Formatters::BaseFormatter
+        def format_for_log
           [
             indent_if_enabled,
             colorize(depth_if_enabled, :blue),
