@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "trace_formatters/method_call_formatter"
-require_relative "trace_formatters/method_return_formatter"
+require "trace_viz/loggers/trace_formatters/method_call_formatter"
+require "trace_viz/loggers/trace_formatters/method_return_formatter"
 
 module TraceViz
   module Loggers

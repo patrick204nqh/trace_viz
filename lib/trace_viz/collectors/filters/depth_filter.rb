@@ -18,6 +18,8 @@ module TraceViz
         private
 
         def within_depth?(depth)
+          return false if depth.nil?
+
           depth <= @max_depth
         end
       end

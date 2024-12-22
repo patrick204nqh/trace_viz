@@ -6,41 +6,21 @@ module TraceViz
   module TraceData
     module TracePoint
       class Base < TraceData::Base
-        attr_reader :trace_point, :timestamp, :depth
+        attr_reader :trace_point,
+          :timestamp,
+          :depth,
+          :id,
+          :event,
+          :klass,
+          :path,
+          :line_number
 
         def initialize(trace_point)
           super()
           @trace_point = trace_point
 
           record_timestamp
-        end
-
-        def id
-          trace_point.method_id
-        end
-
-        def event
-          trace_point.event
-        end
-
-        def path
-          trace_point.path
-        end
-
-        def line_number
-          trace_point.lineno
-        end
-
-        def klass
-          trace_point.defined_class
-        end
-
-        def params
-          trace_point.binding.local_variables
-        end
-
-        def result
-          trace_point.return_value
+          cache_basic_trace_data
         end
 
         def duration
@@ -48,6 +28,14 @@ module TraceViz
         end
 
         private
+
+        def cache_basic_trace_data
+          @id = trace_point.method_id
+          @event = trace_point.event
+          @klass = trace_point.defined_class
+          @path = trace_point.path
+          @line_number = trace_point.lineno
+        end
 
         def record_timestamp
           @timestamp = Time.now

@@ -32,14 +32,6 @@ module TraceViz
         raise NotImplementedError
       end
 
-      def params
-        raise NotImplementedError
-      end
-
-      def result
-        raise NotImplementedError
-      end
-
       private
 
       attr_reader :tracker
