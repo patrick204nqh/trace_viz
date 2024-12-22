@@ -3,8 +3,8 @@
 require_relative "base_formatter"
 
 module TraceViz
-  module Formatters
-    module Loggers
+  module Loggers
+    module TraceFormatters
       class MethodCallFormatter < BaseFormatter
         def format
           [

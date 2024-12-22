@@ -14,7 +14,7 @@ module TraceViz
         raise NotImplementedError
       end
 
-      def data
+      def collection
         @collected_data
       end
 

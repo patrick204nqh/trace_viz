@@ -2,6 +2,7 @@
 
 require "trace_viz/adapters/base_adapter"
 require "trace_viz/collectors/trace_point_collector"
+require "trace_viz/exporters/text_exporter"
 
 module TraceViz
   module Adapters
@@ -16,6 +17,8 @@ module TraceViz
         ::TracePoint.new(:call, :return) do |tp|
           collector.collect(tp)
         end.enable(&block)
+
+        Exporters::TextExporter.new(collector).export
       end
 
       private

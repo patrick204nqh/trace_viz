@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative "loggers/method_call_formatter"
-require_relative "loggers/method_return_formatter"
+require_relative "trace_formatters/method_call_formatter"
+require_relative "trace_formatters/method_return_formatter"
 
 module TraceViz
-  module Formatters
-    class LogBuilder
+  module Loggers
+    class TraceBuilder
       FORMATTERS = {
-        call: Loggers::MethodCallFormatter,
-        return: Loggers::MethodReturnFormatter,
+        call: TraceFormatters::MethodCallFormatter,
+        return: TraceFormatters::MethodReturnFormatter,
       }.freeze
 
       def initialize(trace_data)

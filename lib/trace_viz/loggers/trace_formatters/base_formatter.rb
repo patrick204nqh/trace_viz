@@ -1,12 +1,23 @@
 # frozen_string_literal: true
 
-require "trace_viz/formatters/base_formatter"
+require "trace_viz/utils/colorize"
 
 module TraceViz
-  module Formatters
-    module Loggers
-      class BaseFormatter < Formatters::BaseFormatter
+  module Loggers
+    module TraceFormatters
+      class BaseFormatter
+        def initialize(trace_data)
+          @trace_data = trace_data
+          @config = @trace_data.config
+        end
+
+        def format
+          raise NotImplementedError
+        end
+
         private
+
+        attr_reader :trace_data, :config
 
         def indent_if_enabled
           return unless config.show_indent && config.show_depth
@@ -51,6 +62,10 @@ module TraceViz
           return unless config.show_execution_time && trace_data.duration
 
           "in #{trace_data.duration}ms"
+        end
+
+        def colorize(text, color_key)
+          Utils::Colorize.colorize(text, color_key)
         end
       end
     end
