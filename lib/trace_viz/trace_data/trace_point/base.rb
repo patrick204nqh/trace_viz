@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/trace_data/base"
+require_relative "../base"
 
 module TraceViz
   module TraceData
@@ -43,12 +43,6 @@ module TraceViz
           trace_point.return_value
         end
 
-        def exceeded_max_depth?
-          return false unless config.max_display_depth
-
-          depth > config.max_display_depth
-        end
-
         def duration
           # TODO: Implement duration calculation
         end
@@ -57,6 +51,19 @@ module TraceViz
 
         def record_timestamp
           @timestamp = Time.now
+        end
+
+        def increment_depth
+          return @depth = 0 unless tracker&.depth
+
+          @depth = tracker.depth.current || 0
+          tracker.depth.increment
+        end
+
+        def decrement_depth
+          return 0 unless tracker&.depth
+
+          @depth = tracker.depth.decrement
         end
       end
     end

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require "trace_viz/collectors/base_collector"
 require "trace_viz/trace_data/trace_point_builder"
-require "trace_viz/collectors/filters/registry"
+require "trace_viz/trace_logger"
+require_relative "base_collector"
+require_relative "filters/registry"
 
 module TraceViz
   module Collectors
@@ -22,7 +23,7 @@ module TraceViz
         # Apply sanitizers
         # @sanitizers.each { |sanitizer| sanitizer.apply(trace_data) }
 
-        trace_data.log_trace
+        TraceLogger.log(trace_data)
 
         @collected_data << trace_data
       end

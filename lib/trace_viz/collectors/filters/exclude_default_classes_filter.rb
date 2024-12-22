@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "set"
+require_relative "base_filter"
 
 module TraceViz
   module Collectors

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "trace_viz/trace_data/trace_point/method_call"
-require "trace_viz/trace_data/trace_point/method_return"
+require_relative "trace_point/method_call"
+require_relative "trace_point/method_return"
 
 module TraceViz
   module TraceData

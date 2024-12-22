@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "base_filter"
+
 module TraceViz
   module Collectors
     module Filters

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/collectors/filters/base_filter"
+require_relative "base_filter"
 
 module TraceViz
   module Collectors

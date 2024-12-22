@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "trace_viz/collectors/filters/depth_filter"
-require "trace_viz/collectors/filters/allow_classes_filter"
-require "trace_viz/collectors/filters/exclude_internal_call_filter"
-require "trace_viz/collectors/filters/exclude_gems_filter"
-require "trace_viz/collectors/filters/exclude_rails_framework_filter"
-require "trace_viz/collectors/filters/exclude_default_classes_filter"
-require "trace_viz/collectors/filters/exclude_classes_filter"
+require_relative "depth_filter"
+require_relative "allow_classes_filter"
+require_relative "exclude_internal_call_filter"
+require_relative "exclude_gems_filter"
+require_relative "exclude_rails_framework_filter"
+require_relative "exclude_default_classes_filter"
+require_relative "exclude_classes_filter"
 
 module TraceViz
   module Collectors

@@ -8,7 +8,6 @@ module TraceViz
       attr_reader :config
 
       def initialize
-        @logger = TraceViz.logger
         @config = Context.for(:config).configuration
         @tracker = Context.for(:tracking)
       end
@@ -41,17 +40,9 @@ module TraceViz
         raise NotImplementedError
       end
 
-      def log_trace
-        raise NotImplementedError
-      end
-
       private
 
-      attr_reader :logger, :tracker
-
-      def should_log?
-        config.show_trace_events.include?(event)
-      end
+      attr_reader :tracker
     end
   end
 end
