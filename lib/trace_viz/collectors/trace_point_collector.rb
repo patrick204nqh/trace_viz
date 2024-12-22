@@ -10,13 +10,13 @@ module TraceViz
     class TracePointCollector < BaseCollector
       def initialize(filters = [], sanitizers = [])
         super()
-        @filters = Collectors::Filters::Registry.build(config.filters)
+        @filters = build_filters(config.filters)
       end
 
       def collect(trace_point_event)
         trace_data = TraceData::TracePointBuilder.build(trace_point_event)
 
-        return unless filters_apply?(trace_data)
+        return unless should_collect?(trace_data)
 
         Loggers::TraceLogger.log(trace_data)
 
@@ -27,8 +27,20 @@ module TraceViz
 
       attr_reader :filters
 
+      def should_collect?(trace_data)
+        filters_apply?(trace_data) && trace_event_allowed?(trace_data)
+      end
+
       def filters_apply?(trace_data)
         filters.all? { |filter| filter.apply?(trace_data) }
+      end
+
+      def trace_event_allowed?(trace_data)
+        config.show_trace_events.include?(trace_data.event)
+      end
+
+      def build_filters(filters)
+        Collectors::Filters::Registry.build(filters)
       end
     end
   end
