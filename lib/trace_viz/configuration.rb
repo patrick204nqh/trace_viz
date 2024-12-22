@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "trace_viz/logger"
+require_relative "config/export_config"
 
 module TraceViz
   class Configuration
@@ -15,7 +16,8 @@ module TraceViz
       :show_return_value,
       :show_execution_time,
       :show_trace_events,
-      :filters
+      :filters,
+      :export
 
     def initialize
       @logger = Logger.new
@@ -30,6 +32,7 @@ module TraceViz
       @show_execution_time = true
       @show_trace_events = [:call, :return]
       @filters = [:depth, :exclude_internal_call]
+      @export = Config::ExportConfig.new
     end
 
     def dup

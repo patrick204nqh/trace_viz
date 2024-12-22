@@ -26,27 +26,32 @@ class Example
 end
 
 TraceViz.trace(
-    tab_size: 4,
-    show_indent: true,
-    show_depth: true,
-    max_display_depth: 3,
-    show_method_name: true,
-    show_params: true,
-    show_return_value: true,
-    show_execution_time: true,
-    show_source_location: true,
-    show_trace_events: [:call],
-    filters: [
-      :depth,
-      :exclude_internal_call,
-      :exclude_rails_framework,
-      allow_classes: {
-        classes: [Example]
-      },
-      # exclude_classes: {
-      #   classes: [Example]
-      # }
-    ]
+  tab_size: 4,
+  show_indent: true,
+  show_depth: true,
+  max_display_depth: 3,
+  show_method_name: true,
+  show_params: true,
+  show_return_value: true,
+  show_execution_time: true,
+  show_source_location: true,
+  show_trace_events: [:call],
+  filters: [
+    :depth,
+    :exclude_internal_call,
+    :exclude_rails_framework,
+    allow_classes: {
+      classes: [Example]
+    },
+    # exclude_classes: {
+    #   classes: [Example]
+    # }
+  ],
+  export: {
+    enabled: true,
+    format: :txt,
+    overwrite: false
+  }
 ) do
   example = Example.new
   example.perform_task(5, 7)
