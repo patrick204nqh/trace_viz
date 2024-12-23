@@ -31,10 +31,17 @@ module TraceViz
           method = binding.eval("method(:#{id})")
           method.parameters.each_with_object({}) do |(_, name), hash|
             next unless name
+            next if name.to_s.include?("*") # Skip invalid or special variable names
 
-            value = binding.local_variable_get(name)
+            value = safe_local_variable_get(binding, name)
             hash[name] = format_param(name, value)
           end
+        end
+
+        def safe_local_variable_get(binding, name)
+          binding.local_variable_defined?(name) ? binding.local_variable_get(name) : nil
+        rescue NameError
+          nil
         end
 
         def format_param(name, value)
