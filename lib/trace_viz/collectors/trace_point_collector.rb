@@ -8,15 +8,15 @@ module TraceViz
   module Collectors
     class TracePointCollector < BaseCollector
       def collect(trace_point)
-        decrement_depth if trace_point.event == :return
+        return if depth_manager.exceeded_max_depth?
+
         trace_data = build_trace_data(trace_point)
-        increment_depth if trace_point.event == :call
+        depth_manager.adjust_for_event(trace_data)
 
         return unless should_collect?(trace_data)
 
         log_trace_data(trace_data)
-
-        @collection << trace_data
+        store_trace_data(trace_data)
       end
 
       private
@@ -29,16 +29,8 @@ module TraceViz
         Loggers::TraceLogger.log(trace_data)
       end
 
-      def depth_tracker
-        @depth_tracker ||= Context.for(:tracking).depth
-      end
-
-      def increment_depth
-        depth_tracker.increment
-      end
-
-      def decrement_depth
-        depth_tracker.decrement
+      def store_trace_data(trace_data)
+        @collection << trace_data
       end
     end
   end

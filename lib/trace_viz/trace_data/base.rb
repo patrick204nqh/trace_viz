@@ -5,11 +5,12 @@ require "trace_viz/context"
 module TraceViz
   module TraceData
     class Base
-      attr_reader :config, :depth
+      attr_reader :config
+      attr_accessor :depth
 
       def initialize
         @config = Context.for(:config).configuration
-        @depth = Context.for(:tracking).depth.current
+        @depth = 0
       end
 
       def id

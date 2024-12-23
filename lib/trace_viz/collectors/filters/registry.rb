@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "depth_filter"
 require_relative "allow_classes_filter"
 require_relative "exclude_internal_call_filter"
 require_relative "exclude_gems_filter"
@@ -13,7 +12,6 @@ module TraceViz
     module Filters
       class Registry
         FILTERS = {
-          depth: DepthFilter,
           allow_classes: AllowClassesFilter,
           exclude_internal_call: ExcludeInternalCallFilter,
           exclude_gems: ExcludeGemsFilter,

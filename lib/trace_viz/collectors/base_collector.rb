@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "depth_manager"
 require_relative "policy_evaluator"
 require_relative "policies/filter_policy"
 require_relative "policies/event_policy"
@@ -12,12 +13,8 @@ module TraceViz
       def initialize
         @collection = []
 
-        @policy_evaluator = PolicyEvaluator.new(
-          [
-            Policies::FilterPolicy.new,
-            Policies::EventPolicy.new,
-          ],
-        )
+        @depth_manager = DepthManager.new
+        @policy_evaluator = PolicyEvaluator.new(self.class.policies)
       end
 
       def collect
@@ -30,7 +27,16 @@ module TraceViz
 
       private
 
-      attr_reader :policy_evaluator
+      attr_reader :depth_manager, :policy_evaluator
+
+      class << self
+        def policies
+          [
+            Policies::FilterPolicy.new,
+            Policies::EventPolicy.new,
+          ]
+        end
+      end
 
       def should_collect?(trace_data)
         policy_evaluator.eligible_for_collection?(trace_data)

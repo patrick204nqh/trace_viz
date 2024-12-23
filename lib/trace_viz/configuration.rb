@@ -22,15 +22,12 @@ module TraceViz
       filters: [:exclude_internal_call],
     }.freeze
 
-    attr_reader :logger, :default_filters, :export
+    attr_reader :logger, :export
 
     ATTRIBUTES = DEFAULTS.keys.freeze
     ATTRIBUTES.each { |attr| attr_accessor attr }
 
     def initialize
-      # Default configuration
-      @default_filters = [:depth]
-
       @logger = Logger.new
       @export = Config::ExportConfig.new
 

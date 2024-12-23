@@ -20,12 +20,8 @@ module TraceViz
 
         attr_reader :filters
 
-        def combine_filters
-          Array(config.filters) + Array(config.default_filters)
-        end
-
         def build_filters
-          Collectors::Filters::Registry.build(combine_filters)
+          Collectors::Filters::Registry.build(config.filters)
         end
       end
     end
