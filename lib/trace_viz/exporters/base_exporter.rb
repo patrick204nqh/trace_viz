@@ -44,7 +44,7 @@ module TraceViz
       end
 
       def export_enabled?
-        export_config.enabled
+        export_config[:enabled]
       end
 
       def ensure_directory_exists
@@ -54,7 +54,7 @@ module TraceViz
       def handle_existing_file
         return unless File.exist?(file_path)
 
-        if export_config.overwrite
+        if export_config[:overwrite]
           logger.exported("Overwriting existing file: #{file_path}")
         else
           logger.skipped("File already exists and overwrite is disabled: #{file_path}. Export skipped.")
@@ -70,8 +70,8 @@ module TraceViz
       end
 
       def file_path
-        format = export_config.format
-        path = export_config.path
+        format = export_config[:format]
+        path = export_config[:path]
 
         "#{path}/trace_output.#{format}"
       end
