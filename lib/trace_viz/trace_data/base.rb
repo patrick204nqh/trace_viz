@@ -5,11 +5,11 @@ require "trace_viz/context"
 module TraceViz
   module TraceData
     class Base
-      attr_reader :config
+      attr_reader :config, :depth
 
       def initialize
         @config = Context.for(:config).configuration
-        @tracker = Context.for(:tracking)
+        @depth = Context.for(:tracking).depth.current
       end
 
       def id
@@ -31,10 +31,6 @@ module TraceViz
       def klass
         raise NotImplementedError
       end
-
-      private
-
-      attr_reader :tracker
     end
   end
 end

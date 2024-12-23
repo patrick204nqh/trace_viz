@@ -17,13 +17,12 @@ module TraceViz
         def initialize(trace_point)
           super(trace_point)
 
-          cache_params
-          increment_depth
+          populate_params
         end
 
         private
 
-        def cache_params
+        def populate_params
           @params = extract_params(trace_point.binding)
         end
 

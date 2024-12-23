@@ -20,7 +20,7 @@ module TraceViz
           @trace_point = trace_point
 
           record_timestamp
-          cache_basic_trace_data
+          populate_trace_attributes
         end
 
         def duration
@@ -29,7 +29,7 @@ module TraceViz
 
         private
 
-        def cache_basic_trace_data
+        def populate_trace_attributes
           @id = trace_point.method_id
           @event = trace_point.event
           @klass = trace_point.defined_class
@@ -39,19 +39,6 @@ module TraceViz
 
         def record_timestamp
           @timestamp = Time.now
-        end
-
-        def increment_depth
-          return @depth = 0 unless tracker&.depth
-
-          @depth = tracker.depth.current || 0
-          tracker.depth.increment
-        end
-
-        def decrement_depth
-          return 0 unless tracker&.depth
-
-          @depth = tracker.depth.decrement
         end
       end
     end

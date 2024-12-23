@@ -11,13 +11,12 @@ module TraceViz
         def initialize(trace_point)
           super(trace_point)
 
-          cache_result
-          decrement_depth
+          populate_result
         end
 
         private
 
-        def cache_result
+        def populate_result
           @result = @trace_point.return_value
         end
       end
