@@ -5,40 +5,45 @@ require_relative "config/export_config"
 
 module TraceViz
   class Configuration
-    attr_reader :default_filters
+    VALID_PARAM_DISPLAY_MODES = [:name_and_value, :name_only, :value_only].freeze
 
-    attr_accessor :logger,
-      :tab_size,
-      :show_indent,
-      :show_depth,
-      :max_display_depth,
-      :show_method_name,
-      :show_source_location,
-      :show_params,
-      :show_return_value,
-      :show_execution_time,
-      :show_trace_events,
-      :filters,
-      :export
+    DEFAULTS = {
+      tab_size: 2,
+      show_indent: true,
+      show_depth: true,
+      max_display_depth: 3,
+      show_method_name: true,
+      show_source_location: false,
+      show_params: true,
+      param_display_mode: :name_and_value,
+      show_return_value: true,
+      show_execution_time: true,
+      show_trace_events: [:call, :return],
+      filters: [:exclude_internal_call],
+    }.freeze
+
+    attr_reader :logger, :default_filters, :export
+
+    ATTRIBUTES = DEFAULTS.keys.freeze
+    ATTRIBUTES.each { |attr| attr_accessor attr }
 
     def initialize
       # Default configuration
       @default_filters = [:depth]
 
-      # User configuration
       @logger = Logger.new
-      @tab_size = 2
-      @show_indent = true
-      @show_depth = true
-      @max_display_depth = 3 # Recommended to keep this value between 3 and 5
-      @show_method_name = true
-      @show_source_location = false
-      @show_params = true
-      @show_return_value = true
-      @show_execution_time = true
-      @show_trace_events = [:call, :return]
-      @filters = [:exclude_internal_call]
       @export = Config::ExportConfig.new
+
+      DEFAULTS.each { |key, value| send("#{key}=", value) }
+    end
+
+    def param_display_mode=(mode)
+      unless VALID_PARAM_DISPLAY_MODES.include?(mode)
+        raise ArgumentError,
+          "Invalid param_display_mode: #{mode}. Valid modes are #{VALID_PARAM_DISPLAY_MODES.join(", ")}."
+      end
+
+      @param_display_mode = mode
     end
 
     def dup

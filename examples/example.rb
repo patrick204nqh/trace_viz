@@ -32,6 +32,7 @@ TraceViz.trace(
   max_display_depth: 3,
   show_method_name: true,
   show_params: true,
+  param_display_mode: :value_only,
   show_return_value: true,
   show_execution_time: true,
   show_source_location: true,
