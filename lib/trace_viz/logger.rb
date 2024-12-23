@@ -10,6 +10,8 @@ module TraceViz
       warn: "\e[33m",
       start: "\e[36m",
       finish: "\e[35m",
+      exported: "\e[92m",
+      skipped: "\e[93m",
     }.freeze
 
     EMOJIS = {
@@ -19,9 +21,11 @@ module TraceViz
       warn: "⚠️",
       start: "🚀",
       finish: "🏁",
+      exported: "📤",
+      skipped: "⏩",
     }.freeze
 
-    LEVELS = [:info, :success, :error, :warn, :start, :finish].freeze
+    LEVELS = [:info, :success, :error, :warn, :start, :finish, :exported, :skipped].freeze
 
     def initialize(output: $stdout)
       @output = output
@@ -51,7 +55,13 @@ module TraceViz
       log(:finish, message)
     end
 
-    private
+    def exported(message)
+      log(:exported, message)
+    end
+
+    def skipped(message)
+      log(:skipped, message)
+    end
 
     def log(level, message)
       return unless LEVELS.include?(level)
@@ -59,15 +69,24 @@ module TraceViz
       color = COLORS[level] || COLORS[:info]
       emoji = EMOJIS[level] || EMOJIS[:info]
 
-      # Align emoji and level using fixed-width columns
-      formatted_message = format(
-        "#{color}%-3s %-8s#{COLORS[:reset]} %s",
+      # Build the full message with emoji, level, and text
+      raw_message = format(
+        "%-3s %-8s %s",
         emoji,
         "[#{level.to_s.upcase}]",
         message,
       )
 
+      # Apply color to the full message if color is enabled
+      formatted_message = wrap_in_color(raw_message, color)
+
       @output.puts(formatted_message)
+    end
+
+    private
+
+    def wrap_in_color(message, color)
+      "#{color}#{message}#{COLORS[:reset]}"
     end
   end
 end

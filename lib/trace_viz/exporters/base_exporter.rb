@@ -27,7 +27,7 @@ module TraceViz
 
         write_file(content)
 
-        logger.success("Data successfully exported to #{file_path}")
+        logger.exported("Data successfully exported to #{file_path}")
       end
 
       private
@@ -55,16 +55,16 @@ module TraceViz
         return unless File.exist?(file_path)
 
         if export_config.overwrite
-          logger.info("Overwriting existing file: #{file_path}")
+          logger.exported("Overwriting existing file: #{file_path}")
         else
-          logger.warn("File already exists and overwrite is disabled: #{file_path}. Export skipped.")
+          logger.skipped("File already exists and overwrite is disabled: #{file_path}. Export skipped.")
           :skip
         end
       end
 
       def handle_empty_content
         if content.nil? || content.strip.empty?
-          logger.warn("Export content is empty. Export skipped.")
+          logger.skipped("Export content is empty. Export skipped.")
           :skip
         end
       end
