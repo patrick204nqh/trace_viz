@@ -6,7 +6,7 @@ require "trace_viz/utils/colorize"
 module TraceViz
   module Loggers
     module TraceFormatters
-      class BaseFormatter < Formatters::BaseFormatter
+      class BaseFormatter < TraceViz::Formatters::BaseFormatter
         private
 
         def colorize(text, color_key)

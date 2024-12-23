@@ -5,7 +5,7 @@ require_relative "base_formatter"
 module TraceViz
   module Exporters
     module Formatters
-      class MethodCallFormatter < TraceViz::Formatters::BaseFormatter
+      class MethodCallFormatter < BaseFormatter
         def format
           [
             indent_if_enabled,
