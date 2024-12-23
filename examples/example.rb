@@ -37,7 +37,6 @@ TraceViz.trace(
   show_source_location: true,
   show_trace_events: [:call],
   filters: [
-    :depth,
     :exclude_internal_call,
     :exclude_rails_framework,
     allow_classes: {

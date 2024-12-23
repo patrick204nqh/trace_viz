@@ -5,6 +5,8 @@ require_relative "config/export_config"
 
 module TraceViz
   class Configuration
+    attr_reader :default_filters
+
     attr_accessor :logger,
       :tab_size,
       :show_indent,
@@ -20,6 +22,10 @@ module TraceViz
       :export
 
     def initialize
+      # Default configuration
+      @default_filters = [:depth]
+
+      # User configuration
       @logger = Logger.new
       @tab_size = 2
       @show_indent = true
@@ -31,7 +37,7 @@ module TraceViz
       @show_return_value = true
       @show_execution_time = true
       @show_trace_events = [:call, :return]
-      @filters = [:depth, :exclude_internal_call]
+      @filters = [:exclude_internal_call]
       @export = Config::ExportConfig.new
     end
 

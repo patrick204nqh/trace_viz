@@ -16,14 +16,18 @@ module TraceViz
       end
 
       def export
-        return unless export_enabled?
+        unless export_enabled?
+          logger.warn("Export is disabled in configuration. Skipping export process.")
+          return
+        end
 
         ensure_directory_exists
+        return if handle_empty_content == :skip
         return if handle_existing_file == :skip
 
         write_file(content)
 
-        logger.success("Data exported to #{file_path}")
+        logger.success("Data successfully exported to #{file_path}")
       end
 
       private
@@ -54,6 +58,13 @@ module TraceViz
           logger.info("Overwriting existing file: #{file_path}")
         else
           logger.warn("File already exists and overwrite is disabled: #{file_path}. Export skipped.")
+          :skip
+        end
+      end
+
+      def handle_empty_content
+        if content.nil? || content.strip.empty?
+          logger.warn("Export content is empty. Export skipped.")
           :skip
         end
       end
