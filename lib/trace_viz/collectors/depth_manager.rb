@@ -6,41 +6,37 @@ module TraceViz
       def initialize
         @config = Context.for(:config).configuration
         @tracker = Context.for(:tracking)
-        @depth_tracker = tracker.depth
-        @active_calls_tracker = tracker.active_calls
       end
 
       # Adjusts the depth based on the trace event type and assigns it to the trace data
       def adjust_for_event(trace_data)
         case trace_data.event
         when :call
-          trace_data.depth = current
-          active_calls_tracker.push(trace_data)
-          depth_tracker.increment
+          trace_data.depth = current_depth
+          tracker.active_calls.push(trace_data)
         when :return
-          active_calls_tracker.pop
-          depth_tracker.decrement
-          trace_data.depth = current
+          tracker.active_calls.pop
+          trace_data.depth = current_depth
         end
 
         trace_data
       end
 
-      def current
-        depth_tracker.current || 0
+      def current_depth
+        tracker.active_calls.size
       end
 
       def within_depth?
-        current <= config.general[:max_display_depth]
+        current_depth <= config.general[:max_display_depth]
       end
 
       def current_call
-        active_calls_tracker.current
+        tracker.active_calls.current
       end
 
       private
 
-      attr_reader :config, :tracker, :depth_tracker, :active_calls_tracker
+      attr_reader :config, :tracker
     end
   end
 end

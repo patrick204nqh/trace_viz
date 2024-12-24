@@ -23,11 +23,14 @@ module TraceViz
       private
 
       def should_collect?(trace_point)
-        depth_manager.within_depth? || match_memory_address?(trace_point)
+        depth_manager.within_depth? || current_call_return?(trace_point)
       end
 
-      def match_memory_address?(trace_point)
-        depth_manager.current_call&.id == trace_point.object_id
+      # Checks if the given trace_point corresponds to the return event
+      # of the currently tracked method call in depth_manager.
+      def current_call_return?(trace_point)
+        trace_point.event == :return &&
+          depth_manager.current_call&.id == trace_point.object_id
       end
 
       def build_trace(trace_point)
