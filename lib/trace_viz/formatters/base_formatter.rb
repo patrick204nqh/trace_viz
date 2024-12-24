@@ -37,7 +37,7 @@ module TraceViz
       def method_name_if_enabled
         return unless config.show_method_name
 
-        "#{trace_data.klass}##{trace_data.id}"
+        "#{trace_data.klass}##{trace_data.action}"
       end
 
       def source_location_if_enabled

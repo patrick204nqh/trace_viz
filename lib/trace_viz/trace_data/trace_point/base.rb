@@ -7,11 +7,10 @@ module TraceViz
     module TracePoint
       class Base < TraceData::Base
         attr_reader :trace_point,
-          :timestamp,
-          :depth,
           :id,
           :event,
           :klass,
+          :action,
           :path,
           :line_number
 
@@ -19,7 +18,6 @@ module TraceViz
           super()
           @trace_point = trace_point
 
-          record_timestamp
           populate_trace_attributes
         end
 
@@ -30,15 +28,12 @@ module TraceViz
         private
 
         def populate_trace_attributes
-          @id = trace_point.method_id
+          @id = trace_point.object_id
           @event = trace_point.event
           @klass = trace_point.defined_class
+          @action = trace_point.method_id
           @path = trace_point.path
           @line_number = trace_point.lineno
-        end
-
-        def record_timestamp
-          @timestamp = Time.now
         end
       end
     end

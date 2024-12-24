@@ -27,7 +27,7 @@ module TraceViz
         end
 
         def extract_params(binding)
-          method = binding.eval("method(:#{id})")
+          method = binding.eval("method(:#{action})")
           method.parameters.each_with_object({}) do |(_, name), hash|
             next unless name
             next if name.to_s.include?("*") # Skip invalid or special variable names

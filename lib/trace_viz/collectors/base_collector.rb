@@ -37,6 +37,14 @@ module TraceViz
           ]
         end
       end
+
+      def log_trace(trace_data)
+        Loggers::TraceLogger.log(trace_data)
+      end
+
+      def store_trace(trace_data)
+        @collection << trace_data
+      end
     end
   end
 end
