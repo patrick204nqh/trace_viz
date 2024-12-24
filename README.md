@@ -34,16 +34,37 @@ Wrap your code inside the TraceViz.trace block to start tracing its execution. T
 
 ```ruby
 TraceViz.trace(
-  tab_size: 2,
-  show_indent: true,
-  show_depth: true,
-  max_display_depth: 4, # Recommended to keep this value between 3 and 5
-  show_method_name: true,
-  show_source_location: false,
-  show_params: true,
-  show_return_value: true,
-  show_execution_time: true,
-  show_trace_events: [:call, :return]
+  general: {
+    tab_size: 4,
+    show_indent: true,
+    show_depth: true,
+    max_display_depth: 3,
+    show_method_name: true,
+  },
+  source_location: {
+    show: false,
+    truncate_length: 100,
+  },
+  params: {
+    show: true,
+    mode: :name_and_value,
+    truncate_values: 50,
+  },
+  result: {
+    show: true,
+    truncate_length: 50,
+  },
+  execution: {
+    show_time: true,
+    show_trace_events: [:call, :return],
+  },
+  filters: [:exclude_internal_call],
+  export: {
+    enabled: true,
+    path: "tmp",
+    format: :txt,
+    overwrite: false,
+  }
 ) do
   # Your code here
 end
@@ -77,16 +98,37 @@ class Example
 end
 
 TraceViz.trace(
+  general: {
     tab_size: 4,
     show_indent: true,
     show_depth: true,
     max_display_depth: 3,
     show_method_name: true,
-    show_source_location: false,
-    show_params: true,
-    show_return_value: true,
-    show_execution_time: true,
-    show_trace_events: [:call, :return]
+  },
+  source_location: {
+    show: false,
+    truncate_length: 100,
+  },
+  params: {
+    show: true,
+    mode: :name_and_value,
+    truncate_values: 50,
+  },
+  result: {
+    show: true,
+    truncate_length: 50,
+  },
+  execution: {
+    show_time: true,
+    show_trace_events: [:call, :return],
+  },
+  filters: [:exclude_internal_call],
+  export: {
+    enabled: true,
+    path: "tmp",
+    format: :txt,
+    overwrite: false,
+  }
 ) do
   example = Example.new
   example.perform_task(5, 7)
@@ -96,8 +138,8 @@ end
 **Output**
 
 ```bash
-🚀   [START]   #depth:0 Example#perform_task (5, 7, nil)
-🚀   [START]       #depth:1 Example#add_numbers (5, 7, nil)
+🚀   [START]   #depth:0 Example#perform_task (5, 7)
+🚀   [START]       #depth:1 Example#add_numbers (5, 7)
 🚀   [START]           #depth:2 Example#multiply_by_factor (12, 2)
 🏁   [FINISH]          #depth:2 Example#multiply_by_factor #=> 24
 🏁   [FINISH]      #depth:1 Example#add_numbers #=> 24
@@ -109,20 +151,29 @@ Final result: 24
 
 ### Configuration Options
 
-| Option                 | Type             | Description                                                                      |
-| ---------------------- | ---------------- | -------------------------------------------------------------------------------- |
-| `tab_size`             | Integer          | Defines the number of spaces used for indentation when `show_indent` is enabled. |
-| `show_indent`          | Boolean          | Whether to visually indent nested calls.                                         |
-| `show_depth`           | Boolean          | Displays the depth level of the method call.                                     |
-| `max_display_depth`    | Integer          | Limits the display to a maximum depth of calls.                                  |
-| `show_method_name`     | Boolean          | Shows the name of the method being called.                                       |
-| `show_source_location` | Boolean          | Logs the source file name and line number where the method is defined.           |
-| `show_params`          | Boolean          | Logs the parameters passed to the method.                                        |
-| `show_return_value`    | Boolean          | Logs the return value of the method.                                             |
-| `show_execution_time`  | Boolean          | Logs the execution time for methods.                                             |
-| `show_trace_events`    | Array of Symbols | Specifies the events to trace. Valid values include:                             |
-|                        |                  | - `:call` - Log method calls.                                                    |
-|                        |                  | - `:return` - Log method returns.                                                |
+TraceViz provides extensive configuration options to customize tracing behavior.
+
+| Section             | Option              | Type             | Description                                                       |
+| ------------------- | ------------------- | ---------------- | ----------------------------------------------------------------- |
+| **general**         | `tab_size`          | Integer          | Number of spaces for indentation.                                 |
+|                     | `show_indent`       | Boolean          | Enables visual indentation for nested calls.                      |
+|                     | `show_depth`        | Boolean          | Displays the depth level of the method call.                      |
+|                     | `max_display_depth` | Integer          | Maximum depth of calls to display.                                |
+|                     | `show_method_name`  | Boolean          | Logs the name of the method being executed.                       |
+| **source_location** | `show`              | Boolean          | Logs the source file and line number for methods.                 |
+|                     | `truncate_length`   | Integer          | Maximum length of displayed source location information.          |
+| **params**          | `show`              | Boolean          | Logs method parameters.                                           |
+|                     | `mode`              | Symbol           | Parameter display mode (`:name`, `:value`, or `:name_and_value`). |
+|                     | `truncate_values`   | Integer          | Maximum length of parameter values to display.                    |
+| **result**          | `show`              | Boolean          | Logs method return values.                                        |
+|                     | `truncate_length`   | Integer          | Maximum length of return value logs.                              |
+| **execution**       | `show_time`         | Boolean          | Logs execution time for methods.                                  |
+|                     | `show_trace_events` | Array of Symbols | Specifies the trace events to log (e.g., `:call`, `:return`).     |
+| **filters**         | `filters`           | Array of Symbols | Filters applied to logs (e.g., excluding internal calls).         |
+| **export**          | `enabled`           | Boolean          | Enables or disables exporting of trace logs.                      |
+|                     | `path`              | String           | Directory for exported trace logs.                                |
+|                     | `format`            | Symbol           | Format for trace logs (`:txt` or other supported formats).        |
+|                     | `overwrite`         | Boolean          | Prevents overwriting of existing exported files.                  |
 
 ## Development
 

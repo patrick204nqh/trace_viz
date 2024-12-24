@@ -47,7 +47,7 @@ module TraceViz
     end
 
     def emoji_for(level)
-      Defaults.action_emojis.fetch(level)
+      Defaults.action_emojis.fetch(level, "")
     end
 
     def build_message(message, level, emoji)

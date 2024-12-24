@@ -8,12 +8,6 @@ module TraceViz
       class MethodCall < Base
         attr_reader :params
 
-        DISPLAY_MODES = {
-          name_and_value: ->(name, value) { "#{name}: #{value}" },
-          name_only: ->(name, _) { name.to_s },
-          value_only: ->(_, value) { value },
-        }.freeze
-
         def initialize(trace_point)
           super(trace_point)
 
@@ -33,7 +27,7 @@ module TraceViz
             next if name.to_s.include?("*") # Skip invalid or special variable names
 
             value = safe_local_variable_get(binding, name)
-            hash[name] = format_param(name, value)
+            hash[name] = value
           end
         end
 
@@ -41,12 +35,6 @@ module TraceViz
           binding.local_variable_defined?(name) ? binding.local_variable_get(name) : nil
         rescue NameError
           nil
-        end
-
-        def format_param(name, value)
-          mode = config.params[:mode]
-          formatter = DISPLAY_MODES[mode]
-          formatter.call(name, value)
         end
       end
     end

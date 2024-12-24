@@ -85,15 +85,15 @@ TraceViz.trace(
   params: {
     show: true,
     mode: :name_and_value,
-    truncate_values: 50,
+    truncate_values: 10,
   },
-  return_value: {
+  result: {
     show: true,
-    truncate_values: 50,
+    truncate_length: 5,
   },
   source_location: {
     show: true,
-    truncate_length: 100,
+    truncate_length: 10,
   },
   execution: {
     show_time: true,
@@ -119,7 +119,7 @@ TraceViz.trace(
   example.perform_task(5, 7)
   example.add_numbers(10)
   example.sum_all(1, 2, 3, 4, 5)
-  example.configure(enabled: true, retries: 3)
+  example.configure(enabled: "fdasfhsadfhasdfhsadjfkashdfjkhsdkjfahsjkdfhasdkfjahsdkljfhsdkjfhasdjkfhsakd", retries: 3)
   example.handle_kwargs(a: 10, b: 20, c: 30)
   example.combine_args(1, 2, 3, a: 10, b: 20)
   example.with_block { |message| puts message }

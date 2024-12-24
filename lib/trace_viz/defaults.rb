@@ -66,9 +66,9 @@ module TraceViz
         mode: :name_and_value,
         truncate_values: 50,
       },
-      return_value: {
+      result: {
         show: true,
-        truncate_values: 50,
+        truncate_length: 50,
       },
       execution: {
         show_time: true,

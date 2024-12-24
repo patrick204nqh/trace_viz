@@ -10,7 +10,7 @@ module TraceViz
       def initialize
         @validations = {
           params: ->(value) { validate_params(value) },
-          return_value: ->(value) { validate_return_value(value) },
+          result: ->(value) { validate_result(value) },
           source_location: ->(value) { validate_source_location(value) },
           filters: ->(value) { validate_filters(value) },
           export: ->(value) { validate_export(value) },
@@ -36,8 +36,8 @@ module TraceViz
         end
       end
 
-      def validate_return_value(value)
-        if value[:truncate_values] && (!value[:truncate_values].is_a?(Integer) || value[:truncate_values] <= 0)
+      def validate_result(value)
+        if value[:truncate_length] && (!value[:truncate_length].is_a?(Integer) || value[:truncate_length] <= 0)
           raise ArgumentError, "Truncate values must be a positive integer."
         end
       end
