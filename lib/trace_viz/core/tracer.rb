@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "trace_viz/logger"
 require "trace_viz/defaults"
+require "trace_viz/logger"
 require "trace_viz/context"
 require "trace_viz/configuration"
 require "trace_viz/adapters/trace_point_adapter"

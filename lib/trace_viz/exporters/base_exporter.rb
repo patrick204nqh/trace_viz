@@ -55,7 +55,7 @@ module TraceViz
         return unless File.exist?(file_path)
 
         if export_config[:overwrite]
-          logger.exported("Overwriting existing file: #{file_path}")
+          logger.processing("Overwriting existing file: #{file_path}")
         else
           logger.skipped("File already exists and overwrite is disabled: #{file_path}. Export skipped.")
           :skip

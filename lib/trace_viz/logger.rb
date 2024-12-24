@@ -2,82 +2,26 @@
 
 module TraceViz
   class Logger
-    COLORS = {
-      reset: "\e[0m",
-      info: "\e[34m",
-      success: "\e[32m",
-      error: "\e[31m",
-      warn: "\e[33m",
-      start: "\e[36m",
-      finish: "\e[35m",
-      exported: "\e[92m",
-      skipped: "\e[93m",
-    }.freeze
-
-    EMOJIS = {
-      info: "ℹ️",
-      success: "✅",
-      error: "❌",
-      warn: "⚠️",
-      start: "🚀",
-      finish: "🏁",
-      exported: "📤",
-      skipped: "⏩",
-    }.freeze
-
-    LEVELS = [:info, :success, :error, :warn, :start, :finish, :exported, :skipped].freeze
+    LEVELS = Defaults.action_colors.keys.freeze
 
     def initialize(output: $stdout)
       @output = output
     end
 
-    def info(message)
-      log(:info, message)
+    LEVELS.each do |level|
+      define_method(level) do |message|
+        log(message, level)
+      end
     end
 
-    def success(message)
-      log(:success, message)
-    end
+    def log(message, level = :default)
+      validate_message!(message)
+      validate_level!(level)
 
-    def error(message)
-      log(:error, message)
-    end
+      color = color_for(level)
+      emoji = emoji_for(level)
 
-    def warn(message)
-      log(:warn, message)
-    end
-
-    def start(message)
-      log(:start, message)
-    end
-
-    def finish(message)
-      log(:finish, message)
-    end
-
-    def exported(message)
-      log(:exported, message)
-    end
-
-    def skipped(message)
-      log(:skipped, message)
-    end
-
-    def log(level, message)
-      return unless LEVELS.include?(level)
-
-      color = COLORS[level] || COLORS[:info]
-      emoji = EMOJIS[level] || EMOJIS[:info]
-
-      # Build the full message with emoji, level, and text
-      raw_message = format(
-        "%-3s %-8s %s",
-        emoji,
-        "[#{level.to_s.upcase}]",
-        message,
-      )
-
-      # Apply color to the full message if color is enabled
+      raw_message = build_message(message, level, emoji)
       formatted_message = wrap_in_color(raw_message, color)
 
       @output.puts(formatted_message)
@@ -85,8 +29,37 @@ module TraceViz
 
     private
 
+    def validate_message!(message)
+      raise ArgumentError, "Message must be a String" unless message.is_a?(String)
+    end
+
+    def validate_level!(level)
+      raise ArgumentError, "Invalid log level: #{level}" unless LEVELS.include?(level)
+    end
+
+    def color_for(level)
+      color_key = Defaults.action_colors.fetch(level)
+      Defaults.colors.fetch(color_key)
+    end
+
+    def default_color
+      color_for(:default)
+    end
+
+    def emoji_for(level)
+      Defaults.action_emojis.fetch(level)
+    end
+
+    def build_message(message, level, emoji)
+      if level == :default
+        "#{emoji} #{message}" # No [DEFAULT] for :default level
+      else
+        format("%-3s %-8s %s", emoji, "[#{level.to_s.upcase}]", message)
+      end
+    end
+
     def wrap_in_color(message, color)
-      "#{color}#{message}#{COLORS[:reset]}"
+      "#{color}#{message}#{default_color}"
     end
   end
 end
