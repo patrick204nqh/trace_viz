@@ -12,9 +12,6 @@ module TraceViz
 
       def initialize
         @collection = []
-
-        @depth_manager = DepthManager.new
-        @policy_evaluator = PolicyEvaluator.new(self.class.policies)
       end
 
       def collect
@@ -26,8 +23,6 @@ module TraceViz
       end
 
       private
-
-      attr_reader :depth_manager, :policy_evaluator
 
       class << self
         def policies
@@ -44,6 +39,14 @@ module TraceViz
 
       def store_trace(trace_data)
         @collection << trace_data
+      end
+
+      def depth_manager
+        @depth_manager ||= DepthManager.new
+      end
+
+      def policy_evaluator
+        @policy_evaluator ||= PolicyEvaluator.new(self.class.policies)
       end
     end
   end

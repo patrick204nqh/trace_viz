@@ -75,17 +75,30 @@ class Example
 end
 
 TraceViz.trace(
-  tab_size: 4,
-  show_indent: true,
-  show_depth: true,
-  max_display_depth: 4,
-  show_method_name: true,
-  show_params: true,
-  param_display_mode: :name_and_value,
-  show_return_value: true,
-  show_execution_time: true,
-  show_source_location: true,
-  show_trace_events: [:call, :return],
+  general: {
+    tab_size: 4,
+    show_indent: true,
+    show_depth: true,
+    max_display_depth: 4,
+    show_method_name: true,
+  },
+  params: {
+    show: true,
+    mode: :name_and_value,
+    truncate_values: 50,
+  },
+  return_value: {
+    show: true,
+    truncate_values: 50,
+  },
+  source_location: {
+    show: true,
+    truncate_length: 100,
+  },
+  execution: {
+    show_time: true,
+    show_trace_events: [:call, :return],
+  },
   filters: [
     :exclude_internal_call,
     :exclude_rails_framework,

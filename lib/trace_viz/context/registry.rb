@@ -26,9 +26,7 @@ module TraceViz
         # @raise [ArgumentError] If a context key is not found in the CONTEXTS hash.
         def build(contexts)
           contexts.each_with_object({}) do |(context_key, options), result|
-            klass = CONTEXTS.fetch(context_key) do
-              raise ArgumentError, "Unknown context: #{context_key}"
-            end
+            klass = CONTEXTS.fetch(context_key)
 
             result[context_key] = klass.new(**(options || {}))
           end

@@ -44,7 +44,7 @@ module TraceViz
         end
 
         def format_param(name, value)
-          mode = config.param_display_mode
+          mode = config.params[:mode]
           formatter = DISPLAY_MODES[mode]
           formatter.call(name, value)
         end

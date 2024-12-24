@@ -11,43 +11,61 @@ module TraceViz
     def initialize
       @logger = Logger.new
       @validator = Config::Validator.new
-      reset_defaults
+      @settings = Defaults.fetch_defaults
+      define_dynamic_accessors
     end
 
-    Defaults.fetch_defaults.each_key do |attr|
-      define_method("#{attr}=") do |value|
-        @validator.validate(attr, value)
-        current_value = instance_variable_get("@#{attr}")
+    def [](key)
+      @settings[key]
+    end
 
-        # Handle partial updates for hashes like `export`
-        if current_value.is_a?(Hash) && value.is_a?(Hash)
-          current_value.merge!(value)
-        else
-          instance_variable_set("@#{attr}", value)
-        end
+    def update(group, values)
+      raise ArgumentError, "Invalid configuration group: #{group}" unless @settings.key?(group)
+
+      @validator.validate(group, values)
+      if @settings[group].is_a?(Hash)
+        @settings[group].merge!(values)
+      else
+        @settings[group] = values
       end
-
-      # define_method(attr) do
-      #   instance_variable_get("@#{attr}")
-      # end
     end
 
     def reset_defaults
-      Defaults.fetch_defaults.each { |key, value| send("#{key}=", value) }
+      @settings = Defaults.fetch_defaults
     end
 
     def dup
       copy = self.class.new
-      instance_variables.each do |var|
-        value = instance_variable_get(var)
-        copy_value = begin
-          value.dup
-        rescue TypeError
-          value
-        end
-        copy.instance_variable_set(var, copy_value)
+      @settings.each do |key, value|
+        copy.update(key, deep_dup(value))
       end
       copy
+    end
+
+    private
+
+    def define_dynamic_accessors
+      @settings.each_key do |attr|
+        define_singleton_method(attr) { @settings[attr] }
+        define_singleton_method("#{attr}=") do |value|
+          update(attr, value)
+        end
+      end
+    end
+
+    def deep_dup(value)
+      case value
+      when Hash
+        value.transform_values { |v| deep_dup(v) }
+      when Array
+        value.map { |v| deep_dup(v) }
+      else
+        begin
+          value.dup
+        rescue
+          value
+        end
+      end
     end
   end
 

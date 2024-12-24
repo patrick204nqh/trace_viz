@@ -31,7 +31,7 @@ module TraceViz
       end
 
       def within_depth?
-        current <= config.max_display_depth
+        current <= config.general[:max_display_depth]
       end
 
       def current_call

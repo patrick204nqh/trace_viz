@@ -50,17 +50,30 @@ module TraceViz
     }.freeze
 
     CONFIG = {
-      tab_size: 2,
-      show_indent: true,
-      show_depth: true,
-      max_display_depth: 3,
-      show_method_name: true,
-      show_source_location: false,
-      show_params: true,
-      param_display_mode: :name_and_value,
-      show_return_value: true,
-      show_execution_time: true,
-      show_trace_events: [:call, :return],
+      general: {
+        tab_size: 2,
+        show_indent: true,
+        show_depth: true,
+        max_display_depth: 3,
+        show_method_name: true,
+      },
+      source_location: {
+        show: false,
+        truncate_length: 100,
+      },
+      params: {
+        show: true,
+        mode: :name_and_value,
+        truncate_values: 50,
+      },
+      return_value: {
+        show: true,
+        truncate_values: 50,
+      },
+      execution: {
+        show_time: true,
+        show_trace_events: [:call, :return],
+      },
       filters: [:exclude_internal_call],
       export: {
         enabled: true,
@@ -70,7 +83,7 @@ module TraceViz
       },
     }.freeze
 
-    VALID_PARAM_DISPLAY_MODES = [:name_and_value, :name_only, :value_only].freeze
+    VALID_PARAM_MODES = [:name_and_value, :name_only, :value_only].freeze
     VALID_EXPORT_FORMATS = [:txt, :json, :yml].freeze
 
     class << self
@@ -90,8 +103,8 @@ module TraceViz
         CONFIG.dup
       end
 
-      def valid_param_display_modes
-        VALID_PARAM_DISPLAY_MODES
+      def valid_param_modes
+        VALID_PARAM_MODES
       end
 
       def valid_export_formats

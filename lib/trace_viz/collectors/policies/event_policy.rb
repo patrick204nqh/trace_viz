@@ -8,7 +8,7 @@ module TraceViz
       class EventPolicy < BasePolicy
         def initialize
           super()
-          @allowed_events = config.show_trace_events
+          @allowed_events = config.execution[:show_trace_events]
         end
 
         def applicable?(trace_data)
