@@ -37,10 +37,6 @@ module TraceViz
           ]
         end
       end
-
-      def should_collect?(trace_data)
-        policy_evaluator.eligible_for_collection?(trace_data)
-      end
     end
   end
 end

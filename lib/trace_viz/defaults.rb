@@ -64,7 +64,7 @@ module TraceViz
       filters: [:exclude_internal_call],
       export: {
         enabled: true,
-        path: "exports",
+        path: "tmp",
         format: :txt,
         overwrite: false,
       },

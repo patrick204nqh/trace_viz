@@ -7,10 +7,6 @@ module TraceViz
         @policies = policies
       end
 
-      def add_policy(policy)
-        @policies << policy
-      end
-
       def eligible_for_collection?(trace_data)
         @policies.all? { |policy| policy.applicable?(trace_data) }
       end

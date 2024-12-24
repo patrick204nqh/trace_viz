@@ -12,8 +12,7 @@ module TraceViz
 
         trace_data = build_trace_data(trace_point)
         depth_manager.adjust_for_event(trace_data)
-
-        return unless should_collect?(trace_data)
+        return unless policy_evaluator.eligible_for_collection?(trace_data)
 
         log_trace_data(trace_data)
         store_trace_data(trace_data)
