@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "include_classes_filter"
+require_relative "include_gems_filter"
 require_relative "exclude_internal_call_filter"
 require_relative "exclude_gems_filter"
 require_relative "exclude_rails_framework_filter"
@@ -13,6 +14,7 @@ module TraceViz
       class Registry
         FILTERS = {
           include_classes: IncludeClassesFilter,
+          include_gems: IncludeGemsFilter,
           exclude_internal_call: ExcludeInternalCallFilter,
           exclude_gems: ExcludeGemsFilter,
           exclude_rails_framework: ExcludeRailsFrameworkFilter,

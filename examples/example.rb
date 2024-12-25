@@ -97,7 +97,7 @@ TraceViz.trace(
   },
   execution: {
     show_time: true,
-    show_trace_events: [:call, :return],
+    show_trace_events: [:call],
   },
   filters: [
     :exclude_internal_call,
@@ -105,6 +105,11 @@ TraceViz.trace(
     include_classes: {
       classes: [Example]
     },
+    # include_gems: {
+    #   app_running: true,
+    #   app_path: Dir.pwd,
+    #   gems: ["trace_viz"]
+    # }
     # exclude_classes: {
     #   classes: [Example]
     # }
