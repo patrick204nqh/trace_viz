@@ -2,10 +2,11 @@
 
 require "trace_viz/logger"
 require "trace_viz/config/validator"
+require "trace_viz/config/copier"
 
 module TraceViz
   class Configuration
-    attr_reader :logger
+    attr_reader :logger, :settings
     attr_reader(*Defaults.fetch_defaults.keys)
 
     def initialize
@@ -16,17 +17,17 @@ module TraceViz
     end
 
     def [](key)
-      @settings[key]
+      settings[key]
     end
 
     def update(group, values)
-      raise ArgumentError, "Invalid configuration group: #{group}" unless @settings.key?(group)
+      raise ArgumentError, "Invalid configuration group: #{group}" unless settings.key?(group)
 
       @validator.validate(group, values)
-      if @settings[group].is_a?(Hash)
-        @settings[group].merge!(values)
+      if settings[group].is_a?(Hash)
+        settings[group].merge!(values)
       else
-        @settings[group] = values
+        settings[group] = values
       end
     end
 
@@ -35,35 +36,16 @@ module TraceViz
     end
 
     def dup
-      copy = self.class.new
-      @settings.each do |key, value|
-        copy.update(key, deep_dup(value))
-      end
-      copy
+      Config::Copier.new(self).copy
     end
 
     private
 
     def define_dynamic_accessors
-      @settings.each_key do |attr|
-        define_singleton_method(attr) { @settings[attr] }
+      settings.each_key do |attr|
+        define_singleton_method(attr) { settings[attr] }
         define_singleton_method("#{attr}=") do |value|
           update(attr, value)
-        end
-      end
-    end
-
-    def deep_dup(value)
-      case value
-      when Hash
-        value.transform_values { |v| deep_dup(v) }
-      when Array
-        value.map { |v| deep_dup(v) }
-      else
-        begin
-          value.dup
-        rescue
-          value
         end
       end
     end

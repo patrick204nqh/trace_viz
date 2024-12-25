@@ -80,7 +80,25 @@ module TraceViz
         show_time: true,
         show_trace_events: [:call, :return],
       },
-      filters: [:exclude_internal_call],
+      filters: [
+        :exclude_internal_call,
+        # :exclude_default_classes,
+        # :exclude_rails_framework,
+        # include_classes: {
+        #   classes: [],
+        # },
+        # exclude_classes: {
+        #   classes: [],
+        # },
+        # include_gems: {
+        #   app_running: true,
+        #   app_path: Dir.pwd,
+        #   gems: [],
+        # },
+        # exclude_gems: {
+        #   gems: [],
+        # },
+      ],
       export: {
         enabled: true,
         path: "tmp",
