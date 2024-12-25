@@ -102,7 +102,7 @@ TraceViz.trace(
   filters: [
     :exclude_internal_call,
     :exclude_rails_framework,
-    allow_classes: {
+    include_classes: {
       classes: [Example]
     },
     # exclude_classes: {

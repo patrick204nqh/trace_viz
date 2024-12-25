@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "allow_classes_filter"
+require_relative "include_classes_filter"
 require_relative "exclude_internal_call_filter"
 require_relative "exclude_gems_filter"
 require_relative "exclude_rails_framework_filter"
@@ -12,7 +12,7 @@ module TraceViz
     module Filters
       class Registry
         FILTERS = {
-          allow_classes: AllowClassesFilter,
+          include_classes: IncludeClassesFilter,
           exclude_internal_call: ExcludeInternalCallFilter,
           exclude_gems: ExcludeGemsFilter,
           exclude_rails_framework: ExcludeRailsFrameworkFilter,
@@ -31,7 +31,7 @@ module TraceViz
                 result << klass.new
               when Hash
                 # Handle complex filters with options
-                # (e.g., { allow_class: { classes: [Example] } })
+                # (e.g., { include_classes: { classes: [Example] } })
                 filter.each do |filter_key, options|
                   klass = fetch_filter_class(filter_key)
                   result << klass.new(**options)
