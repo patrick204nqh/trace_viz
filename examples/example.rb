@@ -1,76 +1,72 @@
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
 require "trace_viz"
 
-class Example
-  # Basic method with two parameters
-  def perform_task(x, y)
-    result = add_numbers(x, y)
-    log_result(result)
-    result
+class Calculator
+  def initialize(factor)
+    @factor = factor
   end
 
-  # Method with optional parameters
-  def add_numbers(a, b = 0)
-    sleep(0.1)
-    sum = a + b
-    multiply_by_factor(sum, 2)
+  # A method that triggers a chain of calculations
+  def calculate_chain(a, b)
+    sum = add(a, b)
+    scaled = scale(sum)
+    complex_operation(scaled)
   end
 
-  def multiply_by_factor(value, factor)
+  # Basic addition
+  def add(x, y)
     sleep(0.05)
-    value * factor
+    x + y
   end
 
-  # Method with splat arguments
-  def sum_all(*args)
+  # Scaling a number by the factor
+  def scale(value)
     sleep(0.05)
-    args.sum
+    value * @factor
   end
 
-  # Method with keyword arguments
-  def configure(options = {})
-    sleep(0.02)
-    puts "Configured with: #{options.inspect}"
-    options[:enabled] ? "Configured successfully" : "Configuration failed"
+  # Complex operation involving another class
+  def complex_operation(value)
+    sleep(0.05)
+    Logger.new.log("Starting complex operation")
+    divider = Divider.new
+    divider.divide_and_process(value, 2)
+  end
+end
+
+class Divider
+  # Divides a number and calls a nested method
+  def divide_and_process(value, divisor)
+    result = divide(value, divisor)
+    process_divided_result(result)
   end
 
-  # Method with double-splat arguments
-  def handle_kwargs(**kwargs)
-    sleep(0.03)
-    puts "Handling keyword arguments: #{kwargs.inspect}"
-    kwargs.values.sum
-  end
-
-  # Method with both splat and double-splat arguments
-  def combine_args(*args, **kwargs)
-    sleep(0.04)
-    puts "Positional arguments: #{args.inspect}"
-    puts "Keyword arguments: #{kwargs.inspect}"
-    args.sum + kwargs.values.sum
-  end
-
-  # Method that accepts and yields a block
-  def with_block
-    sleep(0.02)
-    if block_given?
-      yield("Block execution successful")
-    else
-      "No block provided"
-    end
-  end
-
-  # Logging method for debugging
-  def log_result(result)
-    sleep(0.02)
-    puts "Final result: #{result}"
-  end
-
-  # Method with error handling
+  # Performs division
   def divide(a, b)
-    sleep(0.05)
     raise "Division by zero!" if b.zero?
 
+    sleep(0.05)
     a / b
+  end
+
+  # Processes the divided result further
+  def process_divided_result(value)
+    Logger.new.log("Processing divided result: #{value}")
+    nested_process(value)
+  end
+
+  # A nested operation
+  def nested_process(value)
+    sleep(0.05)
+    Logger.new.log("Final nested processing on #{value}")
+    value + 10
+  end
+end
+
+class Logger
+  def log(message)
+    sleep(0.01)
+    puts "[LOG] #{message}"
   end
 end
 
@@ -79,7 +75,7 @@ TraceViz.trace(
     tab_size: 4,
     show_indent: true,
     show_depth: true,
-    max_display_depth: 4,
+    max_display_depth: 10,
     show_method_name: true,
   },
   params: {
@@ -93,26 +89,17 @@ TraceViz.trace(
   },
   source_location: {
     show: true,
-    truncate_length: 10,
+    truncate_length: 20,
   },
   execution: {
     show_time: true,
-    show_trace_events: [:call],
+    show_trace_events: [:call, :return],
   },
   filters: [
     :exclude_internal_call,
-    :exclude_rails_framework,
     include_classes: {
-      classes: [Example]
-    },
-    # include_gems: {
-    #   app_running: true,
-    #   app_path: Dir.pwd,
-    #   gems: ["trace_viz"]
-    # }
-    # exclude_classes: {
-    #   classes: [Example]
-    # }
+      classes: [Calculator, Divider, Logger],
+    }
   ],
   export: {
     enabled: true,
@@ -120,17 +107,7 @@ TraceViz.trace(
     overwrite: true
   }
 ) do
-  example = Example.new
-  example.perform_task(5, 7)
-  example.add_numbers(10)
-  example.sum_all(1, 2, 3, 4, 5)
-  example.configure(enabled: "fdasfhsadfhasdfhsadjfkashdfjkhsdkjfahsjkdfhasdkfjahsdkljfhsdkjfhasdjkfhsakd", retries: 3)
-  example.handle_kwargs(a: 10, b: 20, c: 30)
-  example.combine_args(1, 2, 3, a: 10, b: 20)
-  example.with_block { |message| puts message }
-  begin
-    example.divide(10, 0)
-  rescue => e
-    puts "Error: #{e.message}"
-  end
+  calculator = Calculator.new(3)
+  result = calculator.calculate_chain(10, 20)
+  puts "Final result: #{result}"
 end

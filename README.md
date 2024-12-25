@@ -12,6 +12,10 @@ TraceViz is a Ruby library designed to trace and visualize events executed in a 
 
 The gem allows you to customize how much detail you want to see, such as method calls, parameters, return values, and execution times.
 
+## Demo
+
+[![asciicast](https://asciinema.org/a/pKjqLFNPxQFQWucTzcGMpt6QE.svg)](https://asciinema.org/a/pKjqLFNPxQFQWucTzcGMpt6QE)
+
 ## Installation
 
 Add this line to your application's Gemfile:
