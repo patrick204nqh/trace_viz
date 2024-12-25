@@ -6,12 +6,17 @@ module TraceViz
   module Collectors
     module Filters
       class IncludeGemsFilter < BaseFilter
+        DEFAULT_OPTIONS = {
+          app_running: true,
+          gems: [],
+        }.freeze
+
         def initialize(**options)
           super()
-          @include_app = options.fetch(:app_running, false)
+          @include_app = options.fetch(:app_running, DEFAULT_OPTIONS[:app_running])
           @app_path = options[:app_path] || detect_app_path
           @app_path.freeze
-          @included_gems = options.fetch(:gems, []).map do |gem_name|
+          @included_gems = options.fetch(:gems, DEFAULT_OPTIONS[:gems]).map do |gem_name|
             ::Gem.loaded_specs[gem_name]&.full_gem_path
           end.compact.freeze
         end
