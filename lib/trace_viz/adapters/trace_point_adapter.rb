@@ -17,7 +17,7 @@ module TraceViz
         ::TracePoint.new(:call, :return) do |tp|
           collector.collect(tp)
         end.enable(&block)
-
+      ensure
         Exporters::TextExporter.new(collector).export
       end
 
