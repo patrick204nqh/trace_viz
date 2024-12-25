@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 require "trace_viz/collectors/filters/registry"
-require_relative "base_policy"
+require_relative "base_evaluator"
 
 module TraceViz
   module Collectors
-    module Policies
-      class FilterPolicy < BasePolicy
+    module Evaluators
+      class FilterEvaluator < BaseEvaluator
         def initialize
           super()
+
           @filters = build_filters.freeze
         end
 
-        def applicable?(trace_data)
+        def pass?(trace_data)
           filters.all? { |filter| filter.apply?(trace_data) }
         end
 

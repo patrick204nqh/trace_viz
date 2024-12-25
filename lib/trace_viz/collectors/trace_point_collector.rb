@@ -1,48 +1,49 @@
 # frozen_string_literal: true
 
 require "trace_viz/trace_data/trace_point_builder"
-require "trace_viz/loggers/trace_logger"
 require_relative "base_collector"
+require_relative "matchers/trace_point_action_matcher"
+require_relative "matchers/within_depth_matcher"
+require_relative "depth_manager"
 
 module TraceViz
   module Collectors
     class TracePointCollector < BaseCollector
-      def collect(trace_point)
-        return unless should_collect?(trace_point)
+      def initialize
+        super()
 
-        trace_data = build_trace(trace_point)
-
-        return unless eligible_for_collection?(trace_data)
-
-        trace_data = manage_depth(trace_data)
-
-        log_trace(trace_data)
-        store_trace(trace_data)
+        @action_matcher = Matchers::TracePointActionMatcher.new
+        @within_depth_matcher = Matchers::WithinDepthMatcher.new
       end
 
       private
 
-      def should_collect?(trace_point)
-        depth_manager.within_depth? || current_call_return?(trace_point)
-      end
+      attr_reader :action_matcher, :within_depth_matcher
 
-      # Checks if the given trace_point corresponds to the return event
-      # of the currently tracked method call in depth_manager.
-      def current_call_return?(trace_point)
-        trace_point.event == :return &&
-          depth_manager.current_call&.id == trace_point.object_id
+      def collectible(trace_point)
+        within_depth? || match_action?(trace_point)
       end
 
       def build_trace(trace_point)
         TraceData::TracePointBuilder.build(trace_point)
       end
 
-      def eligible_for_collection?(trace_data)
-        policy_evaluator.eligible_for_collection?(trace_data)
+      def update_trace_depth(trace_data)
+        depth_manager.align(trace_data)
       end
 
-      def manage_depth(trace_data)
-        depth_manager.adjust_for_event(trace_data)
+      def match_action?(trace_point)
+        action_matcher.matches?(trace_point)
+      end
+
+      def within_depth?
+        depth = tracker.current_depth
+
+        within_depth_matcher.matches?(depth)
+      end
+
+      def depth_manager
+        @depth_manager ||= DepthManager.new
       end
     end
   end

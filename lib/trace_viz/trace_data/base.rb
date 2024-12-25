@@ -16,8 +16,13 @@ module TraceViz
         record_timestamp
       end
 
-      # A unique identifier for each object in memory
+      # Unique ID for each individual event
       def id
+        raise NotImplementedError
+      end
+
+      # Shared ID betweem events for the same method call
+      def action_id
         raise NotImplementedError
       end
 

@@ -4,13 +4,13 @@ require "trace_viz/context"
 
 module TraceViz
   module Collectors
-    module Policies
-      class BasePolicy
+    module Evaluators
+      class BaseEvaluator
         def initialize
           @config = Context.for(:config).configuration
         end
 
-        def applicable?(trace_data)
+        def pass?(trace_data)
           raise NotImplementedError
         end
 
