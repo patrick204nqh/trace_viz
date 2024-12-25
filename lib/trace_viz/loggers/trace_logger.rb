@@ -12,25 +12,25 @@ module TraceViz
 
       class << self
         def log(trace_data)
-          new.log(trace_data)
+          new(trace_data).log
         end
       end
 
-      def initialize
+      def initialize(trace_data)
         @logger = TraceViz.logger
+        @trace_data = trace_data
       end
 
-      def log(trace_data)
-        formatted_message = build_log_message(trace_data)
+      def log
         log_level = LOG_LEVELS[trace_data.event] || :info
         logger.send(log_level, formatted_message)
       end
 
       private
 
-      attr_reader :logger
+      attr_reader :logger, :trace_data
 
-      def build_log_message(trace_data)
+      def formatted_message
         Loggers::TraceBuilder.new(trace_data).build
       end
     end

@@ -8,12 +8,13 @@ require_relative "evaluators/hidden_evaluator"
 module TraceViz
   module Collectors
     class BaseCollector
-      attr_reader :collection
+      attr_reader :collection, :stats
 
       # To implement collect trace data from the given event,
       # you need to enter the `config` context to perform the evaluation.
       def initialize
         @tracker = Context.for(:tracking)
+        @stats = TraceStats.new
 
         @collection = []
 
@@ -22,7 +23,7 @@ module TraceViz
       end
 
       def collect(event)
-        return unless collectible(event)
+        return unless collectible?(event)
 
         trace_data = build_trace(event)
         return unless valid?(trace_data)
@@ -73,6 +74,8 @@ module TraceViz
       end
 
       def store_trace(trace_data)
+        stats.update(trace_data)
+
         @collection << trace_data
       end
     end

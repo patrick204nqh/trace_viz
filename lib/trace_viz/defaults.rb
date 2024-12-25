@@ -4,6 +4,10 @@ module TraceViz
   class Defaults
     COLORS = {
       reset: "\e[0m",
+      bold: "\e[1m",
+      dim: "\e[2m",
+      underline: "\e[4m",
+      reverse: "\e[7m",
       black: "\e[30m",
       red: "\e[31m",
       green: "\e[32m",
@@ -34,6 +38,7 @@ module TraceViz
       finish: "🏁",
       exported: "📤",
       skipped: "⏩",
+      stats: "📊",
     }.freeze
 
     ACTION_COLORS = {
@@ -47,6 +52,7 @@ module TraceViz
       finish: :magenta,
       exported: :light_green,
       skipped: :light_yellow,
+      stats: :underline,
     }.freeze
 
     CONFIG = {

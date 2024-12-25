@@ -5,6 +5,7 @@ require_relative "base_collector"
 require_relative "matchers/trace_point_action_matcher"
 require_relative "matchers/within_depth_matcher"
 require_relative "depth_manager"
+require_relative "trace_stats"
 
 module TraceViz
   module Collectors
@@ -20,7 +21,7 @@ module TraceViz
 
       attr_reader :action_matcher, :within_depth_matcher
 
-      def collectible(trace_point)
+      def collectible?(trace_point)
         within_depth? || match_action?(trace_point)
       end
 
