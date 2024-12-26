@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require_relative "base_exporter"
-require_relative "transformers/text_transformer"
+require_relative "transformers/yaml_transformer"
 
 module TraceViz
   module Exporters
-    class TextExporter < BaseExporter
+    class YamlExporter < BaseExporter
       private
 
       def transform_collector_data(collector)
-        transformer = Transformers::TextTransformer.new(collector)
+        transformer = Transformers::YamlTransformer.new(collector)
         transformer.transform
       end
 

@@ -103,7 +103,7 @@ TraceViz.trace(
   ],
   export: {
     enabled: true,
-    format: :txt,
+    format: :yaml,
     overwrite: true
   }
 ) do

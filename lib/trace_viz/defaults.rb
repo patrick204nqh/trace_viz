@@ -108,7 +108,7 @@ module TraceViz
     }.freeze
 
     VALID_PARAM_MODES = [:name_and_value, :name_only, :value_only].freeze
-    VALID_EXPORT_FORMATS = [:txt, :json, :yml].freeze
+    VALID_EXPORT_FORMATS = [:txt, :json, :yaml].freeze
 
     class << self
       def colors

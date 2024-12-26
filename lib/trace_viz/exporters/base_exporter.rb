@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require "fileutils"
-
 require "trace_viz/context"
-require_relative "transformers/text_transformer"
 
 module TraceViz
   module Exporters
@@ -33,11 +31,6 @@ module TraceViz
       private
 
       attr_reader :config, :export_config, :logger, :data
-
-      def transform_collector_data(collector)
-        transformer = Transformers::TextTransformer.new(collector)
-        transformer.transform
-      end
 
       def content
         raise NotImplementedError
