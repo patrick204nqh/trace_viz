@@ -20,11 +20,27 @@ module TraceViz
         end
 
         def formatted_class_name
-          colorize("#{trace_data.klass}#", :bold, :yellow)
+          colorize("#{trace_data.klass}#", :light_green)
         end
 
         def formatted_action_name
-          colorize(trace_data.action, :light_cyan)
+          colorize(trace_data.action, :bold, :light_cyan)
+        end
+
+        def formatted_depth
+          return unless config.general[:show_depth]
+
+          depth_prefix = colorize("depth", :dip, :italic, :blue)
+          depth_open_block = colorize("[", :dip, :light_blue)
+          depth_number = colorize(trace_data.depth, :light_red)
+          depth_close_block = colorize("]", :dip, :light_blue)
+
+          [
+            depth_prefix,
+            depth_open_block,
+            depth_number,
+            depth_close_block,
+          ].join
         end
       end
     end
