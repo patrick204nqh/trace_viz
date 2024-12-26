@@ -9,7 +9,6 @@ module TraceViz
         def format
           [
             indent_representation,
-            # colorize(depth_representation, :cyan),
             formatted_depth,
             formatted_method_name,
             colorize(source_location_representation, :dim, :light_gray),
