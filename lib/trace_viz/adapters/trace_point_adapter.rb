@@ -20,12 +20,16 @@ module TraceViz
         end.enable(&block)
       ensure
         Loggers::TraceStatsLogger.log(collector)
-        Exporters::TextExporter.new(collector).export
+        exporter.export
       end
 
       private
 
       attr_reader :collector
+
+      def exporter
+        Exporters::Registry.build(config.export[:format], collector)
+      end
     end
   end
 end
