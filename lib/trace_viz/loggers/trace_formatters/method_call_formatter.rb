@@ -8,11 +8,11 @@ module TraceViz
       class MethodCallFormatter < BaseFormatter
         def format
           [
-            indent_if_enabled,
-            colorize(depth_if_enabled, :blue),
-            colorize(method_name_if_enabled, :light_green),
-            colorize(source_location_if_enabled, :dark_gray),
-            colorize(params_if_enabled, :yellow),
+            indent_representation,
+            colorize(depth_representation, :blue),
+            formatted_method_name,
+            colorize(source_location_representation, :dark_gray),
+            colorize(params_representation, :light_yellow),
           ].compact.join(" ")
         end
       end

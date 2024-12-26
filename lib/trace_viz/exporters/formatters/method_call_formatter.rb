@@ -8,11 +8,11 @@ module TraceViz
       class MethodCallFormatter < BaseFormatter
         def format
           [
-            indent_if_enabled,
-            depth_if_enabled,
-            method_name_if_enabled,
-            source_location_if_enabled,
-            params_if_enabled,
+            indent_representation,
+            depth_representation,
+            method_name_representation,
+            source_location_representation,
+            params_representation,
           ].compact.join(" ")
         end
       end

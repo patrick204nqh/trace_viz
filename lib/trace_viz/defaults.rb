@@ -43,15 +43,15 @@ module TraceViz
 
     ACTION_COLORS = {
       default: :reset,
-      info: :blue,
+      info: :cyan,
       success: :green,
-      error: :red,
+      error: :light_red,
       warn: :yellow,
-      start: :cyan,
+      start: :light_cyan,
       processing: :dim_light_gray,
-      finish: :magenta,
+      finish: :light_magenta,
       exported: :light_green,
-      skipped: :light_yellow,
+      skipped: :dark_gray,
       stats: :underline,
     }.freeze
 

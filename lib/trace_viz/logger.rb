@@ -51,11 +51,9 @@ module TraceViz
     end
 
     def build_message(message, level, emoji)
-      if level == :default
-        "#{emoji} #{message}" # No [DEFAULT] for :default level
-      else
-        format("%-3s %-8s %s", emoji, "[#{level.to_s.upcase}]", message)
-      end
+      level_str = level == :default ? "" : "[#{level.to_s.upcase}]"
+      merged_emoji_level = "#{emoji} #{level_str}".strip
+      format("%-12s %s", merged_emoji_level, message)
     end
 
     def wrap_in_color(message, color)

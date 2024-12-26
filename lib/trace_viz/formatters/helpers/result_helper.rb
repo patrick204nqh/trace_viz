@@ -6,7 +6,7 @@ module TraceViz
   module Formatters
     module Helpers
       module ResultHelper
-        def result_if_enabled
+        def result_representation
           return unless config.result[:show]
 
           truncated_result = Utils::FormatUtils.truncate_value(

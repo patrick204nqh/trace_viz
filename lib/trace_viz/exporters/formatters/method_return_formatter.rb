@@ -8,12 +8,12 @@ module TraceViz
       class MethodReturnFormatter < BaseFormatter
         def format
           [
-            indent_if_enabled,
-            depth_if_enabled,
-            method_name_if_enabled,
-            result_if_enabled,
-            source_location_if_enabled,
-            execution_time_if_enabled,
+            indent_representation,
+            depth_representation,
+            method_name_representation,
+            result_representation,
+            source_location_representation,
+            execution_time_representation,
           ].compact.join(" ")
         end
       end
