@@ -1,42 +1,113 @@
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
 require "trace_viz"
 
-class Example
-  def perform_task(x, y)
-    result = add_numbers(x, y)
-    log_result(result)
-    result
+class Calculator
+  def initialize(factor)
+    @factor = factor
   end
 
-  def add_numbers(a, b)
-    sleep(0.1)
-    sum = a + b
-    multiply_by_factor(sum, 2)
+  # A method that triggers a chain of calculations
+  def calculate_chain(a, b)
+    sum = add(a, b)
+    scaled = scale(sum)
+    complex_operation(scaled)
   end
 
-  def multiply_by_factor(value, factor)
+  # Basic addition
+  def add(x, y)
     sleep(0.05)
-    value * factor
+    x + y
   end
 
-  def log_result(result)
-    sleep(0.02)
-    puts "Final result: #{result}"
+  # Scaling a number by the factor
+  def scale(value)
+    sleep(0.05)
+    value * @factor
+  end
+
+  # Complex operation involving another class
+  def complex_operation(value)
+    sleep(0.05)
+    Logger.new.log("Starting complex operation")
+    divider = Divider.new
+    divider.divide_and_process(value, 2)
+  end
+end
+
+class Divider
+  # Divides a number and calls a nested method
+  def divide_and_process(value, divisor)
+    result = divide(value, divisor)
+    process_divided_result(result)
+  end
+
+  # Performs division
+  def divide(a, b)
+    raise "Division by zero!" if b.zero?
+
+    sleep(0.05)
+    a / b
+  end
+
+  # Processes the divided result further
+  def process_divided_result(value)
+    Logger.new.log("Processing divided result: #{value}")
+    nested_process(value)
+  end
+
+  # A nested operation
+  def nested_process(value)
+    sleep(0.05)
+    Logger.new.log("Final nested processing on #{value}")
+    value + 10
+  end
+end
+
+class Logger
+  def log(message)
+    sleep(0.01)
+    puts "[LOG] #{message}"
   end
 end
 
 TraceViz.trace(
+  general: {
     tab_size: 4,
     show_indent: true,
     show_depth: true,
-    max_display_depth: 3,
+    max_display_depth: 10,
     show_method_name: true,
-    show_params: true,
-    show_return_value: true,
-    show_execution_time: true,
-    show_source_location: true,
-    show_trace_events: [:call, :return]
+  },
+  params: {
+    show: true,
+    mode: :name_and_value,
+    truncate_values: 10,
+  },
+  result: {
+    show: true,
+    truncate_length: 5,
+  },
+  source_location: {
+    show: true,
+    truncate_length: 20,
+  },
+  execution: {
+    show_time: true,
+    show_trace_events: [:call, :return],
+  },
+  filters: [
+    :exclude_internal_call,
+    include_classes: {
+      classes: [Calculator, Divider, Logger],
+    }
+  ],
+  export: {
+    enabled: true,
+    format: :txt,
+    overwrite: true
+  }
 ) do
-  example = Example.new
-  example.perform_task(5, 7)
+  calculator = Calculator.new(3)
+  result = calculator.calculate_chain(10, 20)
+  puts "Final result: #{result}"
 end

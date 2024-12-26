@@ -1,37 +1,33 @@
 # frozen_string_literal: true
 
-require "trace_viz/context/manager/context_map"
-require "trace_viz/context/manager/context_validation"
-require "trace_viz/context/manager/context_registry"
-require "trace_viz/context/manager/context_operations"
-require "trace_viz/context/config_context"
-require "trace_viz/context/tracking_context"
+require "trace_viz/context/map"
+require "trace_viz/context/registry"
 
 module TraceViz
   module Context
     class Manager
+      @map = Map.new
+
       class << self
-        include ContextMap
-        include ContextValidation
-        include ContextRegistry
-        include ContextOperations
-
-        # Initialize class instance variables
-        def initialize_manager
-          @context_map = {}
-          @registered_contexts = {}
-
-          register_default_contexts
+        def enter_contexts(contexts)
+          @map.replace(Registry.build(contexts))
         end
 
-        def register_default_contexts
-          Manager.register_context_type(:config, ConfigContext)
-          Manager.register_context_type(:tracking, TrackingContext)
+        def exit_contexts(*keys)
+          @map.remove(*keys)
+        end
+
+        def with_contexts(contexts = {})
+          enter_contexts(contexts)
+          yield
+        ensure
+          exit_contexts(*contexts.keys)
+        end
+
+        def fetch_context(key)
+          @map.fetch(key)
         end
       end
-
-      # Ensure initialization upon loading
-      initialize_manager
     end
   end
 end

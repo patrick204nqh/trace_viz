@@ -23,7 +23,7 @@ module TraceViz
           if temp_configuration.respond_to?("#{key}=")
             temp_configuration.send("#{key}=", value)
           else
-            warn("TraceViz: Unknown configuration option '#{key}'")
+            TraceViz.logger.warn("Unknown configuration option '#{key}'")
           end
         end
 

@@ -2,72 +2,62 @@
 
 module TraceViz
   class Logger
-    COLORS = {
-      reset: "\e[0m",
-      info: "\e[34m",
-      success: "\e[32m",
-      error: "\e[31m",
-      warn: "\e[33m",
-      start: "\e[36m",
-      finish: "\e[35m",
-    }.freeze
-
-    EMOJIS = {
-      info: "ℹ️",
-      success: "✅",
-      error: "❌",
-      warn: "⚠️",
-      start: "🚀",
-      finish: "🏁",
-    }.freeze
-
-    LEVELS = [:info, :success, :error, :warn, :start, :finish].freeze
+    LEVELS = Defaults.action_colors.keys.freeze
 
     def initialize(output: $stdout)
       @output = output
     end
 
-    def info(message)
-      log(:info, message)
+    LEVELS.each do |level|
+      define_method(level) do |message|
+        log(message, level)
+      end
     end
 
-    def success(message)
-      log(:success, message)
-    end
+    def log(message, level = :default)
+      validate_message!(message)
+      validate_level!(level)
 
-    def error(message)
-      log(:error, message)
-    end
+      color = color_for(level)
+      emoji = emoji_for(level)
 
-    def warn(message)
-      log(:warn, message)
-    end
+      raw_message = build_message(message, level, emoji)
+      formatted_message = wrap_in_color(raw_message, color)
 
-    def start(message)
-      log(:start, message)
-    end
-
-    def finish(message)
-      log(:finish, message)
+      @output.puts(formatted_message)
     end
 
     private
 
-    def log(level, message)
-      return unless LEVELS.include?(level)
+    def validate_message!(message)
+      raise ArgumentError, "Message must be a String" unless message.is_a?(String)
+    end
 
-      color = COLORS[level] || COLORS[:info]
-      emoji = EMOJIS[level] || EMOJIS[:info]
+    def validate_level!(level)
+      raise ArgumentError, "Invalid log level: #{level}" unless LEVELS.include?(level)
+    end
 
-      # Align emoji and level using fixed-width columns
-      formatted_message = format(
-        "#{color}%-3s %-8s#{COLORS[:reset]} %s",
-        emoji,
-        "[#{level.to_s.upcase}]",
-        message,
-      )
+    def color_for(level)
+      color_key = Defaults.action_colors.fetch(level)
+      Defaults.colors.fetch(color_key)
+    end
 
-      @output.puts(formatted_message)
+    def default_color
+      color_for(:default)
+    end
+
+    def emoji_for(level)
+      Defaults.action_emojis.fetch(level, "")
+    end
+
+    def build_message(message, level, emoji)
+      level_str = level == :default ? "" : "[#{level.to_s.upcase}]"
+      merged_emoji_level = "#{emoji} #{level_str}".strip
+      format("%-12s %s", merged_emoji_level, message)
+    end
+
+    def wrap_in_color(message, color)
+      "#{color}#{message}#{default_color}"
     end
   end
 end

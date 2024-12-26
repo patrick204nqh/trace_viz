@@ -1,47 +1,53 @@
 # frozen_string_literal: true
 
 require "trace_viz/logger"
+require "trace_viz/config/validator"
+require "trace_viz/config/copier"
 
 module TraceViz
   class Configuration
-    attr_accessor :logger,
-      :tab_size,
-      :show_indent,
-      :show_depth,
-      :max_display_depth,
-      :show_method_name,
-      :show_source_location,
-      :show_params,
-      :show_return_value,
-      :show_execution_time,
-      :show_trace_events
+    attr_reader :logger, :settings
+    attr_reader(*Defaults.fetch_defaults.keys)
 
     def initialize
       @logger = Logger.new
-      @tab_size = 2
-      @show_indent = true
-      @show_depth = true
-      @max_display_depth = 3 # Recommended to keep this value between 3 and 5
-      @show_method_name = true
-      @show_source_location = false
-      @show_params = true
-      @show_return_value = true
-      @show_execution_time = true
-      @show_trace_events = [:call, :return]
+      @validator = Config::Validator.new
+      @settings = Defaults.fetch_defaults
+      define_dynamic_accessors
+    end
+
+    def [](key)
+      settings[key]
+    end
+
+    def update(group, values)
+      raise ArgumentError, "Invalid configuration group: #{group}" unless settings.key?(group)
+
+      @validator.validate(group, values)
+      if settings[group].is_a?(Hash)
+        settings[group].merge!(values)
+      else
+        settings[group] = values
+      end
+    end
+
+    def reset_defaults
+      @settings = Defaults.fetch_defaults
     end
 
     def dup
-      copy = self.class.new
-      instance_variables.each do |var|
-        value = instance_variable_get(var)
-        copy_value = begin
-          value.dup
-        rescue TypeError
-          value
+      Config::Copier.new(self).copy
+    end
+
+    private
+
+    def define_dynamic_accessors
+      settings.each_key do |attr|
+        define_singleton_method(attr) { settings[attr] }
+        define_singleton_method("#{attr}=") do |value|
+          update(attr, value)
         end
-        copy.instance_variable_set(var, copy_value)
       end
-      copy
     end
   end
 

@@ -36,7 +36,8 @@ RSpec.describe(TraceViz::Core::Tracer) do
           complex.process_data
         end
 
-        expect(output.string).to(include("ComplexClass#process_data"))
+        expect(output.string).to(include("ComplexClass#"))
+        expect(output.string).to(include("process_data"))
       end
     end
   end

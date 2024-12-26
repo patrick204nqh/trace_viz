@@ -1,0 +1,42 @@
+# frozen_string_literal: true
+
+require_relative "helpers/indent_helper"
+require_relative "helpers/depth_helper"
+require_relative "helpers/time_helper"
+require_relative "helpers/params_helper"
+require_relative "helpers/source_helper"
+require_relative "helpers/result_helper"
+require_relative "helpers/method_details_helper"
+
+module TraceViz
+  module Formatters
+    class BaseFormatter
+      #
+      # General formatting methods for TraceData::Base
+      # These methods are used to format the output of the trace data
+      # based on the configuration settings.
+      #
+
+      include Helpers::IndentHelper
+      include Helpers::DepthHelper
+      include Helpers::TimeHelper
+      include Helpers::ParamsHelper
+      include Helpers::SourceHelper
+      include Helpers::ResultHelper
+      include Helpers::MethodDetailsHelper
+
+      def initialize(trace_data)
+        @trace_data = trace_data
+        @config = @trace_data.config
+      end
+
+      def format
+        raise NotImplementedError
+      end
+
+      private
+
+      attr_reader :trace_data, :config
+    end
+  end
+end
