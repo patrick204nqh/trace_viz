@@ -7,13 +7,15 @@ module TraceViz
         def depth_representation
           return unless config.general[:show_depth]
 
-          if trace_data.depth.zero?
-            "depth[0]"
-          elsif trace_data.event == :call
-            "depth[#{trace_data.depth}]"
-          elsif trace_data.event == :return
-            "depth[#{trace_data.depth}]"
-          end
+          # if trace_data.depth.zero?
+          #   "depth[0]"
+          # elsif trace_data.event == :call
+          #   "depth[+#{trace_data.depth}]"
+          # elsif trace_data.event == :return
+          #   "depth[-#{trace_data.depth}]"
+          # end
+
+          "depth[#{trace_data.depth}]"
         end
       end
     end

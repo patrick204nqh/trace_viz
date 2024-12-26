@@ -6,6 +6,7 @@ module TraceViz
       reset: "\e[0m",
       bold: "\e[1m",
       dim: "\e[2m",
+      italic: "\e[3m",
       underline: "\e[4m",
       reverse: "\e[7m",
       black: "\e[30m",
@@ -24,7 +25,6 @@ module TraceViz
       light_magenta: "\e[95m",
       light_cyan: "\e[96m",
       white: "\e[97m",
-      dim_light_gray: "\e[2;37m",
     }.freeze
 
     ACTION_EMOJIS = {
@@ -48,7 +48,7 @@ module TraceViz
       error: :light_red,
       warn: :yellow,
       start: :light_cyan,
-      processing: :dim_light_gray,
+      processing: :dark_gray,
       finish: :light_magenta,
       exported: :light_green,
       skipped: :dark_gray,
