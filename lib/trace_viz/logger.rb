@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "trace_viz/utils/colorize"
+
 module TraceViz
   class Logger
     LEVELS = Defaults.action_colors.keys.freeze
@@ -18,11 +20,11 @@ module TraceViz
       validate_message!(message)
       validate_level!(level)
 
-      color = color_for(level)
+      colors = colors_for(level)
       emoji = emoji_for(level)
 
       raw_message = build_message(message, level, emoji)
-      formatted_message = wrap_in_color(raw_message, color)
+      formatted_message = apply_colors(raw_message, colors)
 
       @output.puts(formatted_message)
     end
@@ -37,13 +39,8 @@ module TraceViz
       raise ArgumentError, "Invalid log level: #{level}" unless LEVELS.include?(level)
     end
 
-    def color_for(level)
-      color_key = Defaults.action_colors.fetch(level)
-      Defaults.colors.fetch(color_key)
-    end
-
-    def default_color
-      color_for(:default)
+    def colors_for(level)
+      Defaults.action_colors.fetch(level)
     end
 
     def emoji_for(level)
@@ -56,8 +53,8 @@ module TraceViz
       format("%-12s %s", merged_emoji_level, message)
     end
 
-    def wrap_in_color(message, color)
-      "#{color}#{message}#{default_color}"
+    def apply_colors(message, colors)
+      Utils::Colorize.colorize(message, *colors)
     end
   end
 end
