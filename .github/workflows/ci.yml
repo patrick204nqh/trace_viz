@@ -1,4 +1,4 @@
-name: Ruby Test and Coverage Workflow
+name: CI with Code Climate Coverage
 
 on:
   push:
@@ -26,19 +26,21 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Prepare Code Climate test reporter
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-
       - name: Run tests and generate coverage
         run: bundle exec rspec
+
+      - name: Install Code Climate CLI
+        run: |
+          curl -L https://github.com/codeclimate/codeclimate/archive/refs/tags/v0.8.1.tar.gz | tar xz
+          cd codeclimate-0.8.1
+          make build
+          sudo mv bin/codeclimate /usr/local/bin/
+          cd ..
 
       - name: Upload coverage to Code Climate
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
-          ./cc-test-reporter after-build --exit-code $?
+          codeclimate-test-reporter before-build
+          codeclimate-test-reporter format-coverage -t simplecov
+          codeclimate-test-reporter upload-coverage

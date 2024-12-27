@@ -10,5 +10,5 @@ group :development, :test do
   gem "rspec", "~> 3.0"
   gem "rubocop", "~> 1.65"
   gem "rubocop-shopify", "~> 2.15.1"
-  gem "simplecov", "~> 0.21"
+  gem "simplecov", "~> 0.22", require: false
 end
