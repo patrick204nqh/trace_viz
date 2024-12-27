@@ -1,0 +1,11 @@
+module TraceViz
+  module Adapters
+    class BaseAdapter
+      def initialize: () -> void
+      
+      def trace: () -> void
+
+      private attr_reader config: untyped
+    end
+  end
+end

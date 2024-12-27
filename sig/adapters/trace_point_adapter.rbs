@@ -1,0 +1,13 @@
+module TraceViz
+  module Adapters
+    class TracePointAdapter < BaseAdapter
+      def initialize: () -> void
+
+      def trace: () { () -> void } -> void
+
+      private attr_reader collector: TraceViz::Collectors::TracePointCollector
+
+      private def exporter: () -> untyped
+    end
+  end
+end
