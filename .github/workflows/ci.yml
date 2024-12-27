@@ -9,14 +9,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         ruby-version: [3.0, 3.1, 3.2]
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -27,12 +26,24 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Run tests with Code Climate coverage
+      # 1. Download and run the reporter BEFORE tests
+      - name: Prepare Code Climate test reporter
+        if: always()
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          bundle exec rspec
+
+      # 2. Run tests (this will generate SimpleCov .json coverage)
+      - name: Run tests and generate coverage
+        run: bundle exec rspec
+
+      # 3. After tests, upload coverage
+      - name: Upload coverage to Code Climate
+        if: always()
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
           ./cc-test-reporter after-build --exit-code $?
