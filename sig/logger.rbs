@@ -1,0 +1,31 @@
+module TraceViz
+  class Logger
+    LEVELS: Array[Symbol]
+
+    @output: IO
+
+    def initialize: (?output: IO) -> void
+    def log: (String? message, ?Symbol level) -> void
+
+    # Dynamically defined methods for each level in `LEVELS`
+    def default: (String message) -> void
+    def info: (String message) -> void
+    def success: (String message) -> void
+    def error: (String message) -> void
+    def warn: (String message) -> void
+    def start: (String message) -> void
+    def processing: (String message) -> void
+    def finish: (String message) -> void
+    def exported: (String message) -> void
+    def skipped: (String message) -> void
+    def stats: (String message) -> void
+
+    private def validate_message!: (untyped message) -> void
+    private def validate_level!: (Symbol level) -> void
+    private def color_for: (Symbol level) -> String
+    private def default_color: () -> String
+    private def emoji_for: (Symbol level) -> String
+    private def build_message: (String? message, Symbol level, String emoji) -> String
+    private def wrap_in_color: (String message, String color) -> String
+  end
+end

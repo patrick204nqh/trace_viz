@@ -1,0 +1,18 @@
+module TraceViz
+  module Config
+    class Validator
+      FILTER_KEYS: Array[Symbol]
+
+      @validations: Hash[Symbol, ^(untyped) -> void]
+
+      def initialize: () -> void
+      def validate: (Symbol group, Symbol value) -> void
+
+      private def validate_params: (Hash[Symbol, untyped] value) -> void
+      private def validate_result: (Hash[Symbol, untyped] value) -> void
+      private def validate_source_location: (Hash[Symbol, untyped] value) -> void
+      private def validate_filters: (Array[untyped] filters) -> void
+      private def validate_export: (Hash[Symbol, untyped] value) -> void
+    end
+  end
+end

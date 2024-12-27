@@ -1,0 +1,5 @@
+module TraceViz
+  module Context
+    def self.for: (Symbol key) -> TraceViz::Context::Manager
+  end
+end

@@ -1,0 +1,13 @@
+module TraceViz
+  module Context
+    class Map
+      @context_map: Hash[Symbol, untyped]
+
+      def initialize: () -> void
+      def replace: (Hash[Symbol, untyped] new_map) -> void
+      def fetch: (Symbol key) -> untyped
+      def remove: (*Symbol keys) -> void
+      def reset: () -> void
+    end
+  end
+end
