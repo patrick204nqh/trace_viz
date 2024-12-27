@@ -1,0 +1,4 @@
+module TraceViz
+  module Core
+  end
+end

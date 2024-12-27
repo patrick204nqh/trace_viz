@@ -1,0 +1,22 @@
+module TraceViz
+  class Configuration
+    @logger: TraceViz::Logger
+    @validator: TraceViz::Config::Validator
+    @settings: Hash[Symbol, untyped]
+
+    attr_reader logger: TraceViz::Logger
+    attr_reader settings: Hash[Symbol, untyped]
+
+    def initialize: () -> void
+    def []: (Symbol key) -> untyped
+    def update: (Symbol group, untyped values) -> void
+    def reset_defaults: () -> void
+    def dup: () -> TraceViz::Config::Copier
+
+    private def define_dynamic_accessors: () -> void
+  end
+
+  def self.configuration: () -> TraceViz::Configuration
+  def self.configure: () { (TraceViz::Configuration) -> void } -> void
+  def self.logger: () -> TraceViz::Logger
+end

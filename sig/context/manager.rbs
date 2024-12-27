@@ -1,0 +1,10 @@
+module TraceViz
+  module Context
+    class Manager
+      def self.enter_contexts: (Hash[Symbol, untyped] contexts) -> void
+      def self.exit_contexts: (*Symbol keys) -> void
+      def self.with_contexts: (?Hash[Symbol, untyped] contexts) { () -> void } -> void
+      def self.fetch_context: (Symbol key) -> untyped
+    end
+  end
+end
