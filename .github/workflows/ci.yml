@@ -26,9 +26,7 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      # 1. Download and run the reporter BEFORE tests
       - name: Prepare Code Climate test reporter
-        if: always()
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
@@ -36,13 +34,10 @@ jobs:
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
 
-      # 2. Run tests (this will generate SimpleCov .json coverage)
       - name: Run tests and generate coverage
         run: bundle exec rspec
 
-      # 3. After tests, upload coverage
       - name: Upload coverage to Code Climate
-        if: always()
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |

@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
-require "simplecov"
+if ENV["CI"]
+  require "simplecov"
 
-SimpleCov.start do
-  add_filter "/spec/"
-  track_files "{lib}/**/*.rb"
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::SimpleFormatter,
+  ]
+
+  SimpleCov.start do
+    add_filter "/spec/"
+    track_files "{lib}/**/*.rb"
+  end
+
+  puts "SimpleCov coverage started..."
 end
-
-puts "SimpleCov coverage started..." if ENV["CI"]
