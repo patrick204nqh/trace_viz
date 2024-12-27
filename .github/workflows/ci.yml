@@ -1,0 +1,38 @@
+name: Ruby Test and Coverage Workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        ruby-version: [3.0, 3.1, 3.2]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Run tests with Code Climate coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          bundle exec rspec
+          ./cc-test-reporter after-build --exit-code $?
