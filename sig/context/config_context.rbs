@@ -1,0 +1,13 @@
+module TraceViz
+  module Context
+    class ConfigContext
+      attr_reader configuration: untyped
+
+      def initialize: (options: Hash[Symbol, untyped]) -> void
+
+      def temp_configuration: () -> untyped
+
+      def apply_options: (Hash[Symbol, untyped]) -> untyped
+    end
+  end
+end

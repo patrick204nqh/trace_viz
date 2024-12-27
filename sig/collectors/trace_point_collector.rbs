@@ -1,0 +1,17 @@
+module TraceViz
+  module Collectors
+    class TracePointCollector
+      def initialize: () -> void
+
+      private attr_reader action_matcher: TraceViz::Matchers::TracePointActionMatcher
+      private attr_reader within_depth_matcher: TraceViz::Matchers::WithinDepthMatcher
+
+      private def collectible?: (untyped) -> bool
+      private def build_trace: (untyped) -> untyped
+      private def update_trace_depth: (untyped) -> void
+      private def match_action?: (untyped) -> bool
+      private def within_depth?: () -> bool
+      private def depth_manager: () -> TraceViz::Collectors::DepthManager
+    end
+  end
+end

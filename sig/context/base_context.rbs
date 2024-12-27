@@ -1,0 +1,9 @@
+module TraceViz
+  module Context
+    class BaseContext
+      attr_reader options: Hash[Symbol, untyped]
+
+      def initialize: (options: Hash[Symbol, untyped]) -> void
+    end
+  end
+end
