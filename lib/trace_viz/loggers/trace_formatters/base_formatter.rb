@@ -13,7 +13,7 @@ module TraceViz
           Utils::Colorize.colorize(text, *styles)
         end
 
-        def formatted_depth
+        def format_depth
           return unless config.general[:show_depth]
 
           prefix = colorize("depth", :dip, :italic, :blue)
@@ -29,20 +29,20 @@ module TraceViz
           ].join
         end
 
-        def formatted_method_name
+        def format_method_name
           return unless config.general[:show_method_name]
 
-          "#{formatted_class_name}#{formatted_action_name}"
+          "#{format_class_name}#{format_action_name}"
         end
 
-        def formatted_class_name
+        def format_class_name
           klass = colorize(trace_data.klass, :light_green)
           method_sign = colorize("#", :blue)
 
           [klass, method_sign].join
         end
 
-        def formatted_action_name
+        def format_action_name
           colorize(trace_data.action, :bold, :light_cyan)
         end
       end

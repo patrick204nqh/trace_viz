@@ -2,13 +2,7 @@ module TraceViz
   module Utils
     module FormatUtils
       def self.format_key_value_pairs: (Array[[untyped, untyped]] data, Symbol mode) -> String
-      def self.display_mode: (Symbol mode) -> ^(?String, ?String) -> String
       def self.truncate_value: (untyped value, Integer length) -> untyped
-
-      private def self.truncate_string: (String string, Integer length) -> String
-      private def self.truncate_array: (Array[untyped] array, Integer length) -> Array[untyped]
-      private def self.truncate_hash: (Hash[untyped, untyped] hash, Integer length) -> String
-      private def self.truncate_object: (untyped object, Integer length) -> String
     end
   end
 end

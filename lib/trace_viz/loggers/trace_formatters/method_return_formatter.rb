@@ -10,8 +10,8 @@ module TraceViz
         def format
           [
             indent_representation,
-            formatted_depth,
-            formatted_method_name,
+            format_depth,
+            format_method_name,
             formatted_result,
             colorize(source_location_representation, :dark_gray),
             colorize(execution_time_representation, :red),

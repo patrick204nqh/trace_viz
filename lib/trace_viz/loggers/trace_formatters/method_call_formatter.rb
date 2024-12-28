@@ -10,34 +10,49 @@ module TraceViz
         def format
           [
             indent_representation,
-            formatted_depth,
-            formatted_method_name,
+            format_depth,
+            format_method_name,
             colorize(source_location_representation, :dim, :light_gray),
-            formatted_params,
+            format_params,
           ].compact.join(" ")
         end
 
         private
 
-        def formatted_params
+        def format_params
           return unless config.params[:show]
 
-          truncated_params = trace_data.params.transform_values do |value|
-            Utils::FormatUtils.truncate_value(value, config.params[:truncate_values])
-          end
+          params = prepare_params(trace_data.params)
+          wrap_params(params)
+        end
 
-          colored_params = truncated_params.transform_keys do |key|
-            colorize(key.to_s, :light_yellow)
-          end.transform_values do |value|
-            colorize(value.to_s, :dim, :light_yellow)
-          end
+        def prepare_params(params)
+          params
+            .then { |p| truncate_values(p, config.params[:truncate_values]) }
+            .then { |p| colorize_keys_and_values(p) }
+            .then { |p| format_as_string(p) }
+        end
 
-          formatted_string = Utils::FormatUtils.format_key_value_pairs(
-            colored_params,
-            config.params[:mode],
-          )
+        def truncate_values(params, length)
+          return params unless length
 
-          "(#{formatted_string})"
+          params.transform_values { |value| Utils::FormatUtils.truncate_value(value, length) }
+        end
+
+        def colorize_keys_and_values(params)
+          params.transform_keys { |key| colorize(key.to_s, :light_yellow) }
+            .transform_values { |value| colorize(value.to_s, :dim, :light_yellow) }
+        end
+
+        def format_as_string(params)
+          Utils::FormatUtils.format_key_value_pairs(params, config.params[:mode])
+        end
+
+        def wrap_params(params_string)
+          return unless params_string
+
+          truncated = Utils::FormatUtils.truncate_value(params_string, config.params[:truncate_length])
+          "(#{truncated})"
         end
       end
     end
