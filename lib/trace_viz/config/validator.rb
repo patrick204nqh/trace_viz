@@ -37,7 +37,7 @@ module TraceViz
       end
 
       def validate_result(value)
-        if value[:truncate_length] && (!value[:truncate_length].is_a?(Integer) || value[:truncate_length] <= 0)
+        if value[:truncate_length] && !value[:truncate_length].is_a?(Integer)
           raise ArgumentError, "Truncate values must be a positive integer."
         end
       end
