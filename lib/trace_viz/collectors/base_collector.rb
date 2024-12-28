@@ -31,7 +31,10 @@ module TraceViz
         trace_data = update_trace_depth(trace_data)
         return if hidden?(trace_data)
 
-        log_trace(trace_data)
+        #
+        # Disable runtime logging for now
+        #
+        # log_trace(trace_data)
         store_trace(trace_data)
       end
 
@@ -66,17 +69,21 @@ module TraceViz
       end
 
       def update_trace_depth(trace_data)
-        raise NotImplementedError
+        depth_manager.align(trace_data)
       end
 
-      def log_trace(trace_data)
-        Loggers::TraceLogger.log(trace_data)
-      end
+      # def log_trace(trace_data)
+      #   Loggers::TraceLogger.log(trace_data)
+      # end
 
       def store_trace(trace_data)
         stats.update(trace_data)
 
         @collection << trace_data
+      end
+
+      def depth_manager
+        @depth_manager ||= DepthManager.new
       end
     end
   end

@@ -1,18 +1,13 @@
 # frozen_string_literal: true
 
+require_relative "base_logger"
 require_relative "trace_builder"
 
 module TraceViz
   module Loggers
-    class TraceStatsLogger
-      class << self
-        def log(collector)
-          new(collector).log
-        end
-      end
-
+    class TraceStatsLogger < BaseLogger
       def initialize(collector)
-        @logger = TraceViz.logger
+        super()
         @stats = collector.stats
       end
 
@@ -22,7 +17,7 @@ module TraceViz
 
       private
 
-      attr_reader :logger, :stats
+      attr_reader :stats
 
       def format_stats
         [

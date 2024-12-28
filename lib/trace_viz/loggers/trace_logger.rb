@@ -1,23 +1,18 @@
 # frozen_string_literal: true
 
+require_relative "base_logger"
 require_relative "trace_builder"
 
 module TraceViz
   module Loggers
-    class TraceLogger
+    class TraceLogger < BaseLogger
       LOG_LEVELS = {
         call: :start,
         return: :finish,
       }.freeze
 
-      class << self
-        def log(trace_data)
-          new(trace_data).log
-        end
-      end
-
       def initialize(trace_data)
-        @logger = TraceViz.logger
+        super()
         @trace_data = trace_data
       end
 
@@ -28,7 +23,7 @@ module TraceViz
 
       private
 
-      attr_reader :logger, :trace_data
+      attr_reader :trace_data
 
       def formatted_message
         Loggers::TraceBuilder.new(trace_data).build

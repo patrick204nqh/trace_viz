@@ -3,7 +3,7 @@
 require "trace_viz/adapters/base_adapter"
 require "trace_viz/collectors/trace_point_collector"
 require "trace_viz/exporters/text_exporter"
-require "trace_viz/loggers/trace_stats_logger"
+require "trace_viz/loggers/collection_trace_logger"
 
 module TraceViz
   module Adapters
@@ -19,16 +19,21 @@ module TraceViz
           collector.collect(tp)
         end.enable(&block)
       ensure
-        Loggers::TraceStatsLogger.log(collector)
-        exporter.export
+        log_collection
+        export_collection
       end
 
       private
 
       attr_reader :collector
 
-      def exporter
-        Exporters::Registry.build(config.export[:format], collector)
+      def log_collection
+        Loggers::CollectionTraceLogger.log(collector)
+      end
+
+      def export_collection
+        exporter = Exporters::Registry.build(config.export[:format], collector)
+        exporter.export
       end
     end
   end

@@ -29,10 +29,6 @@ module TraceViz
         TraceData::TracePointBuilder.build(trace_point)
       end
 
-      def update_trace_depth(trace_data)
-        depth_manager.align(trace_data)
-      end
-
       def match_action?(trace_point)
         action_matcher.matches?(trace_point)
       end
@@ -41,10 +37,6 @@ module TraceViz
         depth = tracker.current_depth
 
         within_depth_matcher.matches?(depth)
-      end
-
-      def depth_manager
-        @depth_manager ||= DepthManager.new
       end
     end
   end
