@@ -8,11 +8,10 @@ module TraceViz
 
         def initialize(length: DEFAULT_LENGTH)
           @length = length
-          validate_length!
         end
 
         def truncate(value)
-          return value if @length.negative?
+          return value unless valid_length?
 
           case value
           when String then truncate_string(value)
@@ -24,11 +23,10 @@ module TraceViz
 
         private
 
-        def validate_length!
-          raise ArgumentError, "Length must be an integer" unless @length.is_a?(Integer)
+        def valid_length?
+          @length.is_a?(Integer) && @length.positive?
         end
 
-        # Truncates a string
         def truncate_string(string)
           string.length > @length ? "#{string[0, @length]}..." : string
         end

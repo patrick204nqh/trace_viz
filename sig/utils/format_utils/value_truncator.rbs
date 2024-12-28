@@ -8,7 +8,7 @@ module TraceViz
 
         def truncate: (String | Array[untyped] | Hash[untyped, untyped] | Object) -> (String | Array[untyped] | Hash[untyped, untyped] | Object)
 
-        private def validate_length!: () -> void
+        private def valid_length?: () -> bool
         private def truncate_string: (String) -> String
         private def truncate_array: (Array[untyped]) -> Array[untyped]
         private def truncate_hash: (Hash[untyped, untyped]) -> String
