@@ -1,44 +1,106 @@
-name: CI with Code Climate Coverage
+name: TraceViz CI/CD Pipeline
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
+  lint:
+    name: Linting Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+      - name: Install dependencies
+        run: bundle install
+      - name: Run Linter (RuboCop)
+        run: bundle exec rubocop
+
   test:
+    name: Run Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby-version: [3.0, 3.1, 3.2]
-
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
-
       - name: Install dependencies
         run: bundle install
-
-      - name: Run tests and generate coverage
+      - name: Run Tests with Coverage
+        env:
+          COVERAGE: true
         run: bundle exec rspec
-
       - name: Prepare Code Climate test reporter
+        if: env.CC_TEST_REPORTER_ID
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-
       - name: Upload coverage to Code Climate
+        if: env.CC_TEST_REPORTER_ID
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
           ./cc-test-reporter after-build --coverage-input-type=lcov --exit-code $?
+
+  security_check:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+      - name: Install Dependencies
+        run: bundle install
+      - name: Run Bundler Audit
+        run: |
+          bundle exec bundler-audit update
+          bundle exec bundler-audit check
+  
+  # deploy:
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   needs: [test]
+  #   steps:
+  #     - name: Check out code
+  #       uses: actions/checkout@v3
+  #     - name: Set up Ruby
+  #       uses: ruby/setup-ruby@v1
+  #     - name: Build Gem
+  #       run: gem build trace_viz.gemspec
+  #     - name: Push to RubyGems
+  #       run: gem push trace_viz-${{ github.ref_name }}.gem
+  #       env:
+  #         RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+  #     - name: Create GitHub Release
+  #       uses: actions/create-release@v1
+  #       with:
+  #         tag_name: ${{ github.ref_name }}
+  #         release_name: Release ${{ github.ref_name }}
+
+  notify:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    needs: [lint, test, security_check]
+    steps:
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: always
+          fields: workflow,job,commit,repo,ref,author,took
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
