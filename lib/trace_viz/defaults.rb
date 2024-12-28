@@ -102,7 +102,7 @@ module TraceViz
       },
       result: {
         show: true,
-        truncate_length: 10,
+        truncate_length: 50,
       },
       execution: {
         show_time: true,

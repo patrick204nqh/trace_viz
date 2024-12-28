@@ -17,7 +17,7 @@ module TraceViz
 
       private
 
-      attr_reader :tracker
+      attr_reader :tracker, :trace_linker
 
       def assign_depth(trace_data)
         case trace_data.event
@@ -42,7 +42,7 @@ module TraceViz
       end
 
       def link_trace(trace_data)
-        trace_data.link(tracker.active_calls.current)
+        trace_linker.link_return_to_call(trace_data, tracker.active_calls.current)
       end
     end
   end
