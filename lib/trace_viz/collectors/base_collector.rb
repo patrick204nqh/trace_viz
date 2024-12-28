@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "trace_viz/context"
-require "trace_viz/loggers/trace_logger"
+require "trace_viz/loggers/logging_manager"
 require_relative "evaluators/filter_evaluator"
 require_relative "evaluators/hidden_evaluator"
 
@@ -13,7 +13,9 @@ module TraceViz
       # To implement collect trace data from the given event,
       # you need to enter the `config` context to perform the evaluation.
       def initialize
+        @config = Context.for(:config).configuration
         @tracker = Context.for(:tracking)
+        @logger = Loggers::LoggingManager.new(config)
         @stats = TraceStats.new
 
         @collection = []
@@ -31,10 +33,7 @@ module TraceViz
         trace_data = update_trace_depth(trace_data)
         return if hidden?(trace_data)
 
-        #
-        # Disable runtime logging for now
-        #
-        # log_trace(trace_data)
+        logger.log_runtime_trace(trace_data)
         store_trace(trace_data)
       end
 
@@ -44,7 +43,9 @@ module TraceViz
 
       private
 
-      attr_reader :tracker,
+      attr_reader :config,
+        :logger,
+        :tracker,
         :filter_evaluator,
         :hidden_evaluator
 
@@ -71,10 +72,6 @@ module TraceViz
       def update_trace_depth(trace_data)
         depth_manager.align(trace_data)
       end
-
-      # def log_trace(trace_data)
-      #   Loggers::TraceLogger.log(trace_data)
-      # end
 
       def store_trace(trace_data)
         stats.update(trace_data)

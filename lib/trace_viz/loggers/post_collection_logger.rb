@@ -2,11 +2,10 @@
 
 require_relative "base_logger"
 require_relative "trace_logger"
-require_relative "trace_stats_logger"
 
 module TraceViz
   module Loggers
-    class CollectionTraceLogger < BaseLogger
+    class PostCollectionLogger < BaseLogger
       def initialize(collector)
         super()
         @collector = collector
@@ -16,7 +15,6 @@ module TraceViz
         collection.each do |trace_data|
           log_trace(trace_data)
         end
-        log_stats
       end
 
       private
@@ -29,10 +27,6 @@ module TraceViz
 
       def log_trace(trace_data)
         TraceLogger.log(trace_data)
-      end
-
-      def log_stats
-        TraceStatsLogger.log(collector)
       end
     end
   end

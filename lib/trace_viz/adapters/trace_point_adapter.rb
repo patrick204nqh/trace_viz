@@ -2,8 +2,6 @@
 
 require "trace_viz/adapters/base_adapter"
 require "trace_viz/collectors/trace_point_collector"
-require "trace_viz/exporters/text_exporter"
-require "trace_viz/loggers/collection_trace_logger"
 
 module TraceViz
   module Adapters
@@ -14,26 +12,12 @@ module TraceViz
         @collector = Collectors::TracePointCollector.new
       end
 
-      def trace(&block)
+      private
+
+      def execute_trace(&block)
         ::TracePoint.new(:call, :return) do |tp|
           collector.collect(tp)
         end.enable(&block)
-      ensure
-        log_collection
-        export_collection
-      end
-
-      private
-
-      attr_reader :collector
-
-      def log_collection
-        Loggers::CollectionTraceLogger.log(collector)
-      end
-
-      def export_collection
-        exporter = Exporters::Registry.build(config.export[:format], collector)
-        exporter.export
       end
     end
   end

@@ -127,6 +127,12 @@ module TraceViz
         #   gems: [],
         # },
       ],
+      log: {
+        enabled: true,
+        runtime: false,
+        post_collection: true,
+        stats: true,
+      },
       export: {
         enabled: true,
         path: "tmp",
