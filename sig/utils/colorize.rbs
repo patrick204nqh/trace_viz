@@ -1,7 +1,7 @@
 module TraceViz
   module Utils
     module Colorize
-      def self.colorize: (String? text, *Symbol styles) -> String?
+      def self.colorize: (String text, *Symbol styles) -> String?
       private def self.build_color_sequence: (Array[Symbol] styles) -> String
     end
   end

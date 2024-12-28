@@ -40,7 +40,8 @@ module TraceViz
     end
 
     def colors_for(level)
-      Defaults.action_colors.fetch(level)
+      color_key = Defaults.action_colors.fetch(level, :default)
+      Array(color_key)
     end
 
     def emoji_for(level)

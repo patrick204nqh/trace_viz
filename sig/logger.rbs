@@ -1,31 +1,33 @@
 module TraceViz
   class Logger
+    # Constants
     LEVELS: Array[Symbol]
 
-    @output: IO
+    # Constructor
+    def initialize: (output: IO) -> void
 
-    def initialize: (?output: IO) -> void
-    def log: (String? message, ?Symbol level) -> void
+    # Dynamic methods for each log level
+    def info: (String?) -> void
+    def success: (String?) -> void
+    def error: (String?) -> void
+    def warn: (String?) -> void
+    def start: (String?) -> void
+    def processing: (String?) -> void
+    def finish: (String?) -> void
+    def exported: (String?) -> void
+    def skipped: (String?) -> void
+    def stats: (String?) -> void
+    def default: (String?) -> void
 
-    # Dynamically defined methods for each level in `LEVELS`
-    def default: (String message) -> void
-    def info: (String message) -> void
-    def success: (String message) -> void
-    def error: (String message) -> void
-    def warn: (String message) -> void
-    def start: (String message) -> void
-    def processing: (String message) -> void
-    def finish: (String message) -> void
-    def exported: (String message) -> void
-    def skipped: (String message) -> void
-    def stats: (String message) -> void
+    # Public methods
+    def log: (String?, Symbol) -> void
 
-    private def validate_message!: (untyped message) -> void
-    private def validate_level!: (Symbol level) -> void
-    private def color_for: (Symbol level) -> String
-    private def default_color: () -> String
-    private def emoji_for: (Symbol level) -> String
-    private def build_message: (String? message, Symbol level, String emoji) -> String
-    private def wrap_in_color: (String message, String color) -> String
+    # Private methods
+    private def validate_message!: (String?) -> void
+    private def validate_level!: (Symbol) -> void
+    private def colors_for: (Symbol) -> Array[Symbol]
+    private def emoji_for: (Symbol) -> String
+    private def build_message: (String?, Symbol, String) -> String
+    private def apply_colors: (String, Array[Symbol]) -> String
   end
 end
