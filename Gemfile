@@ -9,6 +9,7 @@ group :development do
   gem "rake", "~> 13.0"
   gem "rubocop", "~> 1.65"
   gem "rubocop-shopify", "~> 2.15.1"
+  gem "steep", "~> 1.9.3"
 end
 
 group :test do
