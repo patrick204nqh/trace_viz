@@ -1,0 +1,13 @@
+module TraceViz
+  module Collectors
+    module Filters
+      class Registry
+        FILTERS: Hash[Symbol, untyped]
+
+        def self.build: (Array[Symbol | Hash[Symbol, untyped]] filters) -> Array[untyped]
+
+        private def self.fetch_filter_class: (Symbol filter_key) -> untyped
+      end
+    end
+  end
+end

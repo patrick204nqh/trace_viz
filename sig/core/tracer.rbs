@@ -1,0 +1,7 @@
+module TraceViz
+  module Core
+    class Tracer
+      def trace: (options: Hash[Symbol, untyped]) { () -> void } -> void
+    end
+  end
+end

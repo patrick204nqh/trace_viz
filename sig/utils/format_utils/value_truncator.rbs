@@ -1,0 +1,19 @@
+module TraceViz
+  module Utils
+    module FormatUtils
+      class ValueTruncator
+        DEFAULT_LENGTH: Integer
+
+        def initialize: (length: Integer) -> void
+
+        def truncate: (String | Array[untyped] | Hash[untyped, untyped] | Object) -> (String | Array[untyped] | Hash[untyped, untyped] | Object)
+
+        private def valid_length?: () -> bool
+        private def truncate_string: (String) -> String
+        private def truncate_array: (Array[untyped]) -> Array[untyped]
+        private def truncate_hash: (Hash[untyped, untyped]) -> String
+        private def truncate_generic: (Object) -> String
+      end
+    end
+  end
+end

@@ -1,0 +1,17 @@
+module TraceViz
+  class Defaults
+    COLORS: Hash[Symbol, String]
+    ACTION_EMOJIS: Hash[Symbol, String]
+    ACTION_COLORS: Hash[Symbol, Symbol]
+    CONFIG: Hash[Symbol, untyped]
+    VALID_PARAM_MODES: Array[Symbol]
+    VALID_EXPORT_FORMATS: Array[Symbol]
+
+    def self.colors: () -> Hash[Symbol, String]
+    def self.action_colors: () -> Hash[Symbol, Symbol]
+    def self.action_emojis: () -> Hash[Symbol, String]
+    def self.fetch_defaults: () -> Hash[Symbol, untyped]
+    def self.valid_param_modes: () -> Array[Symbol]
+    def self.valid_export_formats: () -> Array[Symbol]
+  end
+end

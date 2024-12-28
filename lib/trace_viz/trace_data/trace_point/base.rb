@@ -16,12 +16,13 @@ module TraceViz
           :line_number
 
         def initialize(trace_point)
-          super()
-
           @trace_point = trace_point
 
-          populate_trace_attributes
-          assign_ids
+          super()
+        end
+
+        def memory_id
+          trace_point.self.object_id
         end
 
         def duration
@@ -36,15 +37,6 @@ module TraceViz
           @action = trace_point.callee_id
           @path = trace_point.path
           @line_number = trace_point.lineno
-        end
-
-        def assign_ids
-          @id = generate_unique_id
-          @action_id = generate_action_id
-        end
-
-        def memory_id
-          trace_point.self.object_id
         end
 
         def generate_unique_id

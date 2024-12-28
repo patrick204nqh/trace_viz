@@ -1,31 +1,17 @@
 # frozen_string_literal: true
 
-require "trace_viz/formatters/base_formatter"
-require "trace_viz/utils/colorize"
+require "trace_viz/formatters/trace_data_formatter"
+require_relative "helpers/color_helper"
+require_relative "helpers/depth_helper"
+require_relative "helpers/method_name_helper"
 
 module TraceViz
   module Loggers
     module TraceFormatters
-      class BaseFormatter < TraceViz::Formatters::BaseFormatter
-        private
-
-        def colorize(text, *styles)
-          Utils::Colorize.colorize(text, *styles)
-        end
-
-        def formatted_method_name
-          return unless config.general[:show_method_name]
-
-          "#{formatted_class_name}#{formatted_action_name}"
-        end
-
-        def formatted_class_name
-          colorize("#{trace_data.klass}#", :bold, :yellow)
-        end
-
-        def formatted_action_name
-          colorize(trace_data.action, :light_cyan)
-        end
+      class BaseFormatter < TraceViz::Formatters::TraceDataFormatter
+        include Helpers::ColorHelper
+        include Helpers::DepthHelper
+        include Helpers::MethodNameHelper
       end
     end
   end

@@ -1,0 +1,16 @@
+module TraceViz
+  module Utils
+    module FormatUtils
+      class KeyValueFormatter
+        DEFAULT_MODE: Symbol
+
+        def initialize: (mode: Symbol) -> void
+
+        def format: (Hash[untyped, untyped]) -> String
+
+        private def validate_input: (untyped) -> void
+        private def build_formatter: () -> Hash[Symbol, ^(untyped, untyped) -> String]
+      end
+    end
+  end
+end

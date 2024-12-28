@@ -1,0 +1,8 @@
+module TraceViz
+  module Utils
+    module FormatUtils
+      def self.format_key_value_pairs: (Hash[untyped, untyped] data, Symbol mode) -> String
+      def self.truncate_value: (untyped value, Integer length) -> untyped
+    end
+  end
+end

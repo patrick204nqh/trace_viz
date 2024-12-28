@@ -1,0 +1,15 @@
+module TraceViz
+  module Config
+    class Copier
+      @origin_configuration: untyped
+      @settings: Hash[Symbol, untyped]
+
+      def initialize: (untyped configuration) -> void
+      def copy: () -> untyped
+
+      private def deep_copy: (untyped value) -> untyped
+      private attr_reader origin_configuration: untyped
+      private attr_reader settings: Hash[Symbol, untyped]
+    end
+  end
+end

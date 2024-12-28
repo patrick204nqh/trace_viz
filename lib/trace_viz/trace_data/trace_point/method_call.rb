@@ -6,12 +6,16 @@ module TraceViz
   module TraceData
     module TracePoint
       class MethodCall < Base
-        attr_reader :params
+        attr_reader :params, :method_return
 
         def initialize(trace_point)
           super(trace_point)
 
           populate_params
+        end
+
+        def link(method_return)
+          @method_return = method_return
         end
 
         private
