@@ -161,7 +161,7 @@ end
 
 **Output**
 
-<details>
+<details open>
   <summary>Sample Output</summary>
 
 ```bash

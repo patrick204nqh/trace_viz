@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "trace_viz/trace_data/id_generator"
+
 module TraceViz
   module Collectors
     module Matchers
@@ -25,10 +27,10 @@ module TraceViz
         end
 
         def build_action_id(trace_point)
-          [
-            trace_point.self.object_id,
-            trace_point.callee_id,
-          ].join("_")
+          TraceData::IDGenerator.generate_action_id(
+            memory_id: trace_point.self.object_id,
+            action: trace_point.callee_id,
+          )
         end
       end
     end
