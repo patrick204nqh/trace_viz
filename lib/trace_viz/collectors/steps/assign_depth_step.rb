@@ -8,6 +8,7 @@ module TraceViz
       class AssignDepthStep < BaseStep
         def call(trace_data)
           assign_depth(trace_data)
+          trace_data
         rescue StandardError => e
           logger.error("Depth assignment failed for trace_data ID: #{trace_data.id} - #{e.message}")
           nil
@@ -24,8 +25,6 @@ module TraceViz
           else
             logger.warn("Unknown event type: #{trace_data.event}")
           end
-
-          trace_data
         end
 
         def handle_call(trace_data)

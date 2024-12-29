@@ -13,8 +13,14 @@ module TraceViz
         def build
           TracePipeline.new.tap do |pipeline|
             pipeline.add_step(Steps::ValidationStep.new)
-            pipeline.add_step(Steps::AssignDepthStep.new)
+
+            #
+            # This action will link trace data to current call,
+            # so it needs to be run before current call is updated
+            #
             pipeline.add_step(Steps::LinkingStep.new)
+
+            pipeline.add_step(Steps::AssignDepthStep.new)
             pipeline.add_step(Steps::HiddenStep.new)
           end
         end
