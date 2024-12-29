@@ -2,8 +2,8 @@
 
 require "trace_viz/context"
 require "trace_viz/loggers/logging_manager"
-require_relative "evaluators/filter_evaluator"
-require_relative "evaluators/hidden_evaluator"
+require_relative "trace_stats"
+require_relative "trace_pipeline_builder"
 
 module TraceViz
   module Collectors
@@ -13,74 +13,67 @@ module TraceViz
       # To implement collect trace data from the given event,
       # you need to enter the `config` context to perform the evaluation.
       def initialize
-        @config = Context.for(:config).configuration
-        @tracker = Context.for(:tracking)
-        @logger = Loggers::LoggingManager.new(config)
-        @stats = TraceStats.new
-
-        @collection = []
-
-        @filter_evaluator = Evaluators::FilterEvaluator.new
-        @hidden_evaluator = Evaluators::HiddenEvaluator.new
+        setup_context
+        setup_pipeline
+        reset_collection
       end
 
       def collect(event)
         return unless collectible?(event)
 
         trace_data = build_trace(event)
-        return unless valid?(trace_data)
+        processed_data = process_trace_data(trace_data)
 
-        trace_data = update_trace_depth(trace_data)
-        return if hidden?(trace_data)
+        return unless processed_data
 
-        logger.log_runtime_trace(trace_data)
-        store_trace(trace_data)
+        store_trace(processed_data)
       end
 
       def clear
-        @collection = []
+        reset_collection
       end
 
       private
 
       attr_reader :config,
-        :logger,
         :tracker,
-        :filter_evaluator,
-        :hidden_evaluator
+        :logger,
+        :pipeline
 
-      # Checks if trace data is collectible.
+      def setup_context
+        @config = Context.for(:config).configuration
+        @tracker = Context.for(:tracking)
+        @logger = Loggers::LoggingManager.new(config)
+        @stats = TraceStats.new
+      end
+
+      def setup_pipeline
+        @pipeline = TracePipelineBuilder.build
+      end
+
+      def reset_collection
+        @collection = []
+      end
+
+      def process_trace_data(trace_data)
+        pipeline.process(trace_data)
+      end
+
+      # Base on trace-event for specific adapter
       def collectible?(event)
         raise NotImplementedError
       end
 
-      # Validates trace data against filters.
-      def valid?(trace_data)
-        filter_evaluator.pass?(trace_data)
-      end
-
-      # Checks if trace data should be hidden.
-      def hidden?(trace_data)
-        hidden_evaluator.pass?(trace_data)
-      end
-
-      # Builds trace data from the given data.
+      # Builds trace data from the trace-event for specific adapter
       def build_trace(event)
         raise NotImplementedError
       end
 
-      def update_trace_depth(trace_data)
-        depth_manager.align(trace_data)
-      end
-
       def store_trace(trace_data)
+        logger.log_runtime_trace(trace_data)
         stats.update(trace_data)
 
         @collection << trace_data
-      end
-
-      def depth_manager
-        @depth_manager ||= DepthManager.new
       end
     end
   end

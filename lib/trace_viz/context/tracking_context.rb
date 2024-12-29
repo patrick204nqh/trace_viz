@@ -15,6 +15,10 @@ module TraceViz
         @active_calls = Tracking::ActiveCalls.new
       end
 
+      def current_call
+        active_calls.current
+      end
+
       def current_depth
         active_calls.size
       end

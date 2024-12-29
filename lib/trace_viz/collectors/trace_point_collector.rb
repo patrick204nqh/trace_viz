@@ -4,8 +4,6 @@ require "trace_viz/trace_data/trace_point_builder"
 require_relative "base_collector"
 require_relative "matchers/trace_point_action_matcher"
 require_relative "matchers/within_depth_matcher"
-require_relative "depth_manager"
-require_relative "trace_stats"
 
 module TraceViz
   module Collectors
