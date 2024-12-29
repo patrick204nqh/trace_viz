@@ -26,7 +26,7 @@ module TraceViz
         end
 
         def duration
-          # TODO: Implement duration calculation
+          0
         end
 
         private

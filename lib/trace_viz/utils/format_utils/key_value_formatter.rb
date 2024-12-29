@@ -11,7 +11,7 @@ module TraceViz
           @formatter = build_formatter
         end
 
-        def format(data)
+        def call(data)
           validate_input(data)
           data.map { |key, value| @formatter.call(key, value) }.join(", ")
         end

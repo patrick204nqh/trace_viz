@@ -19,6 +19,12 @@ module TraceViz
           method_call.link(self)
         end
 
+        def duration
+          return 0 unless method_call
+
+          timestamp - method_call.timestamp
+        end
+
         private
 
         def populate_result

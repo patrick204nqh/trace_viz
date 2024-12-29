@@ -7,7 +7,7 @@ module TraceViz
     module Formatters
       module Yaml
         class MethodCallFormatter < BaseFormatter
-          def format
+          def call
             [
               indent_representation,
               method_name_representation,

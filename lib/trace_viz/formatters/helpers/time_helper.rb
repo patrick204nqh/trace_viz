@@ -7,7 +7,7 @@ module TraceViz
         def execution_time_representation
           return unless config.execution[:show_time] && trace_data.duration
 
-          "in #{trace_data.duration}ms"
+          format("in %.6fms", trace_data.duration)
         end
       end
     end

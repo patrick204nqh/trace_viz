@@ -18,6 +18,12 @@ module TraceViz
           @method_return = method_return
         end
 
+        def duration
+          return 0 unless method_return
+
+          method_return.timestamp - timestamp
+        end
+
         private
 
         def populate_params

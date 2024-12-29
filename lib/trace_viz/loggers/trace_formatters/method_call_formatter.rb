@@ -11,7 +11,7 @@ module TraceViz
         include Helpers::ParamsHelper
         include Helpers::ResultHelper
 
-        def format
+        def call
           [
             indent_representation,
             format_depth(trace_data, config),
@@ -19,6 +19,7 @@ module TraceViz
             colorize(source_location_representation, :dim, :light_gray),
             format_params(trace_data, config),
             format_result(trace_data, config),
+            colorize(execution_time_representation, :dim, :light_red),
           ].compact.join(" ")
         end
 
