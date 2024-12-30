@@ -46,6 +46,25 @@ module TraceViz
       bright_white: "\e[97m",
     })
 
+    SOLARIZED_THEME = {
+      base03: :color_234,
+      base02: :color_235,
+      base01: :color_240,
+      base00: :color_241,
+      base0: :color_244,
+      base1: :color_245,
+      base2: :color_254,
+      base3: :color_230,
+      yellow: :color_136,
+      orange: :color_166,
+      red: :color_160,
+      magenta: :color_125,
+      violet: :color_61,
+      blue: :color_33,
+      cyan: :color_37,
+      green: :color_64,
+    }.freeze
+
     ACTION_EMOJIS = {
       default: "",
       info: "ℹ️",
@@ -188,13 +207,46 @@ module TraceViz
       end
 
       def action_colors_for(action)
-        action_colors = ACTION_COLORS.fetch(action, ACTION_COLORS[:default])
-
+        source_colors = @current_action_colors || ACTION_COLORS
+        action_colors = source_colors.fetch(action, source_colors[:default])
         Array(action_colors)
       end
 
       def emoji_for(action)
         ACTION_EMOJIS.fetch(action, ACTION_EMOJIS[:default])
+      end
+
+      def apply_solarized_theme
+        @current_action_colors = ACTION_COLORS.dup
+        @current_action_colors.merge!(
+          default: SOLARIZED_THEME[:base0],
+          info: SOLARIZED_THEME[:blue],
+          success: SOLARIZED_THEME[:green],
+          error: SOLARIZED_THEME[:red],
+          warn: SOLARIZED_THEME[:yellow],
+          start: SOLARIZED_THEME[:blue],
+          processing: SOLARIZED_THEME[:base01],
+          finish: SOLARIZED_THEME[:magenta],
+          exported: SOLARIZED_THEME[:green],
+          skipped: SOLARIZED_THEME[:base01],
+          stats: SOLARIZED_THEME[:base2],
+          trace_indent: SOLARIZED_THEME[:base03],
+          trace_depth: SOLARIZED_THEME[:blue],
+          trace_depth_prefix: [:italic, SOLARIZED_THEME[:base02]],
+          trace_depth_open: SOLARIZED_THEME[:base02],
+          trace_depth_value: SOLARIZED_THEME[:red],
+          trace_depth_close: SOLARIZED_THEME[:base03],
+          trace_method_name: SOLARIZED_THEME[:cyan],
+          trace_method_class: [:bold, SOLARIZED_THEME[:green]],
+          trace_method_sign: SOLARIZED_THEME[:violet],
+          trace_method_action: [:bold, SOLARIZED_THEME[:blue]],
+          trace_source_location: SOLARIZED_THEME[:base01],
+          trace_params_key: SOLARIZED_THEME[:orange],
+          trace_params_value: SOLARIZED_THEME[:base00],
+          trace_result_prefix: SOLARIZED_THEME[:base1],
+          trace_result_value: SOLARIZED_THEME[:base3],
+          trace_execution_time: SOLARIZED_THEME[:cyan],
+        )
       end
     end
   end
