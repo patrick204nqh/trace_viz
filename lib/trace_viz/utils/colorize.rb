@@ -4,17 +4,17 @@ module TraceViz
   module Utils
     module Colorize
       class << self
-        def colorize(text, *styles)
-          return text if text.nil? || styles.empty?
+        def colorize(text, *colors)
+          return text if text.nil? || colors.empty?
 
-          "#{build_color_sequence(styles)}#{text}#{Defaults.colors[:reset]}"
+          "#{build_color_sequence(colors)}#{text}#{Defaults.color_code_for(:default)}"
         end
 
         private
 
-        def build_color_sequence(styles)
-          styles
-            .map { |style| Defaults.colors[style] }
+        def build_color_sequence(colors)
+          colors
+            .map { |color| Defaults.color_code_for(color) }
             .compact
             .join
         end

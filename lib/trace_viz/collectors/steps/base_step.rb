@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
-require "trace_viz/context"
+require "trace_viz/helpers/tracking_helper"
+require "trace_viz/helpers/config_helper"
 
 module TraceViz
   module Collectors
     module Steps
       class BaseStep
+        include Helpers::TrackingHelper
+        include Helpers::ConfigHelper
+
         def initialize
           @logger = TraceViz.logger
         end
@@ -17,27 +21,6 @@ module TraceViz
         private
 
         attr_reader :logger
-
-        def config
-          Context.for(:config).configuration
-        end
-
-        def tracker
-          Context.for(:tracking)
-        end
-
-        # Helper methods to access tracker attributes
-        def active_call_stack
-          tracker.active_calls
-        end
-
-        def current_call
-          tracker.current_call
-        end
-
-        def current_depth
-          tracker.current_depth
-        end
       end
     end
   end

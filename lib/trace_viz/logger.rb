@@ -20,8 +20,8 @@ module TraceViz
       validate_message!(message)
       validate_level!(level)
 
-      colors = colors_for(level)
-      emoji = emoji_for(level)
+      colors = Defaults.action_colors_for(level)
+      emoji = Defaults.emoji_for(level)
 
       raw_message = build_message(message, level, emoji)
       formatted_message = apply_colors(raw_message, colors)
@@ -37,15 +37,6 @@ module TraceViz
 
     def validate_level!(level)
       raise ArgumentError, "Invalid log level: #{level}" unless LEVELS.include?(level)
-    end
-
-    def colors_for(level)
-      color_key = Defaults.action_colors.fetch(level, :default)
-      Array(color_key)
-    end
-
-    def emoji_for(level)
-      Defaults.action_emojis.fetch(level, "")
     end
 
     def build_message(message, level, emoji)

@@ -9,8 +9,10 @@ module TraceViz
         module ColorHelper
           private
 
-          def colorize(text, *styles)
-            Utils::Colorize.colorize(text, *styles)
+          def colorize(text, action)
+            colors = Defaults.action_colors_for(action)
+
+            Utils::Colorize.colorize(text, *colors)
           end
         end
       end
