@@ -2,6 +2,7 @@
 
 require "trace_viz/helpers"
 require "trace_viz/loggers/logging_manager"
+require_relative "hierarchy_linker"
 require_relative "trace_stats"
 require_relative "trace_pipeline_builder"
 
@@ -11,7 +12,7 @@ module TraceViz
       include Helpers::ConfigHelper
       include Helpers::TrackingHelper
 
-      attr_reader :collection, :stats
+      attr_reader :collection, :stats, :hierarchy
 
       # To implement collect trace data from the given event,
       # you need to enter the `config` context to perform the evaluation.
@@ -19,6 +20,7 @@ module TraceViz
         setup_logger
         setup_stats
         setup_pipeline
+        setup_hierarchy
         clear
       end
 
@@ -26,11 +28,12 @@ module TraceViz
         return unless can_collect?(event)
 
         trace_data = build_trace(event)
-        processed_data = process_trace_data(trace_data)
+        processed_data = process_trace(trace_data)
 
         return unless processed_data
 
         store_trace(processed_data)
+        link_to_hierarchy(processed_data)
       end
 
       def clear
@@ -53,7 +56,11 @@ module TraceViz
         @pipeline = TracePipelineBuilder.build
       end
 
-      def process_trace_data(trace_data)
+      def setup_hierarchy
+        @hierarchy = TraceData::HierarchyLinker.new
+      end
+
+      def process_trace(trace_data)
         pipeline.process(trace_data)
       end
 
@@ -72,6 +79,10 @@ module TraceViz
         stats.update(trace_data)
 
         @collection << trace_data
+      end
+
+      def link_to_hierarchy(trace_data)
+        hierarchy.link(trace_data)
       end
     end
   end

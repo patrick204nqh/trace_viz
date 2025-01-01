@@ -10,6 +10,7 @@ module TraceViz
         include Traits::Identifiable
 
         attr_reader :trace_point,
+          :memory_id,
           :event,
           :klass,
           :action,
@@ -24,17 +25,30 @@ module TraceViz
           assign_ids
         end
 
-        def memory_id
-          trace_point.self.object_id
-        end
-
         def duration
           0
+        end
+
+        def to_h
+          super.merge(
+            {
+              id: id,
+              action_id: action_id,
+              memory_id: memory_id,
+              event: event,
+              depth: depth,
+              klass: klass,
+              action: action,
+              path: path,
+              line_number: line_number,
+            },
+          )
         end
 
         private
 
         def populate_attributes
+          @memory_id = trace_point.self.object_id
           @event = trace_point.event
           @klass = trace_point.defined_class
           @action = trace_point.callee_id

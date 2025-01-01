@@ -8,6 +8,7 @@ module TraceViz
     class TraceStatsLogger < BaseLogger
       def initialize(collector)
         super()
+        @collector = collector
         @stats = collector.stats
       end
 

@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "trace_pipeline"
-require_relative "steps/validation_step"
-require_relative "steps/assign_depth_step"
-require_relative "steps/linking_step"
-require_relative "steps/hidden_step"
+require_relative "steps"
 
 module TraceViz
   module Collectors
@@ -15,12 +12,14 @@ module TraceViz
             pipeline.add_step(Steps::ValidationStep.new)
 
             #
-            # This action will link trace data to current call,
+            # Those actions require access to the current call,
             # so it needs to be run before current call is updated
             #
+            pipeline.add_step(Steps::BuildHierarchyStep.new)
             pipeline.add_step(Steps::LinkingStep.new)
 
-            pipeline.add_step(Steps::AssignDepthStep.new)
+            pipeline.add_step(Steps::AssignDepthForCallStep.new)
+            pipeline.add_step(Steps::AssignDepthForReturnStep.new)
             pipeline.add_step(Steps::HiddenStep.new)
           end
         end

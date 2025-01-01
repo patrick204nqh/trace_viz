@@ -15,10 +15,6 @@ module TraceViz
         initialize_timestamp
       end
 
-      def memory_id
-        raise NotImplementedError
-      end
-
       def action
         raise NotImplementedError
       end
