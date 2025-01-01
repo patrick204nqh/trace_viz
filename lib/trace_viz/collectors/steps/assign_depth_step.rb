@@ -28,14 +28,14 @@ module TraceViz
         end
 
         def handle_call(trace_data)
-          trace_data.depth = current_depth
+          trace_data.assign_depth(current_depth)
           active_call_stack.push(trace_data)
         end
 
         def handle_return(trace_data)
           active_call_stack.pop if call_matches?(trace_data)
 
-          trace_data.depth = current_depth
+          trace_data.assign_depth(current_depth)
         end
 
         def call_matches?(trace_data)

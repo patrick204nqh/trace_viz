@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TraceViz
-  module TraceData
+  module Utils
     class IDGenerator
       ID_DELIMITER = "|"
       COMPONENT_DELIMITER = ":"
