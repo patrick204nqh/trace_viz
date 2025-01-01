@@ -19,6 +19,10 @@ module TraceViz
         def collection
           collector.collection
         end
+
+        def hierarchy
+          collector.hierarchy
+        end
       end
     end
   end

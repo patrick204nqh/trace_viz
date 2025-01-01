@@ -30,8 +30,8 @@ module TraceViz
           end
 
           def colorize_keys_and_values(params)
-            params.transform_keys { |key| colorize(key.to_s, :light_yellow) }
-              .transform_values { |value| colorize(value.to_s, :dim, :light_yellow) }
+            params.transform_keys { |key| colorize(key.to_s, :trace_params_key) }
+              .transform_values { |value| colorize(value.to_s, :trace_params_value) }
           end
 
           def format_as_string(params, mode)

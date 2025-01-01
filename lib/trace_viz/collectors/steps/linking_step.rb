@@ -8,7 +8,7 @@ module TraceViz
     module Steps
       class LinkingStep < BaseStep
         def call(trace_data)
-          valid?(trace_data) ? link_trace(trace_data) : trace_data
+          valid?(trace_data) ? linking_trace(trace_data) : trace_data
         rescue StandardError => e
           logger.error("Linking failed for trace_data ID: #{trace_data.id} - #{e.message}")
           nil
@@ -26,8 +26,9 @@ module TraceViz
           ].all?
         end
 
-        def link_trace(trace_data)
+        def linking_trace(trace_data)
           trace_data.link(current_call)
+          trace_data
         end
       end
     end

@@ -11,7 +11,7 @@ require_relative "helpers/method_details_helper"
 module TraceViz
   module Formatters
     class BaseFormatter
-      def format
+      def call
         raise NotImplementedError
       end
     end

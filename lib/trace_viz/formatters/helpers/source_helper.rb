@@ -12,6 +12,7 @@ module TraceViz
           truncated_path = Utils::FormatUtils.truncate_value(
             trace_data.path,
             config.source_location[:truncate_length],
+            direction: :start,
           )
           "at #{truncated_path}:#{trace_data.line_number}"
         end

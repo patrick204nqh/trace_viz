@@ -14,13 +14,13 @@ module TraceViz
           private
 
           def format_class_name(trace_data)
-            klass = colorize(trace_data.klass, :light_green)
-            method_sign = colorize("#", :blue)
+            klass = colorize(trace_data.klass, :trace_method_class)
+            method_sign = colorize("#", :trace_method_sign)
             [klass, method_sign].join
           end
 
           def format_action_name(trace_data)
-            colorize(trace_data.action, :bold, :light_cyan)
+            colorize(trace_data.action, :trace_method_action)
           end
         end
       end

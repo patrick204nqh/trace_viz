@@ -19,6 +19,21 @@ module TraceViz
           method_call.link(self)
         end
 
+        def duration
+          return 0 unless method_call
+
+          timestamp - method_call.timestamp
+        end
+
+        def to_h
+          super.merge(
+            {
+              result: result,
+              method_call_id: method_call&.id,
+            },
+          )
+        end
+
         private
 
         def populate_result

@@ -17,9 +17,9 @@ module TraceViz
         def format_item(trace_data)
           case trace_data.event
           when :call
-            Formatters::MethodCallFormatter.new(trace_data).format
+            Formatters::MethodCallFormatter.new(trace_data).call
           when :return
-            Formatters::MethodReturnFormatter.new(trace_data).format
+            Formatters::MethodReturnFormatter.new(trace_data).call
           end
         end
       end

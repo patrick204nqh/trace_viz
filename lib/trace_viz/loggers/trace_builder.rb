@@ -19,7 +19,7 @@ module TraceViz
         formatter_class = FORMATTERS[trace_data.event]
         raise ArgumentError, "No formatter found for #{trace_data.event}" unless formatter_class
 
-        formatter_class.new(trace_data).format
+        formatter_class.new(trace_data).call
       end
 
       private

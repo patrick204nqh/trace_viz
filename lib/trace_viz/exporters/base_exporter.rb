@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require "fileutils"
-require "trace_viz/context"
+require "trace_viz/helpers"
 
 module TraceViz
   module Exporters
     class BaseExporter
+      include Helpers::ConfigHelper
+
       def initialize(collector)
-        @config = Context.for(:config).configuration
         @export_config = config.export
         @logger = config.logger
         @data = transform_collector_data(collector)
@@ -30,7 +31,7 @@ module TraceViz
 
       private
 
-      attr_reader :config, :export_config, :logger, :data
+      attr_reader :export_config, :logger, :data
 
       def content
         raise NotImplementedError

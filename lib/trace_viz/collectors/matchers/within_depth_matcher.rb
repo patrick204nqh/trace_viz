@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
+require "trace_viz/helpers/config_helper"
+require_relative "base_matcher"
+
 module TraceViz
   module Collectors
     module Matchers
       class WithinDepthMatcher
-        def initialize
-          @config = Context.for(:config).configuration
-        end
+        include Helpers::ConfigHelper
 
         def matches?(depth)
           depth <= max_depth
@@ -14,11 +15,11 @@ module TraceViz
 
         private
 
-        attr_reader :config
-
         def max_depth
           config.general[:max_display_depth]
         end
+
+        private :config
       end
     end
   end

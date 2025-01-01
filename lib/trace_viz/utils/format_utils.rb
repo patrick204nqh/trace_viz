@@ -10,12 +10,12 @@ module TraceViz
         # Formats key-value pairs based on the provided mode
         def format_key_value_pairs(data, mode)
           formatter = KeyValueFormatter.new(mode: mode)
-          formatter.format(data)
+          formatter.call(data)
         end
 
         # Truncates a value to the specified length
-        def truncate_value(value, length)
-          truncator = ValueTruncator.new(length: length)
+        def truncate_value(value, length, direction: :end)
+          truncator = ValueTruncator.new(length: length, direction: direction)
           truncator.truncate(value)
         end
       end

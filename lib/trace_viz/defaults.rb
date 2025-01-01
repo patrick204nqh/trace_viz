@@ -11,7 +11,23 @@ module TraceViz
       reverse: "\e[7m",
       hidden: "\e[8m",
       strikethrough: "\e[9m",
+    }
 
+    # Reference ASCII color codes
+    # https://talyian.github.io/ansicolors/
+
+    # Map 256-color ANSI codes
+    (0..255).each do |i|
+      COLORS["color_#{i}".to_sym] = "\e[38;5;#{i}m"
+    end
+
+    # To add background colors
+    (0..255).each do |i|
+      COLORS["bg_color_#{i}".to_sym] = "\e[48;5;#{i}m"
+    end
+
+    # Predefined names
+    COLORS.merge!({
       black: "\e[30m",
       red: "\e[31m",
       green: "\e[32m",
@@ -19,32 +35,7 @@ module TraceViz
       blue: "\e[34m",
       magenta: "\e[35m",
       cyan: "\e[36m",
-      light_gray: "\e[37m",
-      dark_gray: "\e[90m",
-      light_red: "\e[91m",
-      light_green: "\e[92m",
-      light_yellow: "\e[93m",
-      light_blue: "\e[94m",
-      light_magenta: "\e[95m",
-      light_cyan: "\e[96m",
-      white: "\e[97m",
-
-      bg_black: "\e[40m",
-      bg_red: "\e[41m",
-      bg_green: "\e[42m",
-      bg_yellow: "\e[43m",
-      bg_blue: "\e[44m",
-      bg_magenta: "\e[45m",
-      bg_cyan: "\e[46m",
-      bg_dark_gray: "\e[100m",
-      bg_light_red: "\e[101m",
-      bg_light_green: "\e[102m",
-      bg_light_yellow: "\e[103m",
-      bg_light_blue: "\e[104m",
-      bg_light_magenta: "\e[105m",
-      bg_light_cyan: "\e[106m",
-      bg_white: "\e[107m",
-
+      white: "\e[37m",
       bright_black: "\e[90m",
       bright_red: "\e[91m",
       bright_green: "\e[92m",
@@ -53,6 +44,25 @@ module TraceViz
       bright_magenta: "\e[95m",
       bright_cyan: "\e[96m",
       bright_white: "\e[97m",
+    })
+
+    SOLARIZED_THEME = {
+      base03: :color_234,
+      base02: :color_235,
+      base01: :color_240,
+      base00: :color_241,
+      base0: :color_244,
+      base1: :color_245,
+      base2: :color_254,
+      base3: :color_230,
+      yellow: :color_136,
+      orange: :color_166,
+      red: :color_160,
+      magenta: :color_125,
+      violet: :color_61,
+      blue: :color_33,
+      cyan: :color_37,
+      green: :color_64,
     }.freeze
 
     ACTION_EMOJIS = {
@@ -70,17 +80,40 @@ module TraceViz
     }.freeze
 
     ACTION_COLORS = {
+      # Default actions
       default: :reset,
       info: :cyan,
       success: :green,
-      error: :light_red,
+      error: :bright_red,
       warn: :yellow,
-      start: :light_cyan,
-      processing: :dark_gray,
-      finish: :light_magenta,
-      exported: :light_green,
-      skipped: :dark_gray,
+
+      # Processing actions
+      start: :bright_cyan,
+      processing: [:dim, :bright_white],
+      finish: :bright_magenta,
+
+      # Export & stats actions
+      exported: :bright_green,
+      skipped: :bright_white,
       stats: [:bold, :underline, :bright_white],
+
+      # Trace data actions
+      trace_indent: :dim,
+      trace_depth: :blue,
+      trace_depth_prefix: [:dim, :italic, :blue],
+      trace_depth_open: [:dim, :bright_blue],
+      trace_depth_value: :bright_red,
+      trace_depth_close: [:dim, :bright_blue],
+      trace_method_name: :bright_cyan,
+      trace_method_class: :bright_green,
+      trace_method_sign: :blue,
+      trace_method_action: [:bold, :bright_cyan],
+      trace_source_location: [:dim, :bright_white],
+      trace_params_key: :bright_yellow,
+      trace_params_value: [:dim, :bright_yellow],
+      trace_result_prefix: [:italic, :bright_blue],
+      trace_result_value: :bright_white,
+      trace_execution_time: [:dim, :bright_red],
     }.freeze
 
     CONFIG = {
@@ -167,6 +200,53 @@ module TraceViz
 
       def valid_export_formats
         VALID_EXPORT_FORMATS
+      end
+
+      def color_code_for(color)
+        COLORS.fetch(color, COLORS[:reset])
+      end
+
+      def action_colors_for(action)
+        source_colors = @current_action_colors || ACTION_COLORS
+        action_colors = source_colors.fetch(action, source_colors[:default])
+        Array(action_colors)
+      end
+
+      def emoji_for(action)
+        ACTION_EMOJIS.fetch(action, ACTION_EMOJIS[:default])
+      end
+
+      def apply_solarized_theme
+        @current_action_colors = ACTION_COLORS.dup
+        @current_action_colors.merge!(
+          default: SOLARIZED_THEME[:base0],
+          info: SOLARIZED_THEME[:blue],
+          success: SOLARIZED_THEME[:green],
+          error: SOLARIZED_THEME[:red],
+          warn: SOLARIZED_THEME[:yellow],
+          start: SOLARIZED_THEME[:blue],
+          processing: SOLARIZED_THEME[:base01],
+          finish: SOLARIZED_THEME[:magenta],
+          exported: SOLARIZED_THEME[:green],
+          skipped: SOLARIZED_THEME[:base01],
+          stats: SOLARIZED_THEME[:base2],
+          trace_indent: SOLARIZED_THEME[:base03],
+          trace_depth: SOLARIZED_THEME[:blue],
+          trace_depth_prefix: [:italic, SOLARIZED_THEME[:base02]],
+          trace_depth_open: SOLARIZED_THEME[:base02],
+          trace_depth_value: SOLARIZED_THEME[:red],
+          trace_depth_close: SOLARIZED_THEME[:base03],
+          trace_method_name: SOLARIZED_THEME[:cyan],
+          trace_method_class: [:bold, SOLARIZED_THEME[:green]],
+          trace_method_sign: SOLARIZED_THEME[:violet],
+          trace_method_action: [:bold, SOLARIZED_THEME[:blue]],
+          trace_source_location: SOLARIZED_THEME[:base01],
+          trace_params_key: SOLARIZED_THEME[:orange],
+          trace_params_value: SOLARIZED_THEME[:base00],
+          trace_result_prefix: SOLARIZED_THEME[:base1],
+          trace_result_value: SOLARIZED_THEME[:base3],
+          trace_execution_time: SOLARIZED_THEME[:cyan],
+        )
       end
     end
   end

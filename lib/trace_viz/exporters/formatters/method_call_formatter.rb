@@ -6,7 +6,7 @@ module TraceViz
   module Exporters
     module Formatters
       class MethodCallFormatter < BaseFormatter
-        def format
+        def call
           [
             indent_representation,
             depth_representation,

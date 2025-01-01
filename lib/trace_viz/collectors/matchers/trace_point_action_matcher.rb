@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
-require "trace_viz/trace_data/id_generator"
+require "trace_viz/utils/id_generator"
+require "trace_viz/helpers/tracking_helper"
+require_relative "base_matcher"
 
 module TraceViz
   module Collectors
     module Matchers
-      class TracePointActionMatcher
-        def initialize
-          @tracker = Context.for(:tracking)
-        end
+      class TracePointActionMatcher < BaseMatcher
+        include Helpers::TrackingHelper
 
         def matches?(trace_point)
           current_action_id == build_action_id(trace_point)
         end
 
         private
-
-        attr_reader :tracker
 
         def current_action
           tracker.active_calls.current
@@ -27,11 +25,13 @@ module TraceViz
         end
 
         def build_action_id(trace_point)
-          TraceData::IDGenerator.generate_action_id(
+          Utils::IDGenerator.generate_action_id(
             memory_id: trace_point.self.object_id,
             action: trace_point.callee_id,
           )
         end
+
+        private :tracker, :active_call_stack, :current_call, :current_depth
       end
     end
   end
