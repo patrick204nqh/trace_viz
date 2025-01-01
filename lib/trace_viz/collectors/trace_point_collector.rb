@@ -19,7 +19,7 @@ module TraceViz
 
       attr_reader :action_matcher, :within_depth_matcher
 
-      def collectible?(trace_point)
+      def can_collect?(trace_point)
         within_depth? || match_action?(trace_point)
       end
 

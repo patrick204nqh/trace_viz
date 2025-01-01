@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/context"
+require "trace_viz/helpers"
 require "trace_viz/loggers/logging_manager"
 require_relative "trace_stats"
 require_relative "trace_pipeline_builder"
@@ -8,18 +8,22 @@ require_relative "trace_pipeline_builder"
 module TraceViz
   module Collectors
     class BaseCollector
+      include Helpers::ConfigHelper
+      include Helpers::TrackingHelper
+
       attr_reader :collection, :stats
 
       # To implement collect trace data from the given event,
       # you need to enter the `config` context to perform the evaluation.
       def initialize
-        setup_context
+        setup_logger
+        setup_stats
         setup_pipeline
-        reset_collection
+        clear
       end
 
       def collect(event)
-        return unless collectible?(event)
+        return unless can_collect?(event)
 
         trace_data = build_trace(event)
         processed_data = process_trace_data(trace_data)
@@ -30,20 +34,18 @@ module TraceViz
       end
 
       def clear
-        reset_collection
+        @collection = []
       end
 
       private
 
-      attr_reader :config,
-        :tracker,
-        :logger,
-        :pipeline
+      attr_reader :logger, :pipeline
 
-      def setup_context
-        @config = Context.for(:config).configuration
-        @tracker = Context.for(:tracking)
+      def setup_logger
         @logger = Loggers::LoggingManager.new(config)
+      end
+
+      def setup_stats
         @stats = TraceStats.new
       end
 
@@ -51,16 +53,12 @@ module TraceViz
         @pipeline = TracePipelineBuilder.build
       end
 
-      def reset_collection
-        @collection = []
-      end
-
       def process_trace_data(trace_data)
         pipeline.process(trace_data)
       end
 
       # Base on trace-event for specific adapter
-      def collectible?(event)
+      def can_collect?(event)
         raise NotImplementedError
       end
 
