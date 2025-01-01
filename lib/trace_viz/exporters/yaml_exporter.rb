@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "yaml"
 require_relative "base_exporter"
 require_relative "transformers/yaml_transformer"
 
@@ -14,7 +15,7 @@ module TraceViz
       end
 
       def content
-        data.join("\n")
+        YAML.dump(data)
       end
     end
   end

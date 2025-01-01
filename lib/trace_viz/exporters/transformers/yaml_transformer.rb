@@ -1,25 +1,33 @@
 # frozen_string_literal: true
 
 require_relative "base_transformer"
-require "trace_viz/exporters/formatters/yaml/method_call_formatter"
-require "trace_viz/exporters/formatters/yaml/method_return_formatter"
 
 module TraceViz
   module Exporters
     module Transformers
       class YamlTransformer < BaseTransformer
         def transform
-          collection.map do |trace_data|
-            format_item(trace_data)
-          end
+          deep_transform_keys_and_values(build_hierarchy_hash)
         end
 
-        def format_item(trace_data)
-          case trace_data.event
-          when :call
-            Formatters::Yaml::MethodCallFormatter.new(trace_data).call
-          when :return
-            Formatters::Yaml::MethodReturnFormatter.new(trace_data).call
+        private
+
+        def build_hierarchy_hash
+          hierarchy.root.to_h
+        end
+
+        def deep_transform_keys_and_values(data)
+          case data
+          when Hash
+            data.each_with_object({}) do |(key, value), result|
+              result[key.to_s] = deep_transform_keys_and_values(value)
+            end
+          when Array
+            data.map { |value| deep_transform_keys_and_values(value) }
+          when Symbol
+            data.to_s
+          else
+            data
           end
         end
       end
