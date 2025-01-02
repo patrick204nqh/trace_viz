@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "trace_viz/trace_data/summary_node"
 require_relative "base_renderer"
 
 module TraceViz
@@ -43,14 +44,22 @@ module TraceViz
 
         [
           {
-            line: format_summary_line(representative_node, group.size),
+            line: format_summary_line(group),
             trace_data: representative_node,
             nested_lines: nested_lines,
           },
         ]
       end
 
-      def format_summary_line(node, count)
+      def format_summary_line(group)
+        representative_node = group.first
+        node = TraceData::SummaryNode.new(
+          group: group,
+          event: representative_node.event,
+          klass: representative_node.klass,
+          action: representative_node.action,
+        )
+
         Formatters::Log::FormatterFactory.fetch_formatter(:summary).call(node)
       end
 
