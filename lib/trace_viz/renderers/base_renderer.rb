@@ -8,7 +8,7 @@ module TraceViz
       end
 
       def render
-        raise NotImplementedError
+        to_lines.map { |line| line[:line] }.join("\n")
       end
 
       def to_lines

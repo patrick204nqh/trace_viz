@@ -2,7 +2,7 @@
 
 require_relative "base_logger"
 require_relative "log_level_resolver"
-require "trace_viz/formatters/log/verbose/formatter_factory"
+require "trace_viz/formatters/log/formatter_factory"
 
 module TraceViz
   module Loggers

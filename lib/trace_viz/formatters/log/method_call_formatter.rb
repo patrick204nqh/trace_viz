@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "base_formatter"
+require_relative "verbose_formatter"
 
 module TraceViz
   module Formatters
     module Log
-      class SummaryFormatter < BaseFormatter
-        include Helpers::Log::DepthHelper
-        include Helpers::Log::MethodNameHelper
+      class MethodCallFormatter < VerboseFormatter
         include Helpers::Log::ParamsHelper
         include Helpers::Log::ResultHelper
 

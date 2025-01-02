@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 require_relative "base_renderer"
-require "trace_viz/formatters/log/verbose/formatter_factory"
+require "trace_viz/formatters/log/formatter_factory"
 
 module TraceViz
   module Renderers
     class VerboseRenderer < BaseRenderer
-      def render
-        data.map do |trace_data|
-          format_for(trace_data)
-        end.join("\n")
+      def to_lines
+        traverse_data(data)
       end
 
-      def to_lines
+      private
+
+      def traverse_data(data)
         data.map do |trace_data|
           {
             line: format_for(trace_data),
@@ -21,15 +21,12 @@ module TraceViz
         end
       end
 
-      private
-
       def format_for(trace_data)
-        formatter = fetch_formatter(trace_data)
-        formatter.call(trace_data)
+        fetch_formatter(trace_data).call(trace_data)
       end
 
       def fetch_formatter(trace_data)
-        Formatters::Log::Verbose::FormatterFactory.fetch_formatter(trace_data.event)
+        Formatters::Log::FormatterFactory.fetch_formatter(trace_data.event)
       end
     end
   end

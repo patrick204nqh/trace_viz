@@ -2,7 +2,7 @@
 
 require_relative "base_logger"
 require_relative "log_level_resolver"
-require "trace_viz/renderers/verbose_renderer"
+require "trace_viz/renderers/renderer_factory"
 
 module TraceViz
   module Loggers
@@ -11,7 +11,7 @@ module TraceViz
         super()
 
         @collector = collector
-        @renderer = build_renderer(collector.collection)
+        @renderer = build_renderer(:summary)
       end
 
       def log
@@ -31,8 +31,8 @@ module TraceViz
         log_message(log_level, formatted_message)
       end
 
-      def build_renderer(data)
-        Renderers::VerboseRenderer.new(data)
+      def build_renderer(mode)
+        Renderers::RendererFactory.build(mode, collector)
       end
     end
   end
