@@ -6,7 +6,7 @@ module TraceViz
   module Formatters
     module Helpers
       module ResultHelper
-        def result_representation
+        def result_representation(trace_data)
           return unless config.result[:show]
 
           truncated_result = Utils::FormatUtils.truncate_value(

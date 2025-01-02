@@ -6,7 +6,7 @@ module TraceViz
   module Formatters
     module Helpers
       module SourceHelper
-        def source_location_representation
+        def source_location_representation(trace_data)
           return unless config.source_location[:show]
 
           truncated_path = Utils::FormatUtils.truncate_value(

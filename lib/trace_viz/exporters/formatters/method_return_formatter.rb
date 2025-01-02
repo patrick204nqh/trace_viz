@@ -6,14 +6,14 @@ module TraceViz
   module Exporters
     module Formatters
       class MethodReturnFormatter < BaseFormatter
-        def call
+        def call(trace_data)
           [
-            indent_representation,
-            depth_representation,
-            method_name_representation,
-            result_representation,
-            source_location_representation,
-            execution_time_representation,
+            indent_representation(trace_data),
+            depth_representation(trace_data),
+            method_name_representation(trace_data),
+            result_representation(trace_data),
+            source_location_representation(trace_data),
+            execution_time_representation(trace_data),
           ].compact.join(" ")
         end
       end

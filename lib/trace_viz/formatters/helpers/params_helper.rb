@@ -6,7 +6,7 @@ module TraceViz
   module Formatters
     module Helpers
       module ParamsHelper
-        def params_representation
+        def params_representation(trace_data)
           return unless config.params[:show]
 
           truncated_params = trace_data.params.transform_values do |value|

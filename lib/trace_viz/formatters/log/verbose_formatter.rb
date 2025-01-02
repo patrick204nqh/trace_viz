@@ -6,8 +6,8 @@ module TraceViz
   module Formatters
     module Log
       class VerboseFormatter < BaseFormatter
-        include Helpers::Log::Verbose::DepthHelper
-        include Helpers::Log::Verbose::MethodNameHelper
+        include Helpers::Log::DepthHelper
+        include Helpers::Log::MethodNameHelper
       end
     end
   end

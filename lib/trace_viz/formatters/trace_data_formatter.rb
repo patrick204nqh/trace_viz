@@ -19,15 +19,6 @@ module TraceViz
       include Helpers::SourceHelper
       include Helpers::ResultHelper
       include Helpers::MethodDetailsHelper
-
-      def initialize(trace_data)
-        super()
-        @trace_data = trace_data
-      end
-
-      private
-
-      attr_reader :trace_data
     end
   end
 end
