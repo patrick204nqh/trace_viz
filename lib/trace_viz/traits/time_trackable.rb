@@ -5,7 +5,7 @@ module TraceViz
     module TimeTrackable
       attr_reader :timestamp
 
-      def initialize_timestamp
+      def record_timestamp
         @timestamp = Time.now
       end
     end

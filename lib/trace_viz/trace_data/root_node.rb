@@ -8,7 +8,7 @@ module TraceViz
       def initialize
         super()
 
-        # Explicitly ensure no parent for RootNode
+        # Explicitly ensure no parent for root
         @parent = nil
       end
 

@@ -12,14 +12,18 @@ module TraceViz
 
       def initialize
         assign_depth(0)
-        initialize_timestamp
-      end
-
-      def action
-        raise NotImplementedError
+        record_timestamp
       end
 
       def event
+        raise NotImplementedError
+      end
+
+      def klass
+        raise NotImplementedError
+      end
+
+      def action
         raise NotImplementedError
       end
 
@@ -31,8 +35,14 @@ module TraceViz
         raise NotImplementedError
       end
 
-      def klass
-        raise NotImplementedError
+      def to_h
+        {
+          event: event,
+          klass: klass,
+          action: action,
+          path: path,
+          line_number: line_number,
+        }
       end
     end
   end

@@ -22,6 +22,7 @@ module TraceViz
 
           @trace_point = trace_point
           populate_attributes
+          assign_memory_id
           assign_ids
         end
 
@@ -35,12 +36,6 @@ module TraceViz
               id: id,
               action_id: action_id,
               memory_id: memory_id,
-              event: event,
-              depth: depth,
-              klass: klass,
-              action: action,
-              path: path,
-              line_number: line_number,
             },
           )
         end
@@ -48,12 +43,15 @@ module TraceViz
         private
 
         def populate_attributes
-          @memory_id = trace_point.self.object_id
           @event = trace_point.event
           @klass = trace_point.defined_class
           @action = trace_point.callee_id
           @path = trace_point.path
           @line_number = trace_point.lineno
+        end
+
+        def assign_memory_id
+          @memory_id = trace_point.self.object_id
         end
       end
     end
