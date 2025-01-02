@@ -45,7 +45,7 @@ module TraceViz
       attr_reader :logger, :pipeline
 
       def setup_logger
-        @logger = Loggers::LoggingManager.new(config)
+        @logger = Loggers::LoggingManager.new
       end
 
       def setup_stats

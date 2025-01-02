@@ -3,12 +3,10 @@
 require "trace_viz/utils/colorize"
 
 module TraceViz
-  module Loggers
-    module TraceFormatters
-      module Helpers
+  module Formatters
+    module Helpers
+      module Log
         module ColorHelper
-          private
-
           def colorize(text, action)
             colors = Defaults.action_colors_for(action)
 

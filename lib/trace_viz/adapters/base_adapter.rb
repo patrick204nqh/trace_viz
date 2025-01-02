@@ -10,8 +10,8 @@ module TraceViz
       include Helpers::ConfigHelper
 
       def initialize
-        @logger = Loggers::LoggingManager.new(config)
-        @exporter = Exporters::ExportManager.new(config)
+        @logger = Loggers::LoggingManager.new
+        @exporter = Exporters::ExportManager.new
       end
 
       def trace(&block)
