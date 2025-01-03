@@ -12,7 +12,7 @@ module TraceViz
       include Helpers::ConfigHelper
       include Helpers::TrackingHelper
 
-      attr_reader :collection, :stats, :hierarchy
+      attr_reader :collection, :hierarchy, :stats, :renderer
 
       # To implement collect trace data from the given event,
       # you need to enter the `config` context to perform the evaluation.
@@ -21,6 +21,7 @@ module TraceViz
         setup_stats
         setup_pipeline
         setup_hierarchy
+
         clear
       end
 
@@ -45,7 +46,7 @@ module TraceViz
       attr_reader :logger, :pipeline
 
       def setup_logger
-        @logger = Loggers::LoggingManager.new(config)
+        @logger = Loggers::LoggingManager.new
       end
 
       def setup_stats

@@ -7,14 +7,14 @@ module TraceViz
         def colorize(text, *colors)
           return text if text.nil? || colors.empty?
 
-          "#{build_color_sequence(colors)}#{text}#{Defaults.color_code_for(:default)}"
+          "#{build_color_sequence(colors)}#{text}#{Defaults::Colors.fetch(:default)}"
         end
 
         private
 
         def build_color_sequence(colors)
           colors
-            .map { |color| Defaults.color_code_for(color) }
+            .map { |color| Defaults::Colors.fetch(color) }
             .compact
             .join
         end

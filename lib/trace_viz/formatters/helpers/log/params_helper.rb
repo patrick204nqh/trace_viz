@@ -3,9 +3,9 @@
 require "trace_viz/utils/format_utils"
 
 module TraceViz
-  module Loggers
-    module TraceFormatters
-      module Helpers
+  module Formatters
+    module Helpers
+      module Log
         module ParamsHelper
           def format_params(trace_data, config)
             return unless config.params[:show]
@@ -30,8 +30,8 @@ module TraceViz
           end
 
           def colorize_keys_and_values(params)
-            params.transform_keys { |key| colorize(key.to_s, :trace_params_key) }
-              .transform_values { |value| colorize(value.to_s, :trace_params_value) }
+            params.transform_keys { |key| colorize_for(key.to_s, :trace_params_key) }
+              .transform_values { |value| colorize_for(value.to_s, :trace_params_value) }
           end
 
           def format_as_string(params, mode)

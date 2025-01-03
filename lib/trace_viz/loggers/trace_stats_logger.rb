@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "base_logger"
-require_relative "trace_builder"
 
 module TraceViz
   module Loggers

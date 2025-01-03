@@ -4,7 +4,7 @@ module TraceViz
   module Formatters
     module Helpers
       module DepthHelper
-        def depth_representation
+        def depth_representation(trace_data)
           return unless config.general[:show_depth]
 
           "depth[#{trace_data.depth}]"

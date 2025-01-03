@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
+require "trace_viz/helpers"
 require_relative "registry"
 
 module TraceViz
   module Exporters
     class ExportManager
-      def initialize(config)
-        @config = config
-      end
+      include Helpers::ConfigHelper
 
       def export(collector)
         return unless export_enabled?
@@ -17,8 +16,6 @@ module TraceViz
       end
 
       private
-
-      attr_reader :config
 
       def build_exporter(collector)
         Registry.build(export_format, collector)

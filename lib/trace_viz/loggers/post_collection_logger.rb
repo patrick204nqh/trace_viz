@@ -1,32 +1,38 @@
 # frozen_string_literal: true
 
+require "trace_viz/formatters/log/formatter_factory"
+require "trace_viz/shared"
 require_relative "base_logger"
-require_relative "trace_logger"
+require_relative "log_level_resolver"
 
 module TraceViz
   module Loggers
     class PostCollectionLogger < BaseLogger
+      include Shared::RendererHelper
+
       def initialize(collector)
         super()
+
         @collector = collector
+        @renderer = build_renderer(collector, Formatters::Log::FormatterFactory)
       end
 
       def log
-        collection.each do |trace_data|
-          log_trace(trace_data)
-        end
+        process_lines(renderer.to_lines) { |line| log_line(line) }
       end
 
       private
 
-      attr_reader :collector
+      attr_reader :collector, :renderer
 
-      def collection
-        collector.collection
+      def log_line(line)
+        log_message(resolve_log_level(line[:trace_data]), line[:line])
+
+        process_lines(line[:nested_lines]) { |nested| log_line(nested) }
       end
 
-      def log_trace(trace_data)
-        TraceLogger.log(trace_data)
+      def resolve_log_level(trace_data)
+        LogLevelResolver.resolve(trace_data)
       end
     end
   end

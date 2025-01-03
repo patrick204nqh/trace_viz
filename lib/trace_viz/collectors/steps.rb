@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "steps/validation_step"
-require_relative "steps/build_hierarchy_step"
-require_relative "steps/linking_step"
-require_relative "steps/assign_depth_for_call_step"
-require_relative "steps/assign_depth_for_return_step"
-require_relative "steps/hidden_step"
+Dir[File.join(__dir__, "steps/**/*.rb")].each { |file| require_relative file }
 
 module TraceViz
   module Collectors

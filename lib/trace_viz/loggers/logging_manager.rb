@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "trace_viz/helpers"
 require_relative "trace_logger"
 require_relative "post_collection_logger"
 require_relative "trace_stats_logger"
@@ -7,9 +8,7 @@ require_relative "trace_stats_logger"
 module TraceViz
   module Loggers
     class LoggingManager
-      def initialize(config)
-        @config = config
-      end
+      include Helpers::ConfigHelper
 
       def log_runtime_trace(trace_data)
         return unless runtime_logging_enabled?
@@ -30,8 +29,6 @@ module TraceViz
       end
 
       private
-
-      attr_reader :config
 
       def runtime_logging_enabled?
         config.log[:enabled] && config.log[:runtime]

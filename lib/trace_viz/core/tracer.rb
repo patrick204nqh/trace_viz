@@ -10,7 +10,7 @@ module TraceViz
   module Core
     class Tracer
       def trace(**options, &block)
-        Defaults.apply_solarized_theme
+        Defaults::Themes.apply_solarized_theme
 
         Context::Manager.with_contexts(config: options, tracking: {}) do
           adapter = Adapters::TracePointAdapter.new

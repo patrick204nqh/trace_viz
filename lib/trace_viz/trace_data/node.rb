@@ -21,10 +21,12 @@ module TraceViz
       end
 
       def to_h
-        {
-          parent: parent&.to_s,
-          children: children.map(&:to_h),
-        }
+        super.merge(
+          {
+            parent: parent&.to_s,
+            children: children.map(&:to_h),
+          },
+        )
       end
     end
   end
