@@ -6,6 +6,7 @@ module TraceViz
       DEFAULTS = {
         general: {
           tab_size: 2,
+          mode: :summary, # :summary, :verbose
           show_indent: true,
           show_depth: true,
           max_display_depth: 3,
@@ -51,7 +52,6 @@ module TraceViz
           enabled: true,
           runtime: false,
           post_collection: true,
-          post_collection_mode: :summary, # :summary, :verbose
           stats: true,
         },
         export: {

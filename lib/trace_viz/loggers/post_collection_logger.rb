@@ -1,63 +1,38 @@
 # frozen_string_literal: true
 
+require "trace_viz/formatters/log/formatter_factory"
+require "trace_viz/shared"
 require_relative "base_logger"
 require_relative "log_level_resolver"
-require "trace_viz/renderers/renderer_factory"
-require "trace_viz/renderers/render_context"
-require "trace_viz/formatters/log/formatter_factory"
 
 module TraceViz
   module Loggers
     class PostCollectionLogger < BaseLogger
+      include Shared::RendererHelper
+
       def initialize(collector)
         super()
 
         @collector = collector
-        @renderer = build_renderer
+        @renderer = build_renderer(collector, Formatters::Log::FormatterFactory)
       end
 
       def log
-        process_lines(renderer.to_lines)
+        process_lines(renderer.to_lines) { |line| log_line(line) }
       end
 
       private
 
       attr_reader :collector, :renderer
 
-      def process_lines(lines)
-        lines.each do |line|
-          log_line(line)
-        end
-      end
-
       def log_line(line)
-        log_level = resolve_log_level(line[:trace_data])
-        formatted_message = line[:line]
+        log_message(resolve_log_level(line[:trace_data]), line[:line])
 
-        log_message(log_level, formatted_message)
-
-        process_lines(line[:nested_lines]) if line[:nested_lines]&.any?
+        process_lines(line[:nested_lines]) { |nested| log_line(nested) }
       end
 
       def resolve_log_level(trace_data)
         LogLevelResolver.resolve(trace_data)
-      end
-
-      def build_renderer
-        mode = collector.config.log[:post_collection_mode]
-        context = build_render_context
-
-        Renderers::RendererFactory.build(
-          mode,
-          collector,
-          context: context,
-        )
-      end
-
-      def build_render_context
-        Renderers::RenderContext.new(
-          formatter_factory: Formatters::Log::FormatterFactory,
-        )
       end
     end
   end

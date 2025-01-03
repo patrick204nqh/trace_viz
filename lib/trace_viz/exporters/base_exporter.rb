@@ -2,11 +2,13 @@
 
 require "fileutils"
 require "trace_viz/helpers"
+require "trace_viz/shared"
 
 module TraceViz
   module Exporters
     class BaseExporter
       include Helpers::ConfigHelper
+      include Shared::RendererHelper
 
       def initialize(collector)
         @export_config = config.export
