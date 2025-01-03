@@ -27,8 +27,9 @@ module TraceViz
 
       def validate_params(value)
         mode = value[:mode]
-        unless Defaults.valid_param_modes.include?(mode)
-          raise ArgumentError, "Invalid param mode: #{mode}. Valid modes are #{Defaults.valid_param_modes.join(", ")}."
+        unless Defaults::Config.valid_param_mode?(mode)
+          raise ArgumentError,
+            "Invalid param mode: #{mode}. Valid modes are #{Defaults::Config.valid_param_modes.join(", ")}."
         end
 
         if value[:truncate_values] && (!value[:truncate_values].is_a?(Integer) || value[:truncate_values] <= 0)
@@ -64,9 +65,9 @@ module TraceViz
         end
 
         format = value[:format]
-        unless Defaults.valid_export_formats.include?(format)
+        unless Defaults::Config.valid_export_format?(format)
           raise ArgumentError,
-            "Invalid export format: #{format}. Valid formats are #{Defaults.valid_export_formats.join(", ")}."
+            "Invalid export format: #{format}. Valid formats are #{Defaults::Config.valid_export_formats.join(", ")}."
         end
       end
     end

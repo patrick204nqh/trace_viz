@@ -4,7 +4,7 @@ require "trace_viz/utils/colorize"
 
 module TraceViz
   class Logger
-    LEVELS = Defaults.action_colors.keys.freeze
+    LEVELS = Defaults::Actions.keys.freeze
 
     def initialize(output: $stdout)
       @output = output
@@ -20,8 +20,8 @@ module TraceViz
       validate_message!(message)
       validate_level!(level)
 
-      colors = Defaults.action_colors_for(level)
-      emoji = Defaults.emoji_for(level)
+      colors = Defaults::Actions.colors_for(level)
+      emoji = Defaults::Actions.emoji_for(level)
 
       raw_message = build_message(message, level, emoji)
       formatted_message = apply_colors(raw_message, colors)

@@ -7,12 +7,12 @@ require "trace_viz/config/copier"
 module TraceViz
   class Configuration
     attr_reader :logger, :settings
-    attr_reader(*Defaults.fetch_defaults.keys)
+    attr_reader(*Defaults::Config.fetch.keys)
 
     def initialize
       @logger = Logger.new
       @validator = Config::Validator.new
-      @settings = Defaults.fetch_defaults
+      @settings = Defaults::Config.fetch
       define_dynamic_accessors
     end
 
@@ -32,7 +32,7 @@ module TraceViz
     end
 
     def reset_defaults
-      @settings = Defaults.fetch_defaults
+      @settings = Defaults::Config.fetch
     end
 
     def dup

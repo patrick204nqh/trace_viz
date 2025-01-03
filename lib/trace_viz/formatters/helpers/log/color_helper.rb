@@ -8,7 +8,7 @@ module TraceViz
       module Log
         module ColorHelper
           def colorize_for(text, action)
-            colors = Defaults.action_colors_for(action)
+            colors = Defaults::Actions.colors_for(action)
 
             colorize(text, *colors)
           end
