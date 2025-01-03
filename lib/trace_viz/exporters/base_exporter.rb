@@ -11,7 +11,8 @@ module TraceViz
       def initialize(collector)
         @export_config = config.export
         @logger = config.logger
-        @data = transform_collector_data(collector)
+
+        @collector = collector
       end
 
       def export
@@ -31,7 +32,7 @@ module TraceViz
 
       private
 
-      attr_reader :export_config, :logger, :data
+      attr_reader :export_config, :logger, :collector
 
       def content
         raise NotImplementedError

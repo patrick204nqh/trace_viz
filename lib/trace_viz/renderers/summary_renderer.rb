@@ -9,7 +9,7 @@ module TraceViz
       def to_lines
         return [] unless valid_children?(data)
 
-        NodeProcessor.new(data.children).process
+        NodeProcessor.new(data.children, context).process
       end
 
       private

@@ -3,8 +3,9 @@
 module TraceViz
   module Renderers
     class BaseRenderer
-      def initialize(data)
+      def initialize(data, context:)
         @data = data
+        @context = context
       end
 
       def render
@@ -17,7 +18,7 @@ module TraceViz
 
       private
 
-      attr_reader :data
+      attr_reader :data, :context
     end
   end
 end

@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 require_relative "text_exporter"
-require_relative "yaml_exporter"
 
 module TraceViz
   module Exporters
     class Registry
       EXPORTS = {
         txt: TextExporter,
-        yaml: YamlExporter,
       }
 
       class << self

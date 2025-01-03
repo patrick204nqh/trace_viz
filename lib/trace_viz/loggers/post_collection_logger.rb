@@ -3,6 +3,8 @@
 require_relative "base_logger"
 require_relative "log_level_resolver"
 require "trace_viz/renderers/renderer_factory"
+require "trace_viz/renderers/render_context"
+require "trace_viz/formatters/log/formatter_factory"
 
 module TraceViz
   module Loggers
@@ -43,8 +45,19 @@ module TraceViz
 
       def build_renderer
         mode = collector.config.log[:post_collection_mode]
+        context = build_render_context
 
-        Renderers::RendererFactory.build(mode, collector)
+        Renderers::RendererFactory.build(
+          mode,
+          collector,
+          context: context,
+        )
+      end
+
+      def build_render_context
+        Renderers::RenderContext.new(
+          formatter_factory: Formatters::Log::FormatterFactory,
+        )
       end
     end
   end

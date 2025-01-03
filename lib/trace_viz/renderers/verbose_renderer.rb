@@ -22,11 +22,7 @@ module TraceViz
       end
 
       def format_for(trace_data)
-        fetch_formatter(trace_data).call(trace_data)
-      end
-
-      def fetch_formatter(trace_data)
-        Formatters::Log::FormatterFactory.fetch_formatter(trace_data.event)
+        context.fetch_formatter(trace_data.event).call(trace_data)
       end
     end
   end

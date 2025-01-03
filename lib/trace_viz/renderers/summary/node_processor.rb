@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "node_formatter"
+require "trace_viz/trace_data/summary_node"
 
 module TraceViz
   module Renderers
     class NodeProcessor
-      def initialize(nodes)
+      def initialize(nodes, context)
         @nodes = nodes
+        @context = context
       end
 
       def process
@@ -15,7 +16,7 @@ module TraceViz
 
       private
 
-      attr_reader :nodes
+      attr_reader :nodes, :context
 
       def grouped_nodes
         nodes.group_by { |node| node_key(node) }
@@ -38,7 +39,7 @@ module TraceViz
         nested_lines = process_nested_nodes(representative_node)
 
         [{
-          line: NodeFormatter.format_group_line(group),
+          line: format_group_line(group),
           trace_data: representative_node,
           nested_lines: nested_lines,
         }]
@@ -46,7 +47,7 @@ module TraceViz
 
       def render_single_node(node)
         current_line = {
-          line: NodeFormatter.format_node(node),
+          line: format_node(node),
           trace_data: node,
           nested_lines: process_nested_nodes(node),
         }
@@ -57,7 +58,16 @@ module TraceViz
       def process_nested_nodes(node)
         return [] unless node.respond_to?(:children) && node.children.any?
 
-        NodeProcessor.new(node.children).process
+        NodeProcessor.new(node.children, context).process
+      end
+
+      def format_node(node)
+        context.fetch_formatter(node.event).call(node)
+      end
+
+      def format_group_line(group)
+        node = TraceData::SummaryNode.new(group: group)
+        context.fetch_formatter(:summary_group).call(node)
       end
     end
   end
