@@ -229,7 +229,7 @@ module TraceViz
           finish: SOLARIZED_THEME[:magenta],
           exported: SOLARIZED_THEME[:green],
           skipped: SOLARIZED_THEME[:base01],
-          stats: SOLARIZED_THEME[:base2],
+          stats: [:bold, :underline, SOLARIZED_THEME[:base2]],
           trace_indent: SOLARIZED_THEME[:base03],
           trace_depth: SOLARIZED_THEME[:blue],
           trace_depth_prefix: [:italic, SOLARIZED_THEME[:base02]],

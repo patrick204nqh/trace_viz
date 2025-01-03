@@ -14,10 +14,10 @@ module TraceViz
             indent_representation(trace_data),
             format_depth(trace_data, config),
             format_method_name(trace_data, config),
-            colorize(source_location_representation(trace_data), :trace_source_location),
+            colorize_for(source_location_representation(trace_data), :trace_source_location),
             format_params(trace_data, config),
             format_result(trace_data, config),
-            colorize(execution_time_representation(trace_data), :trace_execution_time),
+            colorize_for(execution_time_representation(trace_data), :trace_execution_time),
           ].compact.join(" ")
         end
 

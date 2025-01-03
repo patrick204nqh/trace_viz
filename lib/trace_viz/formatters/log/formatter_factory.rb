@@ -2,7 +2,7 @@
 
 require_relative "method_call_formatter"
 require_relative "method_return_formatter"
-require_relative "summary_formatter"
+require_relative "summary_group_formatter"
 
 module TraceViz
   module Formatters
@@ -11,7 +11,7 @@ module TraceViz
         FORMATTERS = {
           call: MethodCallFormatter.new,
           return: MethodReturnFormatter.new,
-          summary: SummaryFormatter.new,
+          summary_group: SummaryGroupFormatter.new,
         }.freeze
 
         class << self

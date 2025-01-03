@@ -15,8 +15,8 @@ module TraceViz
               config.result[:truncate_length],
             )
 
-            prefix = colorize("#=>", :trace_result_prefix)
-            result = colorize(truncated_result, :trace_result_value)
+            prefix = colorize_for("#=>", :trace_result_prefix)
+            result = colorize_for(truncated_result, :trace_result_value)
 
             [prefix, result].join(" ")
           end
