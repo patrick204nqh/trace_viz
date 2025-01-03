@@ -14,6 +14,7 @@ module TraceViz
           [
             indent_representation(trace_data),
             format_depth(trace_data, config),
+            Defaults::Actions.emoji_for(:processing),
             format_method_name(trace_data, config),
             format_params_template(trace_data, config),
             summary_info(trace_data),

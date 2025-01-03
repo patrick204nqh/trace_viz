@@ -11,27 +11,37 @@ module TraceViz
         super()
 
         @collector = collector
-        @renderer = build_renderer(collector)
+        @renderer = build_renderer
       end
 
       def log
-        renderer.to_lines.each do |line|
-          log_line(line)
-        end
+        process_lines(renderer.to_lines)
       end
 
       private
 
       attr_reader :collector, :renderer
 
+      def process_lines(lines)
+        lines.each do |line|
+          log_line(line)
+        end
+      end
+
       def log_line(line)
-        log_level = LogLevelResolver.resolve(line[:trace_data])
+        log_level = resolve_log_level(line[:trace_data])
         formatted_message = line[:line]
 
         log_message(log_level, formatted_message)
+
+        process_lines(line[:nested_lines]) if line[:nested_lines]&.any?
       end
 
-      def build_renderer(collector)
+      def resolve_log_level(trace_data)
+        LogLevelResolver.resolve(trace_data)
+      end
+
+      def build_renderer
         mode = collector.config.log[:post_collection_mode]
 
         Renderers::RendererFactory.build(mode, collector)
