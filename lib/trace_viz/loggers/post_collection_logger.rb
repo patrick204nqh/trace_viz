@@ -11,7 +11,7 @@ module TraceViz
         super()
 
         @collector = collector
-        @renderer = build_renderer(:summary)
+        @renderer = build_renderer(collector)
       end
 
       def log
@@ -31,7 +31,9 @@ module TraceViz
         log_message(log_level, formatted_message)
       end
 
-      def build_renderer(mode)
+      def build_renderer(collector)
+        mode = collector.config.log[:post_collection_mode]
+
         Renderers::RendererFactory.build(mode, collector)
       end
     end

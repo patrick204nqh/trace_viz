@@ -26,8 +26,11 @@ module TraceViz
       end
 
       def formatted_message
-        formatter = FormatterFactory.fetch_formatter(trace_data.event)
-        formatter.call(trace_data)
+        fetch_formatter(trace_data).call(trace_data)
+      end
+
+      def fetch_formatter(trace_data)
+        Formatters::Log::FormatterFactory.fetch_formatter(trace_data.event)
       end
     end
   end

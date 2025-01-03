@@ -28,6 +28,8 @@ module TraceViz
               "in %.6fms",
               trace_data.average_duration,
             )}]",
+            :bold,
+            :italic,
             :yellow,
           )
         end

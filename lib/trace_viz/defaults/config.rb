@@ -4,7 +4,6 @@ module TraceViz
   module Defaults
     class Config
       DEFAULTS = {
-        mode: :summary, # :summary, :verbose
         general: {
           tab_size: 2,
           show_indent: true,
@@ -52,6 +51,7 @@ module TraceViz
           enabled: true,
           runtime: false,
           post_collection: true,
+          post_collection_mode: :summary, # :summary, :verbose
           stats: true,
         },
         export: {
