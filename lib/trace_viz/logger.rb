@@ -42,7 +42,7 @@ module TraceViz
     def build_message(message, level, emoji)
       level_str = level == :default ? "" : "[#{level.to_s.upcase}]"
       merged_emoji_level = "#{emoji} #{level_str}".strip
-      format("%-12s %s", merged_emoji_level, message)
+      format("%s%s", merged_emoji_level, message)
     end
 
     def apply_colors(message, colors)
