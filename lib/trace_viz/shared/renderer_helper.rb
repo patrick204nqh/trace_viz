@@ -12,11 +12,13 @@ module TraceViz
         raise ArgumentError, "Collector cannot be nil" unless collector
         raise ArgumentError, "FormatterFactory cannot be nil" unless formatter_factory
 
-        mode = collector.config.general[:mode] do
-          raise KeyError, "Missing mode"
-        end
+        mode = fetch_config(collector, :mode)
+        group_keys = fetch_config(collector, :group_keys)
 
-        context = Renderers::RenderContext.new(formatter_factory: formatter_factory)
+        context = Renderers::RenderContext.new(
+          formatter_factory: formatter_factory,
+          group_keys: group_keys,
+        )
         Renderers::RendererFactory.build(mode, collector, context: context)
       end
 
@@ -30,6 +32,10 @@ module TraceViz
       end
 
       private
+
+      def fetch_config(collector, key)
+        collector.config.general[key]
+      end
 
       def validate_line_structure!(line)
         raise ArgumentError, "Line must be a Hash" unless line.is_a?(Hash)

@@ -7,6 +7,7 @@ module TraceViz
         general: {
           tab_size: 2,
           mode: :summary, # :summary, :verbose
+          group_keys: [:event, :klass, :action],
           show_indent: true,
           show_depth: true,
           max_display_depth: 3,
