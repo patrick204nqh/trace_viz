@@ -15,7 +15,7 @@ The gem allows you to customize how much detail you want to see, such as method 
 
 ## Demo
 
-[![asciicast](https://asciinema.org/a/pKjqLFNPxQFQWucTzcGMpt6QE.svg)](https://asciinema.org/a/pKjqLFNPxQFQWucTzcGMpt6QE)
+[![asciicast](https://asciinema.org/a/lKXPPgx0muZuQbtvMu8GyHaOV.svg)](https://asciinema.org/a/lKXPPgx0muZuQbtvMu8GyHaOV)
 
 ## Installation
 
@@ -221,7 +221,7 @@ TraceViz provides extensive configuration options to customize tracing behavior.
 ### Notes
 
 - **Default Skipped Classes**: The following standard library classes are excluded by default when `:exclude_default_classes` is enabled:
-  - `Object`, `String`, `Array`, `Hash`, `Numeric`, `Integer`, `Float`, `Symbol`, `Kernel`, `Module`, `Class`, `Range`, `Regexp`.
+  - `Object`, `String`, `Array`, `Hash`, `Numeric`, `Integer`, `Float`, `Symbol`, `Kernel`, `Module`, `Class`, `Range`, `Regexp`, `Set`, `Gem`.
 
 ## Development
 
