@@ -7,6 +7,7 @@ module TraceViz
     module Export
       class SummaryGroupFormatter < BaseFormatter
         include Helpers::Summary::ParamsHelper
+        include Helpers::Summary::SourceHelper
 
         def call(trace_data)
           [
