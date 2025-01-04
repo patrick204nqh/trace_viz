@@ -22,8 +22,16 @@ module TraceViz
         nodes.group_by { |node| node_key(node) }
       end
 
+      def group_keys
+        context.group_keys
+      end
+
       def node_key(node)
-        [node.event, node.klass, node.action]
+        group_keys.map { |key| fetch_node_attribute(node, key) }
+      end
+
+      def fetch_node_attribute(node, key)
+        node.respond_to?(key) ? node.public_send(key) : nil
       end
 
       def render_node_or_group(key, group)
