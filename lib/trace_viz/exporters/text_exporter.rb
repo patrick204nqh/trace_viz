@@ -11,7 +11,8 @@ module TraceViz
       def initialize(collector)
         super(collector)
 
-        @renderer = build_renderer(collector, Formatters::Export::FormatterFactory)
+        @formatter_factory = Formatters::Export::FormatterFactory.new
+        @renderer = build_renderer(collector, @formatter_factory)
       end
 
       private

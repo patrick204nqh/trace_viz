@@ -14,7 +14,8 @@ module TraceViz
         super()
 
         @collector = collector
-        @renderer = build_renderer(collector, Formatters::Log::FormatterFactory)
+        @formatter_factory = Formatters::Log::FormatterFactory.new
+        @renderer = build_renderer(collector, @formatter_factory)
       end
 
       def log
