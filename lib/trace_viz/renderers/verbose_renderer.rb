@@ -17,10 +17,7 @@ module TraceViz
 
       def traverse_data(data)
         data.map do |trace_data|
-          {
-            data: trace_data,
-            line: format_for(trace_data),
-          }
+          NodeLine.new(trace_data, format_for(trace_data))
         end
       end
 

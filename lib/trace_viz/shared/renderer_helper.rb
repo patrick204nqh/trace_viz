@@ -31,8 +31,10 @@ module TraceViz
       private
 
       def validate_line_structure!(line)
-        raise ArgumentError, "Line must be a Hash" unless line.is_a?(Hash)
-        raise KeyError, "Line must include a :line key" unless line.key?(:line)
+        unless line.respond_to?(:line) && line.respond_to?(:data)
+          raise ArgumentError,
+            "Invalid line structure: #{line.inspect}. Expected an object with :line and :data attributes."
+        end
       end
     end
   end

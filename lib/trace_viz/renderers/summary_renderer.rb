@@ -22,10 +22,7 @@ module TraceViz
       end
 
       def render_node(node)
-        node_line = {
-          data: node[:data],
-          line: format_node(node[:data]),
-        }
+        node_line = NodeLine.new(node[:data], format_node(node[:data]))
 
         [node_line] + render_nodes(node[:children])
       end

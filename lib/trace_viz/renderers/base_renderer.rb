@@ -3,6 +3,8 @@
 module TraceViz
   module Renderers
     class BaseRenderer
+      NodeLine = Struct.new(:data, :line)
+
       def initialize(collector, context:)
         @collector = collector
         @context = context
