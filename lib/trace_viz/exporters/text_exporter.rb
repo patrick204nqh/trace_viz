@@ -11,7 +11,12 @@ module TraceViz
       def initialize(collector)
         super(collector)
 
-        @renderer = build_renderer(collector, Formatters::Export::FormatterFactory)
+        @formatter_factory = Formatters::Export::FormatterFactory.new
+        @renderer = build_renderer(
+          collector,
+          mode: fetch_general_config(:mode),
+          formatter_factory: @formatter_factory,
+        )
       end
 
       private
@@ -23,14 +28,7 @@ module TraceViz
       end
 
       def data
-        process_lines(renderer.to_lines) { |line| process_line(line) }
-      end
-
-      def process_line(line)
-        [
-          line[:line],
-          *process_lines(line[:nested_lines]) { |nested| process_line(nested) },
-        ].compact
+        process_lines(renderer.to_lines) { |line| line[:line] }
       end
     end
   end

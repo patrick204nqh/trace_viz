@@ -1,21 +1,42 @@
 # frozen_string_literal: true
 
 require_relative "base_renderer"
-require_relative "summary/node_processor"
+require "trace_viz/transformers/summary_transformer"
+require "trace_viz/trace_data/summary_node"
 
 module TraceViz
   module Renderers
     class SummaryRenderer < BaseRenderer
       def to_lines
-        return [] unless valid_children?(data)
-
-        NodeProcessor.new(data.children, context).process
+        render_nodes(data)
       end
 
       private
 
-      def valid_children?(node)
-        node.respond_to?(:children) && node.children.any?
+      def data
+        Transformers::SummaryTransformer.new(collector).transform
+      end
+
+      def render_nodes(nodes)
+        nodes.flat_map { |node| render_node(node) }
+      end
+
+      def render_node(node)
+        node_line = NodeLine.new(node[:data], format_node(node[:data]))
+
+        [node_line] + render_nodes(node[:children])
+      end
+
+      def format_node(data)
+        if data.is_a?(TraceData::SummaryNode)
+          fetch_formatter(:summary_group).call(data)
+        else
+          fetch_formatter(data.event).call(data)
+        end
+      end
+
+      def fetch_formatter(key)
+        context.fetch_formatter(key)
       end
     end
   end

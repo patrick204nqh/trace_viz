@@ -3,8 +3,10 @@
 module TraceViz
   module Renderers
     class BaseRenderer
-      def initialize(data, context:)
-        @data = data
+      NodeLine = Struct.new(:data, :line)
+
+      def initialize(collector, context:)
+        @collector = collector
         @context = context
       end
 
@@ -12,13 +14,14 @@ module TraceViz
         to_lines.map { |line| line[:line] }.join("\n")
       end
 
+      # [ { line: 'line1' }, { line: 'line2' } ]
       def to_lines
         []
       end
 
       private
 
-      attr_reader :data, :context
+      attr_reader :collector, :context
     end
   end
 end

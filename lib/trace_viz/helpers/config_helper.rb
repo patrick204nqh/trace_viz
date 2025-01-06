@@ -8,6 +8,10 @@ module TraceViz
       def config
         Context.for(:config).configuration
       end
+
+      def fetch_general_config(key)
+        config.general[key]
+      end
     end
   end
 end
