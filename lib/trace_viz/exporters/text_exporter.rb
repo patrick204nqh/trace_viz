@@ -12,7 +12,11 @@ module TraceViz
         super(collector)
 
         @formatter_factory = Formatters::Export::FormatterFactory.new
-        @renderer = build_renderer(collector, @formatter_factory)
+        @renderer = build_renderer(
+          collector,
+          mode: fetch_general_config(:mode),
+          formatter_factory: @formatter_factory,
+        )
       end
 
       private

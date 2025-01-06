@@ -15,9 +15,15 @@ module TraceViz
         @children = []
       end
 
-      def add_child(child)
-        child.parent = self
-        @children << child
+      def add_child(node)
+        node.parent = self
+        @children << node
+      end
+
+      def add_children(nodes)
+        nodes.each do |node|
+          add_child(node)
+        end
       end
 
       def to_h

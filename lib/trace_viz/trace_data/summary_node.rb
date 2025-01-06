@@ -36,14 +36,6 @@ module TraceViz
       def total_duration
         children.map(&:duration).sum
       end
-
-      private
-
-      def add_children(nodes)
-        nodes.each do |node|
-          add_child(node)
-        end
-      end
     end
   end
 end

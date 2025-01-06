@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "base_renderer"
-require "trace_viz/formatters/log/formatter_factory"
 
 module TraceViz
   module Renderers
@@ -12,11 +11,15 @@ module TraceViz
 
       private
 
+      def data
+        collector.collection
+      end
+
       def traverse_data(data)
         data.map do |trace_data|
           {
+            data: trace_data,
             line: format_for(trace_data),
-            trace_data: trace_data,
           }
         end
       end

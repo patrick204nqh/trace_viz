@@ -8,6 +8,7 @@ require_relative "log_level_resolver"
 module TraceViz
   module Loggers
     class PostCollectionLogger < BaseLogger
+      include Helpers::ConfigHelper
       include Shared::RendererHelper
 
       def initialize(collector)
@@ -15,7 +16,11 @@ module TraceViz
 
         @collector = collector
         @formatter_factory = Formatters::Log::FormatterFactory.new
-        @renderer = build_renderer(collector, @formatter_factory)
+        @renderer = build_renderer(
+          collector,
+          mode: fetch_general_config(:mode),
+          formatter_factory: @formatter_factory,
+        )
       end
 
       def log
@@ -27,7 +32,7 @@ module TraceViz
       attr_reader :collector, :renderer
 
       def log_line(line)
-        log_message(resolve_log_level(line[:trace_data]), line[:line])
+        log_message(resolve_log_level(line[:data]), line[:line])
 
         process_lines(line[:nested_lines]) { |nested| log_line(nested) }
       end
