@@ -12,6 +12,7 @@ module TraceViz
         to_lines.map { |line| line[:line] }.join("\n")
       end
 
+      # [ { line: 'line1' }, { line: 'line2' } ]
       def to_lines
         []
       end

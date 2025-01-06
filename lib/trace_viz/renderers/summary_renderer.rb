@@ -18,15 +18,16 @@ module TraceViz
       end
 
       def render_nodes(nodes)
-        nodes.map { |node| render_node(node) }
+        nodes.flat_map { |node| render_node(node) }
       end
 
       def render_node(node)
-        {
+        node_line = {
           data: node[:data],
           line: format_node(node[:data]),
-          nested_lines: render_nodes(node[:children]),
         }
+
+        [node_line] + render_nodes(node[:children])
       end
 
       def format_node(data)

@@ -33,8 +33,6 @@ module TraceViz
 
       def log_line(line)
         log_message(resolve_log_level(line[:data]), line[:line])
-
-        process_lines(line[:nested_lines]) { |nested| log_line(nested) }
       end
 
       def resolve_log_level(trace_data)

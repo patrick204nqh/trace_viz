@@ -28,14 +28,7 @@ module TraceViz
       end
 
       def data
-        process_lines(renderer.to_lines) { |line| process_line(line) }
-      end
-
-      def process_line(line)
-        [
-          line[:line],
-          *process_lines(line[:nested_lines]) { |nested| process_line(nested) },
-        ].compact
+        process_lines(renderer.to_lines) { |line| line[:line] }
       end
     end
   end
