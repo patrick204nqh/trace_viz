@@ -2,13 +2,12 @@
 
 require_relative "base_renderer"
 require "trace_viz/transformers/summary_transformer"
-require "trace_viz/trace_data/summary_node"
 
 module TraceViz
   module Renderers
     class SummaryRenderer < BaseRenderer
       def to_lines
-        render_nodes(data)
+        render_nodes(data.children)
       end
 
       private
@@ -22,21 +21,13 @@ module TraceViz
       end
 
       def render_node(node)
-        node_line = NodeLine.new(node[:data], format_node(node[:data]))
+        node_line = NodeLine.new(node.data, format_node(node.data))
 
-        [node_line] + render_nodes(node[:children])
+        [node_line] + render_nodes(node.children)
       end
 
       def format_node(data)
-        if data.is_a?(TraceData::SummaryNode)
-          fetch_formatter(:summary_group).call(data)
-        else
-          fetch_formatter(data.event).call(data)
-        end
-      end
-
-      def fetch_formatter(key)
-        context.fetch_formatter(key)
+        context.fetch_formatter(data.key).call(data)
       end
     end
   end

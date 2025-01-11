@@ -15,6 +15,13 @@ module TraceViz
         record_timestamp
       end
 
+      #
+      # Represents trace data type code
+      #
+      def key
+        raise NotImplementedError
+      end
+
       def event
         raise NotImplementedError
       end

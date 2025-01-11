@@ -4,6 +4,8 @@ require "trace_viz/helpers/config_helper"
 
 module TraceViz
   module Transformers
+    TransformedNode = Struct.new(:data, :children)
+
     class BaseTransformer
       include Helpers::ConfigHelper
 

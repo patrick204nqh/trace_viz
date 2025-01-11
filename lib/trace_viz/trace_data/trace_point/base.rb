@@ -26,6 +26,10 @@ module TraceViz
           assign_ids
         end
 
+        def key
+          event
+        end
+
         def duration
           0
         end

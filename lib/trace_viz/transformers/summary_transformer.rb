@@ -7,9 +7,12 @@ module TraceViz
   module Transformers
     class SummaryTransformer < BaseTransformer
       def transform
-        return [] unless valid_children?(root_node)
+        return root_node unless valid_children?(root_node)
 
-        transform_nodes(root_node.children)
+        TransformedNode.new(
+          root_node,
+          transform_nodes(root_node.children),
+        )
       end
 
       private
@@ -46,17 +49,17 @@ module TraceViz
       def create_summary_node(group)
         summary_node = TraceData::SummaryNode.new(group: group)
 
-        {
-          data: summary_node,
-          children: transform_nodes(summary_node.children || []),
-        }
+        TransformedNode.new(
+          summary_node,
+          transform_nodes(summary_node.children),
+        )
       end
 
       def create_single_node(node)
-        {
-          data: node,
-          children: transform_nodes(node.children || []),
-        }
+        TransformedNode.new(
+          node,
+          transform_nodes(node.children),
+        )
       end
 
       def group_keys

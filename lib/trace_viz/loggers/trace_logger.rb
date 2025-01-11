@@ -31,7 +31,7 @@ module TraceViz
       end
 
       def fetch_formatter(trace_data)
-        formatter_factory.fetch_formatter(trace_data.event)
+        formatter_factory.fetch_formatter(trace_data.key)
       end
     end
   end
