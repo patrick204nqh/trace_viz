@@ -7,6 +7,7 @@ module TraceViz
     class Registry
       EXPORTS = {
         txt: TextExporter,
+        # mermaid: MermaidExporter,
       }
 
       class << self

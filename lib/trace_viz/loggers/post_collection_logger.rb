@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "trace_viz/formatters/log/formatter_factory"
+require "trace_viz/renderers/renderer_builder"
 require "trace_viz/shared"
 require_relative "base_logger"
 require_relative "log_level_resolver"
@@ -15,11 +16,11 @@ module TraceViz
         super()
 
         @collector = collector
-        @formatter_factory = Formatters::Log::FormatterFactory.new
-        @renderer = build_renderer(
+
+        @renderer = Renderers::RendererBuilder.build(
           collector,
-          mode: fetch_general_config(:mode),
-          formatter_factory: @formatter_factory,
+          key: fetch_general_config(:mode),
+          formatter_factory: Formatters::Log::FormatterFactory.new,
         )
       end
 

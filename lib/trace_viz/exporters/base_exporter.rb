@@ -3,6 +3,8 @@
 require "fileutils"
 require "trace_viz/helpers"
 require "trace_viz/shared"
+require "trace_viz/renderers/renderer_builder"
+require "trace_viz/formatters/export/formatter_factory"
 
 module TraceViz
   module Exporters
@@ -15,6 +17,12 @@ module TraceViz
         @logger = config.logger
 
         @collector = collector
+
+        @renderer = Renderers::RendererBuilder.build(
+          collector,
+          key: fetch_general_config(:mode),
+          formatter_factory: Formatters::Export::FormatterFactory.new,
+        )
       end
 
       def export
@@ -34,7 +42,7 @@ module TraceViz
 
       private
 
-      attr_reader :export_config, :logger, :collector
+      attr_reader :export_config, :logger, :collector, :renderer
 
       def content
         raise NotImplementedError

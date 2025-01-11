@@ -27,11 +27,7 @@ module TraceViz
       end
 
       def formatted_message
-        fetch_formatter(trace_data).call(trace_data)
-      end
-
-      def fetch_formatter(trace_data)
-        formatter_factory.fetch_formatter(trace_data.key)
+        formatter_factory.fetch_formatter(trace_data.key).call(trace_data)
       end
     end
   end
