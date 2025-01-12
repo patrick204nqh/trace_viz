@@ -1,94 +1,128 @@
 # frozen_string_literal: true
 
+require "trace_viz/models/message"
+require_relative "../base_extractor"
+
 module TraceViz
-  module DiagramBuilders
-    module Extractors
+  module Extractors
+    module Diagram
       class MessageExtractor < BaseExtractor
         def initialize(collector, participants)
           super(collector)
-          @participants = participants
+
+          @participants_map = participants.each_with_object({}) do |p, memo|
+            memo[p.name] = p
+          end
         end
 
         def extract
           root = data
-
           root.children.flat_map { |child| traverse(child, nil) }
         end
 
         private
 
-        attr_reader :participants
+        def participant_for(name)
+          @participants_map[name.to_s]
+        end
 
         def traverse(node, caller_trace)
           messages = []
           trace = node.data
-          current_participant = participants[trace.klass]
 
-          if caller_trace && participants[caller_trace.klass] != current_participant
+          current_participant = participant_for(trace.klass)
+
+          if caller_trace && participant_for(caller_trace.klass) != current_participant
             messages << call_message(caller_trace, trace)
           end
 
           messages << loop_start(trace) if loop?(trace)
+
           messages << build_message(trace)
+
           messages << activate(trace) if node_has_children?(trace)
 
-          # Recursively process child nodes
           node.children.each do |child|
             messages.concat(traverse(child, trace))
           end
 
           messages << deactivate(trace) if node_has_children?(trace)
+
           messages << loop_end(trace) if loop?(trace)
 
-          if caller_trace && participants[caller_trace.klass] != current_participant
+          if caller_trace && participant_for(caller_trace.klass) != current_participant
             messages << return_message(trace, caller_trace)
           end
 
           messages.compact
         end
 
+        # -- Domain-level message-building methods --
+
         def loop_start(trace)
-          { type: :loop_start, message: "#{trace.count} calls" }
+          Models::Message.new(
+            type: :loop_start,
+            from: nil,
+            to: nil,
+            content: "#{trace.count} calls",
+          )
         end
 
         def loop_end(trace)
-          { type: :loop_end }
+          Models::Message.new(
+            type: :loop_end,
+            from: nil,
+            to: nil,
+            content: "",
+          )
         end
 
         def activate(trace)
-          { type: :activate, participant: participants[trace.klass] }
+          Models::Message.new(
+            type: :activate,
+            from: nil,
+            to: participant_for(trace.klass),
+            content: "",
+          )
         end
 
         def deactivate(trace)
-          { type: :deactivate, participant: participants[trace.klass] }
+          Models::Message.new(
+            type: :deactivate,
+            from: nil,
+            to: participant_for(trace.klass),
+            content: "",
+          )
         end
 
         def build_message(trace)
-          {
-            type: :message,
-            from: participants[trace.klass],
-            to: participants[trace.klass],
-            message: trace.action,
-          }
+          Models::Message.new(
+            type: :call,
+            from: participant_for(trace.klass),
+            to: participant_for(trace.klass),
+            content: trace.action,
+          )
         end
 
         def call_message(from_trace, to_trace)
-          {
-            type: :message,
-            from: participants[from_trace.klass],
-            to: participants[to_trace.klass],
-            message: "Calling #{to_trace.klass}#{format_params(to_trace.params)}",
-          }
+          Models::Message.new(
+            type: :call,
+            from: participant_for(from_trace.klass),
+            to: participant_for(to_trace.klass),
+            content: "Calling #{to_trace.klass}#{format_params(to_trace.params)}",
+          )
         end
 
         def return_message(from_trace, to_trace)
-          {
-            type: :return_message,
-            from: participants[from_trace.klass],
-            to: participants[to_trace.klass],
-            message: "Returning to #{to_trace.klass}#{format_result(from_trace.result)}",
-          }
+          Models::Message.new(
+            type: :return,
+            from: participant_for(from_trace.klass),
+            to: participant_for(to_trace.klass),
+            content: "Returning to #{to_trace.klass}#{format_result(from_trace.result)}",
+          )
         end
+
+        # -- Utility for formatting parameters/results --
 
         def format_params(params)
           return "" if params.nil? || params.empty?
@@ -112,6 +146,8 @@ module TraceViz
         def truncate(value, max_length)
           sanitize(value, max_length)
         end
+
+        # -- Helper methods for logic --
 
         def loop?(trace)
           trace.key == :summary_group

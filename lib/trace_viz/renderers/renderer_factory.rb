@@ -2,7 +2,7 @@
 
 require_relative "verbose_renderer"
 require_relative "summary_renderer"
-require_relative "mermaid/sequence_renderer"
+require_relative "diagram/sequence_renderer"
 
 module TraceViz
   module Renderers
@@ -10,7 +10,7 @@ module TraceViz
       RENDERERS = {
         verbose: VerboseRenderer,
         summary: SummaryRenderer,
-        sequence_diagram: Mermaid::SequenceRenderer,
+        sequence_diagram: Diagram::SequenceRenderer,
       }.freeze
 
       def initialize(collector, context)
