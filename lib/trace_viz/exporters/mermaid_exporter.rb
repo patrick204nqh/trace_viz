@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "base_exporter"
-
 module TraceViz
   module Exporters
-    class TextExporter < BaseExporter
+    class MermaidExporter < BaseExporter
       private
 
+      def renderer_mode
+        :sequence_diagram
+      end
+
       def file_extension
-        ".txt"
+        ".mmd"
       end
     end
   end

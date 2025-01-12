@@ -77,7 +77,7 @@ module TraceViz
         end
 
         def valid_export_formats
-          [:txt, :json, :yaml].freeze
+          [:txt, :json, :yaml, :mermaid].freeze
         end
 
         def valid_export_format?(format)

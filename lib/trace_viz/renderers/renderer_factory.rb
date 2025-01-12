@@ -10,7 +10,7 @@ module TraceViz
       RENDERERS = {
         verbose: VerboseRenderer,
         summary: SummaryRenderer,
-        sequence_renderer: Mermaid::SequenceRenderer,
+        sequence_diagram: Mermaid::SequenceRenderer,
       }.freeze
 
       def initialize(collector, context)
