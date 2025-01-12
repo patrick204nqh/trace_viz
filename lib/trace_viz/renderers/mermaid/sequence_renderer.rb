@@ -1,65 +1,54 @@
 # frozen_string_literal: true
 
 require_relative "../base_renderer"
-require_relative "syntax/sequence_syntax"
+require "trace_viz/diagram_builders/mermaid/sequence_converter"
 require "trace_viz/diagram_builders/mermaid/sequence_builder"
+require "trace_viz/diagram_builders/mermaid/sequence_processor"
 
 module TraceViz
   module Renderers
     module Mermaid
       class SequenceRenderer < BaseRenderer
         def initialize(collector, context)
-          super
-          @syntax = Syntax::SequenceSyntax.new
+          super(collector, context)
+          @builder = DiagramBuilders::Mermaid::SequenceBuilder.new
+          @processor = DiagramBuilders::Mermaid::SequenceProcessor.new(@builder, collector)
+          @converter = DiagramBuilders::Mermaid::SequenceConverter.new
+
+          process_and_convert
         end
 
         def to_lines
-          lines = []
-
-          lines.push(header_line)
-          lines.concat(participant_lines)
-          lines.concat(message_lines)
-
-          lines
+          [
+            header_line,
+            *participant_lines,
+            *message_lines,
+          ]
         end
 
         private
 
-        attr_reader :syntax
+        attr_reader :builder, :processor, :converter
 
-        def data
-          @data ||= DiagramBuilders::Mermaid::SequenceBuilder.new(collector).build
+        def process_and_convert
+          @processed_data = processor.process
+          @converted_data = converter.convert(@processed_data)
         end
 
         def header_line
-          NodeLine.new(nil, syntax.header)
+          NodeLine.new(nil, @converted_data.header)
         end
 
         def participant_lines
-          participants = data[:participants]
-          participants.map do |klass, alias_name|
-            NodeLine.new(nil, build_participant_line(alias_name, klass))
-          end
+          map_to_node_lines(@converted_data.participants)
         end
 
         def message_lines
-          messages = data[:messages]
-          messages.map do |message|
-            NodeLine.new(nil, build_message_line(message))
-          end
+          map_to_node_lines(@converted_data.messages)
         end
 
-        def build_participant_line(alias_name, klass)
-          "#{indent_level}#{syntax.participant(alias_name, klass)}"
-        end
-
-        def build_message_line(message)
-          "#{indent_level}#{syntax.message(message[:from], message[:to], message[:message])}"
-        end
-
-        def indent_level
-          tab_size = 2
-          " " * tab_size
+        def map_to_node_lines(data)
+          data.map { |item| NodeLine.new(nil, item) }
         end
       end
     end

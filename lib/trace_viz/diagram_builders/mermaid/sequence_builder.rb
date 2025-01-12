@@ -1,24 +1,22 @@
 # frozen_string_literal: true
 
-require_relative "base_builder"
-require_relative "../extractors/participant_extractor"
-require_relative "../extractors/message_extractor"
-
 module TraceViz
   module DiagramBuilders
     module Mermaid
-      class SequenceBuilder < BaseBuilder
-        def build
-          participant_extractor = Extractors::ParticipantExtractor.new(collector)
-          participants = participant_extractor.extract
+      class SequenceBuilder
+        attr_reader :participants, :messages
 
-          message_extractor = Extractors::MessageExtractor.new(collector, participants)
-          messages = message_extractor.extract
+        def initialize
+          @participants = {}
+          @messages = []
+        end
 
-          {
-            participants: participants,
-            messages: messages,
-          }
+        def add_participant(alias_name, full_name)
+          @participants[full_name] = alias_name
+        end
+
+        def add_message(message)
+          @messages << message
         end
       end
     end

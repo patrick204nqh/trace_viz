@@ -17,6 +17,10 @@ module TraceViz
           populate_params
         end
 
+        def result
+          method_return&.result
+        end
+
         def link(method_return)
           @method_return = method_return
         end
