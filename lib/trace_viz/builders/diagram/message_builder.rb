@@ -25,7 +25,7 @@ module TraceViz
             :call,
             participants_manager.find(from_trace.klass),
             participants_manager.find(to_trace.klass),
-            formatter.format_call(to_trace),
+            formatter.format_call,
           )
         end
 
@@ -36,7 +36,7 @@ module TraceViz
             :return,
             participants_manager.find(from_trace.klass),
             participants_manager.find(to_trace.klass),
-            formatter.format_return(from_trace, to_trace),
+            formatter.format_return,
           )
         end
 

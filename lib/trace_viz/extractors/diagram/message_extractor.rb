@@ -20,48 +20,79 @@ module TraceViz
 
         def extract
           root = data
-          root.children.flat_map { |child| traverse(child, nil) }
+          root.children.flat_map { |child| process_node(child, nil) }
         end
 
         private
 
         attr_reader :message_builder, :participants_manager
 
-        def traverse(node, caller_node)
+        def process_node(node, caller_node)
           trace = node.data
           caller_trace = caller_node&.data
 
-          messages = []
-
-          # Handle inter-participant messages
-          messages << message_builder.build_call_message(caller_trace, trace) if caller_trace
-
-          # Handle loop structures
-          messages << message_builder.build_loop_start_message(trace) if loop?(trace)
-
-          # Internal message
-          messages << message_builder.build_internal_message(trace) unless trace.root?
-
-          # Activation of participant
-          messages << message_builder.build_activate_message(trace) if node_has_children?(trace)
-
-          # Process child nodes
-          messages.concat(process_children(node))
-
-          # Deactivation of participant
-          messages << message_builder.build_deactivate_message(trace) if node_has_children?(trace)
-
-          # End loop structures
-          messages << message_builder.build_loop_end_message if loop?(trace)
-
-          # Handle return messages
-          messages << message_builder.build_return_message(trace, caller_trace) if caller_trace
-
-          messages.compact
+          [].tap do |messages|
+            messages << handle_inter_participant_message(caller_trace, trace)
+            messages << handle_loop_start(trace)
+            messages << handle_internal_message(trace)
+            messages << handle_activation(trace)
+            messages.concat(process_children(node))
+            messages << handle_deactivation(trace)
+            messages << handle_loop_end(trace)
+            messages << handle_return_message(trace, caller_trace)
+          end.compact
         end
 
+        # Handle inter-participant messages
+        def handle_inter_participant_message(caller_trace, trace)
+          return unless caller_trace
+
+          message_builder.build_call_message(caller_trace, trace)
+        end
+
+        # Handle loop start messages
+        def handle_loop_start(trace)
+          return unless loop?(trace)
+
+          message_builder.build_loop_start_message(trace)
+        end
+
+        # Handle internal messages
+        def handle_internal_message(trace)
+          message_builder.build_internal_message(trace)
+        end
+
+        # Handle activation of participants
+        def handle_activation(trace)
+          return unless node_has_children?(trace)
+
+          message_builder.build_activate_message(trace)
+        end
+
+        # Handle deactivation of participants
+        def handle_deactivation(trace)
+          return unless node_has_children?(trace)
+
+          message_builder.build_deactivate_message(trace)
+        end
+
+        # Handle loop end messages
+        def handle_loop_end(trace)
+          return unless loop?(trace)
+
+          message_builder.build_loop_end_message
+        end
+
+        # Handle return messages
+        def handle_return_message(trace, caller_trace)
+          return unless caller_trace
+
+          message_builder.build_return_message(trace, caller_trace)
+        end
+
+        # Process child nodes recursively
         def process_children(node)
-          node.children.flat_map { |child| traverse(child, node) }
+          node.children.flat_map { |child| process_node(child, node) }
         end
 
         # -- Helper methods for logic --
