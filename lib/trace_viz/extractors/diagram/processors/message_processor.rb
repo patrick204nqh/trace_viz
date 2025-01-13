@@ -7,7 +7,7 @@ module TraceViz
   module Extractors
     module Diagram
       module Processors
-        class SequenceNodeProcessor
+        class MessageProcessor
           def initialize(participants)
             @formatter = Formatters::Diagram::Sequence::MessageFormatter.new
             @message_builder = Builders::Diagram::MessageBuilder.new(@formatter, participants)

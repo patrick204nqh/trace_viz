@@ -31,7 +31,13 @@ module TraceViz
           to = sanitize_name(message.to&.alias_name)
           content = sanitize_name(message.content)
 
-          case message.type
+          message_syntax(message.type, from, to, content)
+        end
+
+        private
+
+        def message_syntax(type, from, to, content)
+          case type
           when :call
             "#{indent}#{from} ->> #{to}: #{content}"
           when :return
@@ -44,10 +50,10 @@ module TraceViz
             "#{indent}loop #{content}"
           when :loop_end
             "#{indent}end"
+          else
+            raise ArgumentError, "Unsupported message type: #{type}"
           end
         end
-
-        private
 
         def indent
           " " * fetch_general_config(:tab_size)
