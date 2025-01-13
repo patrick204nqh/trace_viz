@@ -27,6 +27,7 @@ module TraceViz
               # Process the current node
               messages << handle_loop_start(trace)
               messages << handle_internal_message(trace)
+              messages << handle_note(trace)
               messages << handle_activation(trace)
               messages.concat(process_children(node))
               messages << handle_deactivation(trace)
@@ -50,6 +51,10 @@ module TraceViz
 
           def handle_internal_message(trace)
             @message_builder.build_internal_message(trace)
+          end
+
+          def handle_note(trace)
+            @message_builder.build_note(trace)
           end
 
           def handle_activation(trace)

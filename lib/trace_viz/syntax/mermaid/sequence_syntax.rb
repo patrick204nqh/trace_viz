@@ -50,6 +50,8 @@ module TraceViz
             "#{indent}loop #{content}"
           when :loop_end
             "#{indent}end"
+          when :note
+            "#{indent}Note over #{to}: #{content}"
           else
             raise ArgumentError, "Unsupported message type: #{type}"
           end
@@ -63,7 +65,7 @@ module TraceViz
           return "" if name.nil?
 
           # Convert Symbols to Strings and handle string sanitization
-          name = name.to_s if name.is_a?(Symbol)
+          name = name.to_s
 
           # Handle `#<Class:...>` specifically
           name = name.gsub(/^#<Class:/, "[Class]").gsub(/>$/, "")

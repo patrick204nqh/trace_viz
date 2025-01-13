@@ -61,6 +61,15 @@ module TraceViz
           )
         end
 
+        def build_note(trace)
+          build(
+            :note,
+            from: participant_for(trace),
+            to: participant_for(trace),
+            content: trace.duration,
+          )
+        end
+
         private
 
         attr_reader :formatter, :participants_manager
