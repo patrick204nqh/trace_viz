@@ -19,6 +19,8 @@ module TraceViz
         end
 
         def build_call_message(from_trace, to_trace)
+          return if from_trace.klass == to_trace.klass
+
           build(
             :call,
             participants_manager.find(from_trace.klass),
@@ -28,6 +30,8 @@ module TraceViz
         end
 
         def build_return_message(from_trace, to_trace)
+          return if from_trace.klass == to_trace.klass
+
           build(
             :return,
             participants_manager.find(from_trace.klass),

@@ -12,6 +12,10 @@ module TraceViz
         @parent = nil
       end
 
+      def root?
+        true
+      end
+
       def parent=(_parent)
         raise NoMethodError, "RootNode cannot have a parent"
       end

@@ -19,7 +19,7 @@ module TraceViz
       # Represents trace data type code
       #
       def key
-        raise NotImplementedError
+        :base
       end
 
       def event

@@ -34,13 +34,13 @@ module TraceViz
           messages = []
 
           # Handle inter-participant messages
-          messages << handle_call_message(caller_trace, trace)
+          messages << message_builder.build_call_message(caller_trace, trace) if caller_trace
 
           # Handle loop structures
           messages << message_builder.build_loop_start_message(trace) if loop?(trace)
 
           # Internal message
-          messages << message_builder.build_internal_message(trace)
+          messages << message_builder.build_internal_message(trace) unless trace.root?
 
           # Activation of participant
           messages << message_builder.build_activate_message(trace) if node_has_children?(trace)
@@ -55,31 +55,9 @@ module TraceViz
           messages << message_builder.build_loop_end_message if loop?(trace)
 
           # Handle return messages
-          messages << handle_return_message(caller_trace, trace)
+          messages << message_builder.build_return_message(trace, caller_trace) if caller_trace
 
           messages.compact
-        end
-
-        def handle_call_message(caller_trace, current_trace)
-          return unless caller_trace
-
-          from_participant = participants_manager.find(caller_trace.klass)
-          to_participant = participants_manager.find(current_trace.klass)
-
-          if from_participant != to_participant
-            message_builder.build_call_message(caller_trace, current_trace)
-          end
-        end
-
-        def handle_return_message(caller_trace, current_trace)
-          return unless caller_trace
-
-          from_participant = participants_manager.find(caller_trace.klass)
-          to_participant = participants_manager.find(current_trace.klass)
-
-          if from_participant != to_participant
-            message_builder.build_return_message(current_trace, caller_trace)
-          end
         end
 
         def process_children(node)
