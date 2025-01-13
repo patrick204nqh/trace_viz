@@ -13,25 +13,25 @@ module TraceViz
         end
 
         def participant(participant)
-          alias_name = participant.alias_name
-          name = participant.name
+          alias_name = sanitize_name(participant.alias_name)
+          name = sanitize_name(participant.name)
           "#{indent}participant #{alias_name} as #{name}"
         end
 
         def message(message)
-          from = message.from
-          to = message.to
-          content = message.content
+          from = sanitize_name(message.from&.alias_name)
+          to = sanitize_name(message.to&.alias_name)
+          content = sanitize_name(message.content)
 
           case message.type
           when :call
-            "#{indent}#{from&.alias_name} ->> #{to&.alias_name}: #{content}"
+            "#{indent}#{from} ->> #{to}: #{content}"
           when :return
-            "#{indent}#{from&.alias_name} -->> #{to&.alias_name}: #{content}"
+            "#{indent}#{from} -->> #{to}: #{content}"
           when :activate
-            "#{indent}activate #{to&.alias_name}"
+            "#{indent}activate #{to}"
           when :deactivate
-            "#{indent}deactivate #{to&.alias_name}"
+            "#{indent}deactivate #{to}"
           when :loop_start
             "#{indent}loop #{content}"
           when :loop_end
@@ -43,6 +43,25 @@ module TraceViz
 
         def indent
           " " * fetch_general_config(:tab_size)
+        end
+
+        def sanitize_name(name)
+          return "" if name.nil?
+
+          # Convert Symbols to Strings and handle string sanitization
+          name = name.to_s if name.is_a?(Symbol)
+
+          # Handle `#<Class:...>` specifically
+          name = name.gsub(/^#<Class:/, "[Class]").gsub(/>$/, "")
+
+          # Replace unconventional method names with readable alternatives
+          name = name.gsub("[]=", "set_value") # Replace `[]=` with `set_value`
+            .gsub(/<<\z/, "append") # Replace `<<` with `append`
+            .gsub("[]", "get_value") # Replace `[]` with `get_value`
+            .gsub("...", "variadic") # Replace `...` with `variadic`
+            .gsub(/\A=/, "assign") # Replace `=` at the start with `assign`
+
+          name
         end
       end
     end

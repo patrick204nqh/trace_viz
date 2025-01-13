@@ -8,11 +8,11 @@ module TraceViz
       module Sequence
         class MessageFormatter < BaseFormatter
           def format_call(to_trace)
-            "Calling #{to_trace.klass}"
+            "Calling"
           end
 
           def format_return(from_trace, to_trace)
-            "Returning to #{to_trace.klass}"
+            "Returning"
           end
         end
       end
