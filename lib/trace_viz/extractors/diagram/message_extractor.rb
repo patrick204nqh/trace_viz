@@ -27,8 +27,10 @@ module TraceViz
 
         attr_reader :message_builder, :participants_manager
 
-        def traverse(node, caller_trace)
+        def traverse(node, caller_node)
           trace = node.data
+          caller_trace = caller_node&.data
+
           messages = []
 
           # Handle inter-participant messages
@@ -44,7 +46,7 @@ module TraceViz
           messages << message_builder.build_activate_message(trace) if node_has_children?(trace)
 
           # Process child nodes
-          messages.concat(process_children(node, trace))
+          messages.concat(process_children(node))
 
           # Deactivation of participant
           messages << message_builder.build_deactivate_message(trace) if node_has_children?(trace)
@@ -80,8 +82,8 @@ module TraceViz
           end
         end
 
-        def process_children(node, trace)
-          node.children.flat_map { |child| traverse(child, trace) }
+        def process_children(node)
+          node.children.flat_map { |child| traverse(child, node) }
         end
 
         # -- Helper methods for logic --
