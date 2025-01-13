@@ -22,7 +22,7 @@ module TraceViz
       end
 
       def format_for(trace_data)
-        context.fetch_formatter(trace_data.event).call(trace_data)
+        context.fetch_formatter(trace_data.key).call(trace_data)
       end
     end
   end

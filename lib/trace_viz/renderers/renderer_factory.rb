@@ -2,6 +2,7 @@
 
 require_relative "verbose_renderer"
 require_relative "summary_renderer"
+require_relative "diagram/sequence_renderer"
 
 module TraceViz
   module Renderers
@@ -9,21 +10,19 @@ module TraceViz
       RENDERERS = {
         verbose: VerboseRenderer,
         summary: SummaryRenderer,
+        sequence_diagram: Diagram::SequenceRenderer,
       }.freeze
 
-      class << self
-        def build(mode, collector, context:)
-          renderer_class = fetch_renderer_class(mode)
-          renderer_class.new(collector, context: context)
-        end
+      def initialize(collector, context)
+        @collector = collector
+        @context = context
+      end
 
-        private
+      def build(key)
+        renderer_class = RENDERERS[key]
+        raise ArgumentError, "Invalid renderer key: #{key}" unless renderer_class
 
-        def fetch_renderer_class(mode)
-          RENDERERS.fetch(mode) do
-            raise ArgumentError, "Unknown mode: #{mode}. Valid modes are: #{RENDERERS.keys.join(", ")}"
-          end
-        end
+        renderer_class.new(@collector, @context)
       end
     end
   end

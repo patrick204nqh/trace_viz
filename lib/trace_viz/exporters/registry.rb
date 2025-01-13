@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require_relative "text_exporter"
+require_relative "mermaid_exporter"
 
 module TraceViz
   module Exporters
     class Registry
       EXPORTS = {
         txt: TextExporter,
+        mermaid: MermaidExporter,
       }
 
       class << self

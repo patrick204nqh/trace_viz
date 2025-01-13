@@ -3,6 +3,8 @@
 require "fileutils"
 require "trace_viz/helpers"
 require "trace_viz/shared"
+require "trace_viz/renderers/renderer_builder"
+require "trace_viz/formatters/export/formatter_factory"
 
 module TraceViz
   module Exporters
@@ -15,6 +17,12 @@ module TraceViz
         @logger = config.logger
 
         @collector = collector
+
+        @renderer = Renderers::RendererBuilder.build(
+          collector,
+          key: renderer_mode,
+          formatter_factory: Formatters::Export::FormatterFactory.new,
+        )
       end
 
       def export
@@ -34,10 +42,18 @@ module TraceViz
 
       private
 
-      attr_reader :export_config, :logger, :collector
+      attr_reader :export_config, :logger, :collector, :renderer
+
+      def renderer_mode
+        fetch_general_config(:mode)
+      end
 
       def content
-        raise NotImplementedError
+        data.join("\n")
+      end
+
+      def data
+        process_lines(renderer.to_lines) { |line| line[:line] }
       end
 
       def export_enabled?
@@ -67,10 +83,15 @@ module TraceViz
       end
 
       def file_path
-        format = export_config[:format]
-        path = export_config[:path]
+        "#{export_directory}/trace_output#{file_extension}"
+      end
 
-        "#{path}/trace_output.#{format}"
+      def export_directory
+        export_config[:path]
+      end
+
+      def file_extension
+        raise NotImplementedError
       end
 
       def write_file(data)

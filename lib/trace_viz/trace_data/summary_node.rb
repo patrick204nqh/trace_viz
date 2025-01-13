@@ -27,6 +27,10 @@ module TraceViz
         add_children(representative_node.children)
       end
 
+      def key
+        :summary_group
+      end
+
       def average_duration
         return 0 if count.zero?
 
