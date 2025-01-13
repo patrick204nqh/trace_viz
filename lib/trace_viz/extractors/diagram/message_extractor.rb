@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require "trace_viz/models/message"
+require "trace_viz/transformers/summary_transformer"
+require "trace_viz/formatters/diagram/sequence/message_formatter"
+require "trace_viz/builders/diagram/message_builder"
+require "trace_viz/managers/diagram/participant_manager"
 require_relative "../base_extractor"
 
 module TraceViz
@@ -10,9 +13,9 @@ module TraceViz
         def initialize(collector, participants)
           super(collector)
 
-          @participants_map = participants.each_with_object({}) do |p, memo|
-            memo[p.name] = p
-          end
+          @formatter = Formatters::Diagram::Sequence::MessageFormatter.new
+          @message_builder = Builders::Diagram::MessageBuilder.new(@formatter, participants)
+          @participants_manager = Managers::Diagram::ParticipantsManager.new(participants)
         end
 
         def extract
@@ -22,129 +25,63 @@ module TraceViz
 
         private
 
-        def participant_for(name)
-          @participants_map[name.to_s]
-        end
+        attr_reader :message_builder, :participants_manager
 
         def traverse(node, caller_trace)
-          messages = []
           trace = node.data
+          messages = []
 
-          current_participant = participant_for(trace.klass)
+          # Handle inter-participant messages
+          messages << handle_call_message(caller_trace, trace)
 
-          if caller_trace && participant_for(caller_trace.klass) != current_participant
-            messages << call_message(caller_trace, trace)
-          end
+          # Handle loop structures
+          messages << message_builder.build_loop_start_message(trace) if loop?(trace)
 
-          messages << loop_start(trace) if loop?(trace)
+          # Internal message
+          messages << message_builder.build_internal_message(trace)
 
-          messages << build_message(trace)
+          # Activation of participant
+          messages << message_builder.build_activate_message(trace) if node_has_children?(trace)
 
-          messages << activate(trace) if node_has_children?(trace)
+          # Process child nodes
+          messages.concat(process_children(node, trace))
 
-          node.children.each do |child|
-            messages.concat(traverse(child, trace))
-          end
+          # Deactivation of participant
+          messages << message_builder.build_deactivate_message(trace) if node_has_children?(trace)
 
-          messages << deactivate(trace) if node_has_children?(trace)
+          # End loop structures
+          messages << message_builder.build_loop_end_message if loop?(trace)
 
-          messages << loop_end(trace) if loop?(trace)
-
-          if caller_trace && participant_for(caller_trace.klass) != current_participant
-            messages << return_message(trace, caller_trace)
-          end
+          # Handle return messages
+          messages << handle_return_message(caller_trace, trace)
 
           messages.compact
         end
 
-        # -- Domain-level message-building methods --
+        def handle_call_message(caller_trace, current_trace)
+          return unless caller_trace
 
-        def loop_start(trace)
-          Models::Message.new(
-            type: :loop_start,
-            from: nil,
-            to: nil,
-            content: "#{trace.count} calls",
-          )
+          from_participant = participants_manager.find(caller_trace.klass)
+          to_participant = participants_manager.find(current_trace.klass)
+
+          if from_participant != to_participant
+            message_builder.build_call_message(caller_trace, current_trace)
+          end
         end
 
-        def loop_end(trace)
-          Models::Message.new(
-            type: :loop_end,
-            from: nil,
-            to: nil,
-            content: "",
-          )
+        def handle_return_message(caller_trace, current_trace)
+          return unless caller_trace
+
+          from_participant = participants_manager.find(caller_trace.klass)
+          to_participant = participants_manager.find(current_trace.klass)
+
+          if from_participant != to_participant
+            message_builder.build_return_message(current_trace, caller_trace)
+          end
         end
 
-        def activate(trace)
-          Models::Message.new(
-            type: :activate,
-            from: nil,
-            to: participant_for(trace.klass),
-            content: "",
-          )
-        end
-
-        def deactivate(trace)
-          Models::Message.new(
-            type: :deactivate,
-            from: nil,
-            to: participant_for(trace.klass),
-            content: "",
-          )
-        end
-
-        def build_message(trace)
-          Models::Message.new(
-            type: :call,
-            from: participant_for(trace.klass),
-            to: participant_for(trace.klass),
-            content: trace.action,
-          )
-        end
-
-        def call_message(from_trace, to_trace)
-          Models::Message.new(
-            type: :call,
-            from: participant_for(from_trace.klass),
-            to: participant_for(to_trace.klass),
-            content: "Calling #{to_trace.klass}#{format_params(to_trace.params)}",
-          )
-        end
-
-        def return_message(from_trace, to_trace)
-          Models::Message.new(
-            type: :return,
-            from: participant_for(from_trace.klass),
-            to: participant_for(to_trace.klass),
-            content: "Returning to #{to_trace.klass}#{format_result(from_trace.result)}",
-          )
-        end
-
-        # -- Utility for formatting parameters/results --
-
-        def format_params(params)
-          return "" if params.nil? || params.empty?
-
-          summarized = params.map { |key, value| "#{sanitize(key)}: #{sanitize(value, 10)}" }
-          " [#{summarized.join(", ")}]"
-        end
-
-        def format_result(result)
-          return "" if result.nil?
-
-          " with result: #{sanitize(result, 15)}"
-        end
-
-        def sanitize(value, max_length = 50)
-          str = value.to_s
-          sanitized = str.gsub(/[<>#&{}]/, "").gsub('"', "'")
-          sanitized.length > max_length ? "#{sanitized[0...max_length]}..." : sanitized
-        end
-
-        def truncate(value, max_length)
-          sanitize(value, max_length)
+        def process_children(node, trace)
+          node.children.flat_map { |child| traverse(child, trace) }
         end
 
         # -- Helper methods for logic --

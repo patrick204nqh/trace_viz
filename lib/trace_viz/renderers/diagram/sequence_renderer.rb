@@ -3,7 +3,6 @@
 require_relative "../base_renderer"
 require "trace_viz/builders/diagram/sequence_builder"
 require "trace_viz/syntax/mermaid/sequence_syntax"
-require "trace_viz/formatters/diagram/sequence_formatter"
 
 module TraceViz
   module Renderers
@@ -13,8 +12,7 @@ module TraceViz
           super(collector, context)
 
           @builder = Builders::Diagram::SequenceBuilder.new(collector)
-          @formatter = Formatters::Diagram::SequenceFormatter.new
-          @syntax = Syntax::Mermaid::SequenceSyntax.new(formatter: @formatter)
+          @syntax = Syntax::Mermaid::SequenceSyntax.new
           @diagram = builder.build
         end
 

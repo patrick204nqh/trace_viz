@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
+require "trace_viz/helpers"
+
 module TraceViz
   module Syntax
     module Mermaid
       class SequenceSyntax
-        def initialize(formatter:)
-          @formatter = formatter
-        end
+        include Helpers::ConfigHelper
 
         def header
           "sequenceDiagram"
@@ -14,14 +14,14 @@ module TraceViz
 
         def participant(participant)
           alias_name = participant.alias_name
-          name = formatter.format_participant_name(participant.name)
+          name = participant.name
           "#{indent}participant #{alias_name} as #{name}"
         end
 
         def message(message)
           from = message.from
           to = message.to
-          content = formatter.format_message_content(message.content)
+          content = message.content
 
           case message.type
           when :call
@@ -41,10 +41,8 @@ module TraceViz
 
         private
 
-        attr_reader :formatter
-
         def indent
-          @formatter.indentation
+          " " * fetch_general_config(:tab_size)
         end
       end
     end

@@ -9,6 +9,11 @@ module TraceViz
   module Builders
     module Diagram
       class SequenceBuilder < BaseBuilder
+        def initialize(collector)
+          super()
+          @collector = collector
+        end
+
         def build
           diagram = Models::Diagram.new
 
@@ -20,6 +25,10 @@ module TraceViz
 
           diagram
         end
+
+        private
+
+        attr_reader :collector
       end
     end
   end
