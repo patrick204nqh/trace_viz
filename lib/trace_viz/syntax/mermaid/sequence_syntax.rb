@@ -12,6 +12,14 @@ module TraceViz
           "sequenceDiagram"
         end
 
+        def box_start(box)
+          "#{indent}box #{sanitize_name(box.color)} #{sanitize_name(box.description)}"
+        end
+
+        def box_end(_box)
+          "#{indent}end"
+        end
+
         def participant(participant)
           alias_name = sanitize_name(participant.alias_name)
           name = sanitize_name(participant.name)

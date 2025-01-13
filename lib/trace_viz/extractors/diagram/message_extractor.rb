@@ -2,7 +2,7 @@
 
 require "trace_viz/transformers/summary_transformer"
 require "trace_viz/extractors/diagram/processors/sequence_node_processor"
-require_relative "../base_extractor"
+require_relative "base_extractor"
 
 module TraceViz
   module Extractors

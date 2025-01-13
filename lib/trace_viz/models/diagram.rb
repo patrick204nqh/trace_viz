@@ -3,11 +3,16 @@
 module TraceViz
   module Models
     class Diagram
-      attr_reader :participants, :messages
+      attr_reader :boxes, :participants, :messages
 
       def initialize
+        @boxes = []
         @participants = []
         @messages = []
+      end
+
+      def add_box(box)
+        @boxes << box unless @boxes.include?(box)
       end
 
       def add_participant(participant)

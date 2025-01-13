@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "trace_viz/models/diagram"
-require "trace_viz/extractors/diagram/participant_extractor"
+require "trace_viz/extractors/diagram/box_extractor"
 require "trace_viz/extractors/diagram/message_extractor"
 require_relative "base_builder"
 
@@ -17,10 +17,11 @@ module TraceViz
         def build
           diagram = Models::Diagram.new
 
-          participants = Extractors::Diagram::ParticipantExtractor.new(collector).extract
+          boxes = Extractors::Diagram::BoxExtractor.new(collector).extract
+          participants = boxes.flat_map(&:participants)
           messages = Extractors::Diagram::MessageExtractor.new(collector, participants).extract
 
-          participants.each { |p| diagram.add_participant(p) }
+          boxes.each { |b| diagram.add_box(b) }
           messages.each { |m| diagram.add_message(m) }
 
           diagram
