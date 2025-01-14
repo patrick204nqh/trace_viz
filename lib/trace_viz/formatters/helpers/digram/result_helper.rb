@@ -8,22 +8,25 @@ module TraceViz
           def result_representation(trace_data)
             return unless config.result[:show]
 
-            result = truncate_result(trace_data.result)
+            result = truncate_structure(trace_data.result)
             result = sinitize_result(result)
             result
           end
 
           private
 
-          def truncate_result(input)
+          def truncate_structure(input)
             Utils::FormatUtils.truncate_value(
               input,
-              config.result[:truncate_length],
+              config.result[:truncate_value],
+              hash_length: config.result[:truncate_length],
             )
           end
 
           def sinitize_result(input)
             input.to_s
+              # .gsub('"', "")
+              # .gsub("'", "")
               .gsub("#", "")
               .strip
           end

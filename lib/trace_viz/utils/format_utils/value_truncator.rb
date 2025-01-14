@@ -7,9 +7,14 @@ module TraceViz
         DEFAULT_LENGTH = -1
         VALID_DIRECTIONS = [:start, :end].freeze
 
-        def initialize(length: DEFAULT_LENGTH, direction: :end)
+        def initialize(
+          length: DEFAULT_LENGTH,
+          direction: :end,
+          hash_length: DEFAULT_LENGTH
+        )
           @length = length
           @direction = validate_direction(direction)
+          @hash_length = hash_length
         end
 
         def truncate(value)
@@ -25,7 +30,7 @@ module TraceViz
 
         private
 
-        attr_reader :length, :direction
+        attr_reader :length, :direction, :hash_length
 
         def validate_direction(direction)
           return direction if VALID_DIRECTIONS.include?(direction)
@@ -33,8 +38,18 @@ module TraceViz
           raise ArgumentError, "Invalid direction: #{direction}. Valid options are :start or :end."
         end
 
+        def validate_length(value, allow_negative: false)
+          return value if value.is_a?(Integer) && (allow_negative || value.positive?)
+
+          raise ArgumentError, "Invalid length: #{value}. Must be a positive integer#{" or -1" if allow_negative}."
+        end
+
         def valid_length?
           length.is_a?(Integer) && length.positive?
+        end
+
+        def valid_hash_length?
+          hash_length.is_a?(Integer) && hash_length.positive?
         end
 
         def truncate_string(string)
@@ -56,7 +71,17 @@ module TraceViz
           keys = hash.keys.take(length)
           truncated_pairs = keys.map { |key| "#{key}: #{truncate(hash[key])}" }
           truncated_pairs << "..." if hash.size > length
-          "{#{truncated_pairs.join(", ")}}"
+
+          hash_str = truncated_pairs.join(", ")
+
+          if valid_hash_length?
+            case direction
+            when :start then "{...#{hash_str[-hash_length..]}}"
+            when :end then "{#{hash_str[0, hash_length]}...}"
+            end
+          else
+            "{#{hash_str}}"
+          end
         end
 
         def truncate_generic(object)

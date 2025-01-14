@@ -12,7 +12,7 @@ module TraceViz
 
             truncated_result = Utils::FormatUtils.truncate_value(
               trace_data.result.inspect,
-              config.result[:truncate_length],
+              config.result[:truncate_value],
             )
 
             prefix = colorize_for("#=>", :trace_result_prefix)

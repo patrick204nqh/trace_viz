@@ -14,8 +14,12 @@ module TraceViz
         end
 
         # Truncates a value to the specified length
-        def truncate_value(value, length, direction: :end)
-          truncator = ValueTruncator.new(length: length, direction: direction)
+        def truncate_value(value, length, direction: :end, hash_length: -1)
+          truncator = ValueTruncator.new(
+            length: length,
+            direction: direction,
+            hash_length: hash_length,
+          )
           truncator.truncate(value)
         end
       end

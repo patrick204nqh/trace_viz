@@ -74,7 +74,6 @@ module TraceViz
           name = name.gsub("[]=", "set_value") # Replace `[]=` with `set_value`
             .gsub(/<<\z/, "append") # Replace `<<` with `append`
             .gsub("[]", "get_value") # Replace `[]` with `get_value`
-            .gsub("...", "variadic") # Replace `...` with `variadic`
             .gsub(/\A=/, "assign") # Replace `=` at the start with `assign`
 
           name

@@ -24,7 +24,8 @@ module TraceViz
         },
         result: {
           show: true,
-          truncate_length: 50,
+          truncate_value: 50,
+          truncate_length: 30,
         },
         execution: {
           show_time: true,
