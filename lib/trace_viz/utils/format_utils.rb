@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "format_utils/key_value_formatter"
-require_relative "format_utils/value_truncator"
 
 module TraceViz
   module Utils
@@ -11,16 +10,6 @@ module TraceViz
         def format_key_value_pairs(data, mode)
           formatter = KeyValueFormatter.new(mode: mode)
           formatter.call(data)
-        end
-
-        # Truncates a value to the specified length
-        def truncate_value(value, length, direction: :end, hash_length: -1)
-          truncator = ValueTruncator.new(
-            length: length,
-            direction: direction,
-            hash_length: hash_length,
-          )
-          truncator.truncate(value)
         end
       end
     end

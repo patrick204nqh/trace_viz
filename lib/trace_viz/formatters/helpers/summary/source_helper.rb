@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/utils/format_utils"
+require "trace_viz/utils"
 
 module TraceViz
   module Formatters
@@ -10,9 +10,9 @@ module TraceViz
           def source_location_representation(trace_data)
             return unless config.source_location[:show]
 
-            truncated_path = Utils::FormatUtils.truncate_value(
+            truncated_path = Utils::Format::ValueTruncator.truncate(
               trace_data.path,
-              config.source_location[:truncate_length],
+              length: config.source_location[:truncate_length],
               direction: :start,
             )
             "at #{truncated_path}"

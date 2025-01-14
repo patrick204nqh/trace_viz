@@ -21,6 +21,7 @@ module TraceViz
           show: true,
           mode: :name_and_value,
           truncate_values: 10,
+          truncate_length: -1,
         },
         result: {
           show: true,

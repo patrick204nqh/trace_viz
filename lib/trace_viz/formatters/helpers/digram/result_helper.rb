@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "trace_viz/utils"
+
 module TraceViz
   module Formatters
     module Helpers
@@ -16,9 +18,9 @@ module TraceViz
           private
 
           def truncate_structure(input)
-            Utils::FormatUtils.truncate_value(
+            Utils::Format::ValueTruncator.truncate(
               input,
-              config.result[:truncate_value],
+              length: config.result[:truncate_value],
               hash_length: config.result[:truncate_length],
             )
           end
