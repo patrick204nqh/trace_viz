@@ -66,7 +66,7 @@ module TraceViz
             :note,
             from: participant_for(trace),
             to: participant_for(trace),
-            content: trace.duration,
+            content: formatter.format_result(trace),
           )
         end
 

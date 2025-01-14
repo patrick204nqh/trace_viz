@@ -20,7 +20,7 @@ module TraceViz
           grouped_participants.map do |namespace, participants|
             box = Models::Box.new(
               color: random_rgb,
-              description: "Namespace: #{namespace}",
+              description: namespace,
             )
 
             participants.each do |participant|
