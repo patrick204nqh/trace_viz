@@ -36,7 +36,7 @@ module TraceViz
             end
 
             def format_as_string(params, mode)
-              Utils::FormatUtils.format_key_value_pairs(params, mode)
+              Utils::Format::KeyValueFormatter.format_pairs(params, mode: mode)
             end
 
             def wrap_params(params_string, config)
