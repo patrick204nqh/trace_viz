@@ -2,7 +2,7 @@
 
 require "trace_viz/utils/alias_generator"
 require "trace_viz/models/participant"
-require_relative "../base_extractor"
+require_relative "base_extractor"
 
 module TraceViz
   module Extractors

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/utils/format_utils"
+require "trace_viz/utils"
 
 module TraceViz
   module Formatters
@@ -10,9 +10,9 @@ module TraceViz
           def format_result(trace_data, config)
             return unless config.result[:show]
 
-            truncated_result = Utils::FormatUtils.truncate_value(
+            truncated_result = Utils::Format::ValueTruncator.truncate(
               trace_data.result.inspect,
-              config.result[:truncate_length],
+              length: config.result[:truncate_value],
             )
 
             prefix = colorize_for("#=>", :trace_result_prefix)

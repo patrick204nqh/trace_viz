@@ -12,6 +12,14 @@ module TraceViz
           "sequenceDiagram"
         end
 
+        def box_start(box)
+          "#{indent}box #{sanitize_name(box.color)} #{sanitize_name(box.description)}"
+        end
+
+        def box_end(_box)
+          "#{indent}end"
+        end
+
         def participant(participant)
           alias_name = sanitize_name(participant.alias_name)
           name = sanitize_name(participant.name)
@@ -23,7 +31,13 @@ module TraceViz
           to = sanitize_name(message.to&.alias_name)
           content = sanitize_name(message.content)
 
-          case message.type
+          message_syntax(message.type, from, to, content)
+        end
+
+        private
+
+        def message_syntax(type, from, to, content)
+          case type
           when :call
             "#{indent}#{from} ->> #{to}: #{content}"
           when :return
@@ -36,10 +50,12 @@ module TraceViz
             "#{indent}loop #{content}"
           when :loop_end
             "#{indent}end"
+          when :note
+            "#{indent}Note over #{to}: #{content}"
+          else
+            raise ArgumentError, "Unsupported message type: #{type}"
           end
         end
-
-        private
 
         def indent
           " " * fetch_general_config(:tab_size)
@@ -49,17 +65,31 @@ module TraceViz
           return "" if name.nil?
 
           # Convert Symbols to Strings and handle string sanitization
-          name = name.to_s if name.is_a?(Symbol)
+          name = name.to_s.dup
 
-          # Handle `#<Class:...>` specifically
-          name = name.gsub(/^#<Class:/, "[Class]").gsub(/>$/, "")
+          # Handle class name pattern
+          name.sub!(/^#<Class:/, "[Class]")
+          name.sub!(/>$/, "")
 
           # Replace unconventional method names with readable alternatives
-          name = name.gsub("[]=", "set_value") # Replace `[]=` with `set_value`
-            .gsub(/<<\z/, "append") # Replace `<<` with `append`
-            .gsub("[]", "get_value") # Replace `[]` with `get_value`
-            .gsub("...", "variadic") # Replace `...` with `variadic`
-            .gsub(/\A=/, "assign") # Replace `=` at the start with `assign`
+          name.gsub!("[]=", "set_value")
+          name.gsub!(/<<\z/, "append")
+          name.gsub!("[]", "get_value")
+          name.gsub!(/\A=/, "assign")
+
+          # Escape specific HTML characters in one pass
+          name.gsub!(/[<>:]/) do |char|
+            case char
+            when "<"
+              "&lt;"
+            when ">"
+              "&gt;"
+            # when ":"
+            #   "&#58;"
+            else
+              char
+            end
+          end
 
           name
         end

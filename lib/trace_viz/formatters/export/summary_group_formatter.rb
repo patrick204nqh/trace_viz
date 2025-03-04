@@ -26,7 +26,7 @@ module TraceViz
         def summary_info(trace_data)
           "[Summary: #{trace_data.count} calls | Avg Time: #{format(
             "in %.6fms",
-            trace_data.average_duration,
+            trace_data.duration,
           )}]"
         end
       end

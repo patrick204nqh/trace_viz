@@ -17,7 +17,9 @@ module TraceViz
 
         def normalize_class_name(klass)
           # Normalize class/module names to handle dynamic/nested representations
-          klass.to_s.gsub(/^#<Class:/, "").gsub(/>$/, "").strip
+          klass.to_s
+            .gsub(/^#<Class/, "<Class")
+            .strip
         end
 
         def matches_hierarchy?(klass_name, target_name)

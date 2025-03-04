@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "trace_viz/utils/format_utils"
+require "trace_viz/utils"
 
 module TraceViz
   module Formatters
@@ -25,13 +25,17 @@ module TraceViz
           end
 
           def format_as_string(params, mode)
-            Utils::FormatUtils.format_key_value_pairs(params, mode)
+            Utils::Format::KeyValueFormatter.format_pairs(params, mode: mode)
           end
 
           def wrap_params_template(params_string, config)
             return unless params_string
 
-            truncated = Utils::FormatUtils.truncate_value(params_string, config.params[:truncate_length])
+            truncated = Utils::Format::ValueTruncator.truncate(
+              params_string,
+              length: config.params[:truncate_length],
+            )
+
             "(#{truncated})"
           end
         end

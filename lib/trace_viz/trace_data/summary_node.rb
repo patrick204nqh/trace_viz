@@ -31,7 +31,7 @@ module TraceViz
         :summary_group
       end
 
-      def average_duration
+      def duration
         return 0 if count.zero?
 
         total_duration / count

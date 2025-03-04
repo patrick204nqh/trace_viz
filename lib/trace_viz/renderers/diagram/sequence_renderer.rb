@@ -19,8 +19,8 @@ module TraceViz
         def to_lines
           [
             header_line,
-            *participant_lines,
-            *message_lines,
+            *render_boxes,
+            *render_messages,
           ]
         end
 
@@ -32,15 +32,25 @@ module TraceViz
           NodeLine.new(nil, syntax.header)
         end
 
-        def participant_lines
-          diagram.participants.map do |participant|
-            NodeLine.new(nil, syntax.participant(participant))
-          end
+        def render_boxes
+          diagram.boxes.flat_map { |box| render_box(box) }
         end
 
-        def message_lines
-          diagram.messages.map do |message|
-            NodeLine.new(nil, syntax.message(message))
+        def render_messages
+          diagram.messages.map { |message| NodeLine.new(nil, syntax.message(message)) }
+        end
+
+        def render_box(box)
+          [
+            NodeLine.new(nil, syntax.box_start(box)),
+            *render_participants(box),
+            NodeLine.new(nil, syntax.box_end(box)),
+          ]
+        end
+
+        def render_participants(box)
+          box.participants.map do |participant|
+            NodeLine.new(nil, syntax.participant(participant))
           end
         end
       end
