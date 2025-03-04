@@ -65,16 +65,31 @@ module TraceViz
           return "" if name.nil?
 
           # Convert Symbols to Strings and handle string sanitization
-          name = name.to_s
+          name = name.to_s.dup
 
-          # Handle `#<Class:...>` specifically
-          name = name.gsub(/^#<Class:/, "[Class]").gsub(/>$/, "")
+          # Handle class name pattern
+          name.sub!(/^#<Class:/, "[Class]")
+          name.sub!(/>$/, "")
 
           # Replace unconventional method names with readable alternatives
-          name = name.gsub("[]=", "set_value") # Replace `[]=` with `set_value`
-            .gsub(/<<\z/, "append") # Replace `<<` with `append`
-            .gsub("[]", "get_value") # Replace `[]` with `get_value`
-            .gsub(/\A=/, "assign") # Replace `=` at the start with `assign`
+          name.gsub!("[]=", "set_value")
+          name.gsub!(/<<\z/, "append")
+          name.gsub!("[]", "get_value")
+          name.gsub!(/\A=/, "assign")
+
+          # Escape specific HTML characters in one pass
+          name.gsub!(/[<>:]/) do |char|
+            case char
+            when "<"
+              "&lt;"
+            when ">"
+              "&gt;"
+            when ":"
+              "&#58;"
+            else
+              char
+            end
+          end
 
           name
         end
