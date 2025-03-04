@@ -13,8 +13,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Trace method and attribute usage in Ruby classes and generate diagrams."
   spec.description = <<~DESC
     TraceViz is a Ruby library designed to trace and visualize events executed#{" "}
-    in a block of code. Useful for debugging and logging.#{" "}
-    Diagram generation is currently under development.
+    in a block of code. Useful for debugging and logging.
   DESC
   spec.homepage = "https://github.com/patrick204nqh/trace_viz"
   spec.license = "MIT"

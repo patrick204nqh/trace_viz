@@ -84,8 +84,8 @@ module TraceViz
               "&lt;"
             when ">"
               "&gt;"
-            when ":"
-              "&#58;"
+            # when ":"
+            #   "&#58;"
             else
               char
             end
