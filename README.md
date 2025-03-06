@@ -245,6 +245,10 @@ TraceViz provides extensive configuration options to customize tracing behavior.
 - **Default Skipped Classes**: The following standard library classes are excluded by default when `:exclude_default_classes` is enabled:
   - `Object`, `String`, `Array`, `Hash`, `Numeric`, `Integer`, `Float`, `Symbol`, `Kernel`, `Module`, `Class`, `Range`, `Regexp`, `Set`, `Gem`.
 
+## Documentation
+
+For detailed API documentation, please visit [RubyDoc for trace_viz](https://www.rubydoc.info/gems/trace_viz).
+
 ## Development
 
 To set up your development environment:

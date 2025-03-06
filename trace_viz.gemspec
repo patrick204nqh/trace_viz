@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["documentation_uri"] = "https://www.rubydoc.info/gems/trace_viz"
   spec.metadata["changelog_uri"] = "https://github.com/patrick204nqh/trace_viz/blob/main/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
